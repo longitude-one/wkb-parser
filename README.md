@@ -1,11 +1,28 @@
-# creof/wkb-parser
+# longitude-one/wkb-parser
 
-[![Build Status](https://travis-ci.org/creof/wkb-parser.svg?branch=master)](https://travis-ci.org/creof/wkb-parser)
-[![Code Climate](https://codeclimate.com/github/creof/wkb-parser/badges/gpa.svg)](https://codeclimate.com/github/creof/wkb-parser)
-[![Test Coverage](https://codeclimate.com/github/creof/wkb-parser/badges/coverage.svg)](https://codeclimate.com/github/creof/wkb-parser/coverage)
-[![Coverage Status](https://coveralls.io/repos/github/creof/wkb-parser/badge.svg?branch=master)](https://coveralls.io/github/creof/wkb-parser?branch=master)
+![longitude-one/wkb-parser](https://img.shields.io/badge/longitude--one-wkb--parser-blue)
+![Stable release](https://img.shields.io/github/v/release/longitude-one/wkb-parser)
+[![Packagist License](https://img.shields.io/packagist/l/longitude-one/wkb-parser)](https://github.com/longitude-one/wkb-parser/blob/main/LICENSE)
 
 Parser library for 2D, 3D, and 4D Open Geospatial Consortium (OGC) WKB or PostGIS EWKB spatial object data.
+
+[![PHP CI](https://github.com/longitude-one/wkb-parser/actions/workflows/ci.yml/badge.svg)](https://github.com/longitude-one/wkb-parser/actions/workflows/ci.yml)
+[![Maintainability](https://api.codeclimate.com/v1/badges/ffeaf1d4951397904a33/maintainability)](https://codeclimate.com/github/longitude-one/wkb-parser/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/ffeaf1d4951397904a33/test_coverage)](https://codeclimate.com/github/longitude-one/wkb-parser/test_coverage)
+![Minimum PHP Version](https://img.shields.io/packagist/php-v/longitude-one/wkb-parser.svg?maxAge=3600)
+
+
+[![CI](https://github.com/longitude-one/wkb-parser/actions/workflows/ci.yml/badge.svg)](https://github.com/longitude-one/wkb-parser/actions/workflows/ci.yml)
+[![Downloads](https://img.shields.io/packagist/dm/longitude-one/wkb-parser.svg)](https://packagist.org/packages/longitude-one/wkb-parser)
+
+> [!NOTE]
+> This package is the continuation of the now abandoned [creof/wkt-parser](https://github.com/creof/wkb-parser) package.
+
+## Installation
+
+```bash
+composer require longitude-one/wkb-parser
+```
 
 ## Usage
 
@@ -58,7 +75,7 @@ The parser will return an array with the keys ```type```, ```value```, ```srid``
 The ```Reader``` and ```Parser``` will throw exceptions implementing interface ```CrEOF\Geo\WKB\Exception\ExceptionInterface```.
 
 ## References
- - PostGIS EWKB - https://github.com/postgis/postgis/blob/svn-trunk/doc/ZMSgeoms.txt
+ - PostGIS EWKB - https://github.com/postgis/postgis/blob/master/doc/ZMSgeoms.txt
  - OGC Simple Feature Access, Part 1 - http://www.opengeospatial.org/standards/sfa
  - OGC Simple Feature Access, Part 2 - http://www.opengeospatial.org/standards/sfs
 

@@ -1,5 +1,5 @@
 {
-    "name": "creof/wkb-parser",
+    "name": "longitude-one/wkb-parser",
     "type": "library",
     "description": "Parser for well-known binary (WKB/EWKB) object data",
     "keywords": ["parser", "string", "text", "geometry", "geography", "spatial", "wkb", "ewkb"],
@@ -7,17 +7,18 @@
         {
             "name":  "Derek J. Lambert",
             "email": "dlambert@dereklambert.com"
+        },
+        {
+            "name":  "Alexandre Tranchant",
+            "email": "alexandre.tranchant@gmail.com"
         }
     ],
     "license": "MIT",
     "require": {
-        "php":     ">=5.3.3",
-        "ext-SPL": "*"
+        "php":     "^8.1"
     },
     "require-dev": {
-        "phpunit/phpunit":               ">=4.8",
-        "codeclimate/php-test-reporter": "dev-master",
-        "satooshi/php-coveralls":        "~1.0"
+        "phpunit/phpunit": "^10.5.16"
     },
     "autoload": {
         "psr-0": {
