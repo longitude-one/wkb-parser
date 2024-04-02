@@ -21,10 +21,10 @@
  * SOFTWARE.
  */
 
-namespace CrEOF\Geo\WKB;
+namespace LongitudeOne\Geo\WKB;
 
-use CrEOF\Geo\WKB\Exception\ExceptionInterface;
-use CrEOF\Geo\WKB\Exception\UnexpectedValueException;
+use LongitudeOne\Geo\WKB\Exception\ExceptionInterface;
+use LongitudeOne\Geo\WKB\Exception\UnexpectedValueException;
 
 /**
  * Parser for WKB/EWKB spatial object data

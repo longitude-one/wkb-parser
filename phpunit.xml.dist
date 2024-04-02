@@ -10,7 +10,7 @@
 
     <testsuites>
         <testsuite name="Tests">
-            <directory>./tests/CrEOF/Geo/WKB/Tests</directory>
+            <directory>./tests/LongitudeOne/Geo/WKB/Tests</directory>
         </testsuite>
     </testsuites>
 

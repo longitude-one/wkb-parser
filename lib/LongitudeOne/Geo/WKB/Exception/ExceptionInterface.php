@@ -21,7 +21,7 @@
  * SOFTWARE.
  */
 
-namespace CrEOF\Geo\WKB\Exception;
+namespace LongitudeOne\Geo\WKB\Exception;
 
 /**
  * Exception interface for library exceptions

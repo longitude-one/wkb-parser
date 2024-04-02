@@ -21,9 +21,9 @@
  * SOFTWARE.
  */
 
-namespace CrEOF\Geo\WKB\Tests;
+namespace LongitudeOne\Geo\WKB\Tests;
 
-use CrEOF\Geo\WKB\Reader;
+use LongitudeOne\Geo\WKB\Reader;
 
 /**
  * Reader tests
@@ -31,7 +31,7 @@ use CrEOF\Geo\WKB\Reader;
  * @author  Derek J. Lambert <dlambert@dereklambert.com>
  * @license http://dlambert.mit-license.org MIT
  *
- * @covers \CrEOF\Geo\WKB\Reader
+ * @covers \LongitudeOne\Geo\WKB\Reader
  */
 class ReaderTest extends \PHPUnit_Framework_TestCase
 {
@@ -96,25 +96,25 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             'readBinaryBadByteOrder' => array(
                 'value'     => pack('H*', '04'),
                 'methods'   => array('readByteOrder'),
-                'exception' => '\CrEOF\Geo\WKB\Exception\UnexpectedValueException',
+                'exception' => '\LongitudeOne\Geo\WKB\Exception\UnexpectedValueException',
                 'message'   => 'Invalid byte order "4"'
             ),
             'readBinaryWithoutByteOrder' => array(
                 'value'     => pack('H*', '0101000000'),
                 'methods'   => array('readLong'),
-                'exception' => '\CrEOF\Geo\WKB\Exception\UnexpectedValueException',
+                'exception' => '\LongitudeOne\Geo\WKB\Exception\UnexpectedValueException',
                 'message'   => 'Invalid byte order "unset"'
             ),
             'readHexWithoutByteOrder' => array(
                 'value'     => '0101000000',
                 'methods'   => array('readLong'),
-                'exception' => '\CrEOF\Geo\WKB\Exception\UnexpectedValueException',
+                'exception' => '\LongitudeOne\Geo\WKB\Exception\UnexpectedValueException',
                 'message'   => 'Invalid byte order "unset"'
             ),
             'readBinaryShortFloat' => array(
                 'value'     => pack('H*', '013D0AD'),
                 'methods'   => array('readByteOrder', 'readFloat'),
-                'exception' => 'CrEOF\Geo\WKB\Exception\RangeException',
+                'exception' => 'LongitudeOne\Geo\WKB\Exception\RangeException',
                 'message'   => '/Type d: not enough input, need 8, have 3$/'
             ),
         );

@@ -21,15 +21,15 @@
  * SOFTWARE.
  */
 
-namespace CrEOF\Geo\WKB\Exception;
+namespace LongitudeOne\Geo\WKB\Exception;
 
 /**
- * RangeException
+ * InvalidArgumentException
  *
  * @author  Derek J. Lambert <dlambert@dereklambert.com>
  * @license http://dlambert.mit-license.org MIT
  */
-class RangeException extends \RangeException implements ExceptionInterface
+class InvalidArgumentException extends \InvalidArgumentException implements ExceptionInterface
 {
 
 }
