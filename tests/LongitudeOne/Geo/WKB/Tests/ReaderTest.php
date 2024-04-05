@@ -187,7 +187,7 @@ class ReaderTest extends TestCase
      *
      * @dataProvider badTestData
      */
-    public function testBad($value, array $methods, $exception, $message)
+    public function testBad($value, array $methods, $exception, $message): void
     {
         self::expectException($exception);
 
@@ -207,7 +207,7 @@ class ReaderTest extends TestCase
     /**
      * @dataProvider goodTestData
      */
-    public function testGood($value, array $methods)
+    public function testGood($value, array $methods): void
     {
         $reader = new Reader($value);
 
@@ -220,7 +220,7 @@ class ReaderTest extends TestCase
         }
     }
 
-    public function testReaderReuse()
+    public function testReaderReuse(): void
     {
         $reader = new Reader();
 
