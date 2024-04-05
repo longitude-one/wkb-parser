@@ -28,30 +28,27 @@ use LongitudeOne\Geo\WKB\Exception\UnexpectedValueException;
 
 /**
  * Parser for WKB/EWKB spatial object data
- *
- * @author  Derek J. Lambert <dlambert@dereklambert.com>
- * @license http://dlambert.mit-license.org MIT
  */
 class Parser
 {
-    const WKB_TYPE_GEOMETRY           = 0;
-    const WKB_TYPE_POINT              = 1;
-    const WKB_TYPE_LINESTRING         = 2;
-    const WKB_TYPE_POLYGON            = 3;
-    const WKB_TYPE_MULTIPOINT         = 4;
-    const WKB_TYPE_MULTILINESTRING    = 5;
-    const WKB_TYPE_MULTIPOLYGON       = 6;
-    const WKB_TYPE_GEOMETRYCOLLECTION = 7;
-    const WKB_TYPE_CIRCULARSTRING     = 8;
-    const WKB_TYPE_COMPOUNDCURVE      = 9;
-    const WKB_TYPE_CURVEPOLYGON       = 10;
-    const WKB_TYPE_MULTICURVE         = 11;
-    const WKB_TYPE_MULTISURFACE       = 12;
-    const WKB_TYPE_CURVE              = 13;
-    const WKB_TYPE_SURFACE            = 14;
-    const WKB_TYPE_POLYHEDRALSURFACE  = 15;
-    const WKB_TYPE_TIN                = 16;
-    const WKB_TYPE_TRIANGLE           = 17;
+    const WKB_TYPE_GEOMETRY           = 0x00000000;
+    const WKB_TYPE_POINT              = 0x00000001;
+    const WKB_TYPE_LINESTRING         = 0x00000002;
+    const WKB_TYPE_POLYGON            = 0x00000003;
+    const WKB_TYPE_MULTIPOINT         = 0x00000004;
+    const WKB_TYPE_MULTILINESTRING    = 0x00000005;
+    const WKB_TYPE_MULTIPOLYGON       = 0x00000006;
+    const WKB_TYPE_GEOMETRYCOLLECTION = 0x00000007;
+    const WKB_TYPE_CIRCULARSTRING     = 0x00000008;
+    const WKB_TYPE_COMPOUNDCURVE      = 0x00000009;
+    const WKB_TYPE_CURVEPOLYGON       = 0x0000000A;
+    const WKB_TYPE_MULTICURVE         = 0x0000000B;
+    const WKB_TYPE_MULTISURFACE       = 0x0000000C;
+    const WKB_TYPE_CURVE              = 0x0000000D;
+    const WKB_TYPE_SURFACE            = 0x0000000E;
+    const WKB_TYPE_POLYHEDRALSURFACE  = 0x0000000F;
+    const WKB_TYPE_TIN                = 0x00000010;
+    const WKB_TYPE_TRIANGLE           = 0x00000011;
 
     const WKB_FLAG_SRID               = 0x20000000;
     const WKB_FLAG_M                  = 0x40000000;
@@ -154,18 +151,34 @@ class Parser
             }
 
             $this->dimensions = $this->getDimensions($this->type);
-            $this->pointSize  = 2 + strlen($this->getDimensionType($this->dimensions) || '');
-
+            $this->pointSize  = 2 + strlen($this->getDimensionType($this->dimensions));
             $typeName = $this->getTypeName($this->type);
+
+            $value = match (strtoupper($typeName)) {
+                strtoupper(self::TYPE_POINT) => $this->point(),
+                strtoupper(self::TYPE_LINESTRING) => $this->lineString(),
+                strtoupper(self::TYPE_POLYGON) => $this->polygon(),
+                strtoupper(self::TYPE_MULTIPOINT) => $this->multiPoint(),
+                strtoupper(self::TYPE_MULTILINESTRING) => $this->multiLineString(),
+                strtoupper(self::TYPE_MULTIPOLYGON) => $this->multiPolygon(),
+                strtoupper(self::TYPE_GEOMETRYCOLLECTION) => $this->geometryCollection(),
+                strtoupper(self::TYPE_CIRCULARSTRING) => $this->circularString(),
+                strtoupper(self::TYPE_COMPOUNDCURVE) => $this->compoundCurve(),
+                strtoupper(self::TYPE_CURVEPOLYGON) => $this->curvePolygon(),
+                strtoupper(self::TYPE_MULTICURVE) => $this->multiCurve(),
+                strtoupper(self::TYPE_MULTISURFACE) => $this->multiSurface(),
+                strtoupper(self::TYPE_POLYHEDRALSURFACE) => $this->polyhedralSurface(),
+                default => throw new UnexpectedValueException(sprintf('Unsupported WKB type %s %d (%X)"', $typeName, $this->type, $this->type)),
+            };
 
             return array(
                 'type'      => $typeName,
                 'srid'      => $this->srid,
-                'value'     => $this->$typeName(),
+                'value'     => $value,
                 'dimension' => $this->getDimensionType($this->dimensions)
             );
         } catch (ExceptionInterface $e) {
-            throw new $e($e->getMessage() . ' at byte ' . $this->reader->getLastPosition(), $e->getCode(), $e->getPrevious());
+            throw new $e($e->getMessage() . ' at byte ' . $this->reader->getLastPosition(), $e->getCode(), $e);
         }
     }
 
@@ -189,7 +202,7 @@ class Parser
      */
     private function is2D($type)
     {
-        return $type < 32;
+        return $type < 0x20; //FIXME : 32 is a magic number
     }
 
     /**
@@ -219,25 +232,15 @@ class Parser
     private function getDimensionType($dimensions)
     {
         if ($this->is2D($dimensions)) {
-            return null;
+            return '';
         }
 
-        switch ($dimensions) {
-            case (1000):
-                //no break
-            case (self::WKB_FLAG_Z):
-                return 'Z';
-            case (2000):
-                //no break
-            case (self::WKB_FLAG_M):
-                return 'M';
-            case (3000):
-                //no break
-            case (self::WKB_FLAG_M | self::WKB_FLAG_Z):
-                return 'ZM';
-        }
-
-        throw new UnexpectedValueException(sprintf('%s with unsupported dimensions 0x%2$X (%2$d)', $this->getTypeName($this->type), $dimensions));
+        return match ($dimensions) {
+            1000, self::WKB_FLAG_Z => 'Z',
+            2000, self::WKB_FLAG_M => 'M',
+            3000, self::WKB_FLAG_M | self::WKB_FLAG_Z => 'ZM',
+            default => throw new UnexpectedValueException(sprintf('%s with unsupported dimensions 0x%2$X (%2$d)', $this->getTypeName($this->type), $dimensions)),
+        };
     }
 
     /**
@@ -270,7 +273,7 @@ class Parser
         }
 
         if ($type > 0xFFFF) {
-            return $type & 0xFF;
+            return ($type & 0xFF);
         }
 
         return $type % 1000;
@@ -286,49 +289,22 @@ class Parser
      */
     private function getTypeName($type)
     {
-        switch ($this->getTypePrimitive($type)) {
-            case (self::WKB_TYPE_POINT):
-                $typeName = self::TYPE_POINT;
-                break;
-            case (self::WKB_TYPE_LINESTRING):
-                $typeName = self::TYPE_LINESTRING;
-                break;
-            case (self::WKB_TYPE_POLYGON):
-                $typeName = self::TYPE_POLYGON;
-                break;
-            case (self::WKB_TYPE_MULTIPOINT):
-                $typeName = self::TYPE_MULTIPOINT;
-                break;
-            case (self::WKB_TYPE_MULTILINESTRING):
-                $typeName = self::TYPE_MULTILINESTRING;
-                break;
-            case (self::WKB_TYPE_MULTIPOLYGON):
-                $typeName = self::TYPE_MULTIPOLYGON;
-                break;
-            case (self::WKB_TYPE_GEOMETRYCOLLECTION):
-                $typeName = self::TYPE_GEOMETRYCOLLECTION;
-                break;
-            case (self::WKB_TYPE_CIRCULARSTRING):
-                $typeName = self::TYPE_CIRCULARSTRING;
-                break;
-            case (self::WKB_TYPE_COMPOUNDCURVE):
-                $typeName = self::TYPE_COMPOUNDCURVE;
-                break;
-            case (self::WKB_TYPE_CURVEPOLYGON):
-                $typeName = self::TYPE_CURVEPOLYGON;
-                break;
-            case (self::WKB_TYPE_MULTICURVE):
-                $typeName = self::TYPE_MULTICURVE;
-                break;
-            case (self::WKB_TYPE_MULTISURFACE):
-                $typeName = self::TYPE_MULTISURFACE;
-                break;
-            case (self::WKB_TYPE_POLYHEDRALSURFACE):
-                $typeName = self::TYPE_POLYHEDRALSURFACE;
-                break;
-            default:
-                throw new UnexpectedValueException('Unsupported WKB type "' . $this->type . '"');
-        }
+        $typeName = match ($this->getTypePrimitive($type)) {
+            self::WKB_TYPE_POINT => self::TYPE_POINT,
+            self::WKB_TYPE_LINESTRING => self::TYPE_LINESTRING,
+            self::WKB_TYPE_POLYGON => self::TYPE_POLYGON,
+            self::WKB_TYPE_MULTIPOINT => self::TYPE_MULTIPOINT,
+            self::WKB_TYPE_MULTILINESTRING => self::TYPE_MULTILINESTRING,
+            self::WKB_TYPE_MULTIPOLYGON => self::TYPE_MULTIPOLYGON,
+            self::WKB_TYPE_GEOMETRYCOLLECTION => self::TYPE_GEOMETRYCOLLECTION,
+            self::WKB_TYPE_CIRCULARSTRING => self::TYPE_CIRCULARSTRING,
+            self::WKB_TYPE_COMPOUNDCURVE => self::TYPE_COMPOUNDCURVE,
+            self::WKB_TYPE_CURVEPOLYGON => self::TYPE_CURVEPOLYGON,
+            self::WKB_TYPE_MULTICURVE => self::TYPE_MULTICURVE,
+            self::WKB_TYPE_MULTISURFACE => self::TYPE_MULTISURFACE,
+            self::WKB_TYPE_POLYHEDRALSURFACE, self::WKB_TYPE_POLYHEDRALSURFACE | self::WKB_FLAG_Z => self::TYPE_POLYHEDRALSURFACE,
+            default => throw new UnexpectedValueException(sprintf('Unsupported WKB type "%1$d" (0x%1$x)', $this->type)),
+        };
 
         return strtoupper($typeName);
     }
@@ -760,7 +736,7 @@ class Parser
                 $message .= $this->getTypeName($expectedTypes[0]);
             } else {
                 $last = $this->getTypeName(array_pop($expectedTypes));
-                $message .= implode(array_map(array($this, 'getTypeName'), $expectedTypes), ', ') . ' or ' . $last;
+                $message .= implode(', ', array_map(array($this, 'getTypeName'), $expectedTypes)) . ' or ' . $last;
             }
 
             $message = 'Unexpected' . $message . ' with ';

@@ -23,21 +23,22 @@
 
 namespace LongitudeOne\Geo\WKB\Tests;
 
+use LongitudeOne\Geo\WKB\Exception\InvalidArgumentException;
+use LongitudeOne\Geo\WKB\Exception\RangeException;
+use LongitudeOne\Geo\WKB\Exception\UnexpectedValueException;
 use LongitudeOne\Geo\WKB\Reader;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Reader tests
  *
- * @author  Derek J. Lambert <dlambert@dereklambert.com>
- * @license http://dlambert.mit-license.org MIT
- *
  * @covers \LongitudeOne\Geo\WKB\Reader
  */
-class ReaderTest extends \PHPUnit_Framework_TestCase
+class ReaderTest extends TestCase
 {
     /**
-     * @param mixed  $value
-     * @param array  $methods
+     * @param mixed $value
+     * @param array $methods
      * @param string $exception
      * @param string $message
      *
@@ -45,20 +46,12 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      */
     public function testBad($value, array $methods, $exception, $message)
     {
-        if (version_compare(\PHPUnit_Runner_Version::id(), '5.0', '>=')) {
-            $this->expectException($exception);
+        self::expectException($exception);
 
-            if ('/' === $message[0]) {
-                $this->expectExceptionMessageRegExp($message);
-            } else {
-                $this->expectExceptionMessage($message);
-            }
+        if ('/' === $message[0]) {
+            self::expectExceptionMessageMatches($message);
         } else {
-            if ('/' === $message[0]) {
-                $this->setExpectedExceptionRegExp($exception, $message);
-            } else {
-                $this->setExpectedException($exception, $message);
-            }
+            $this->expectExceptionMessage($message);
         }
 
         $reader = new Reader($value);
@@ -90,32 +83,38 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function badTestData()
+    public static function badTestData(): array
     {
         return array(
+            'readNullPackage' => array(
+                'value' => null,
+                'methods' => array('readByteOrder'),
+                'exception' => InvalidArgumentException::class,
+                'message' => 'LongitudeOne\Geo\WKB\Reader: Error number 2: unpack(): Type C: not enough input values, need 1 values but only 0 were provided'
+            ),
             'readBinaryBadByteOrder' => array(
-                'value'     => pack('H*', '04'),
-                'methods'   => array('readByteOrder'),
+                'value' => pack('H*', '04'),
+                'methods' => array('readByteOrder'),
                 'exception' => '\LongitudeOne\Geo\WKB\Exception\UnexpectedValueException',
-                'message'   => 'Invalid byte order "4"'
+                'message' => 'Invalid byte order "4"'
             ),
             'readBinaryWithoutByteOrder' => array(
-                'value'     => pack('H*', '0101000000'),
-                'methods'   => array('readLong'),
+                'value' => pack('H*', '0101000000'),
+                'methods' => array('readLong'),
                 'exception' => '\LongitudeOne\Geo\WKB\Exception\UnexpectedValueException',
-                'message'   => 'Invalid byte order "unset"'
+                'message' => 'Invalid byte order "unset"'
             ),
             'readHexWithoutByteOrder' => array(
-                'value'     => '0101000000',
-                'methods'   => array('readLong'),
+                'value' => '0101000000',
+                'methods' => array('readLong'),
                 'exception' => '\LongitudeOne\Geo\WKB\Exception\UnexpectedValueException',
-                'message'   => 'Invalid byte order "unset"'
+                'message' => 'Invalid byte order "unset"'
             ),
             'readBinaryShortFloat' => array(
-                'value'     => pack('H*', '013D0AD'),
-                'methods'   => array('readByteOrder', 'readFloat'),
-                'exception' => 'LongitudeOne\Geo\WKB\Exception\RangeException',
-                'message'   => '/Type d: not enough input, need 8, have 3$/'
+                'value' => pack('H*', '013D0AD'),
+                'methods' => array('readByteOrder', 'readFloat'),
+                'exception' => RangeException::class,
+                'message' => '/Type d: not enough input values, need 8 values but only 3 were provided$/'
             ),
         );
     }
@@ -123,106 +122,106 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function goodTestData()
+    public static function goodTestData(): array
     {
         return array(
             'readBinaryByteOrder' => array(
-                'value'   => pack('H*', '01'),
+                'value' => pack('H*', '01'),
                 'methods' => array(
                     array('readByteOrder', null, 1)
                 )
             ),
             'readHexByteOrder' => array(
-                'value'   => '01',
+                'value' => '01',
                 'methods' => array(
                     array('readByteOrder', null, 1)
                 )
             ),
             'readPrefixedHexByteOrder' => array(
-                'value'   => '0x01',
+                'value' => '0x01',
                 'methods' => array(
                     array('readByteOrder', null, 1)
                 )
             ),
             'readNDRBinaryLong' => array(
-                'value'   => pack('H*', '0101000000'),
+                'value' => pack('H*', '0101000000'),
                 'methods' => array(
                     array('readByteOrder', null, 1),
                     array('readLong', null, 1)
                 )
             ),
             'readXDRBinaryLong' => array(
-                'value'   => pack('H*', '0000000001'),
+                'value' => pack('H*', '0000000001'),
                 'methods' => array(
                     array('readByteOrder', null, 0),
                     array('readLong', null, 1)
                 )
             ),
             'readNDRHexLong' => array(
-                'value'   => '0101000000',
+                'value' => '0101000000',
                 'methods' => array(
                     array('readByteOrder', null, 1),
                     array('readLong', null, 1)
                 )
             ),
             'readXDRHexLong' => array(
-                'value'   => '0000000001',
+                'value' => '0000000001',
                 'methods' => array(
                     array('readByteOrder', null, 0),
                     array('readLong', null, 1)
                 )
             ),
             'readNDRBinaryFloat' => array(
-                'value'   => pack('H*', '013D0AD7A3701D4140'),
+                'value' => pack('H*', '013D0AD7A3701D4140'),
                 'methods' => array(
                     array('readByteOrder', null, 1),
                     array('readFloat', null, 34.23)
                 )
             ),
             'readNDRBinaryDouble' => array(
-                'value'   => pack('H*', '013D0AD7A3701D4140'),
+                'value' => pack('H*', '013D0AD7A3701D4140'),
                 'methods' => array(
                     array('readByteOrder', null, 1),
                     array('readDouble', null, 34.23)
                 )
             ),
             'readXDRBinaryFloat' => array(
-                'value'   => pack('H*', '0040411D70A3D70A3D'),
+                'value' => pack('H*', '0040411D70A3D70A3D'),
                 'methods' => array(
                     array('readByteOrder', null, 0),
                     array('readFloat', null, 34.23)
                 )
             ),
             'readNDRHexFloat' => array(
-                'value'   => '013D0AD7A3701D4140',
+                'value' => '013D0AD7A3701D4140',
                 'methods' => array(
                     array('readByteOrder', null, 1),
                     array('readFloat', null, 34.23)
                 )
             ),
             'readXDRHexFloat' => array(
-                'value'   => '0040411D70A3D70A3D',
+                'value' => '0040411D70A3D70A3D',
                 'methods' => array(
                     array('readByteOrder', null, 0),
                     array('readFloat', null, 34.23)
                 )
             ),
             'readXDRBinaryFloats' => array(
-                'value'   => pack('H*', '0040411D70A3D70A3D40411D70A3D70A3D'),
+                'value' => pack('H*', '0040411D70A3D70A3D40411D70A3D70A3D'),
                 'methods' => array(
                     array('readByteOrder', null, 0),
                     array('readFloats', 2, array(34.23, 34.23))
                 )
             ),
             'readXDRBinaryDoubles' => array(
-                'value'   => pack('H*', '0040411D70A3D70A3D40411D70A3D70A3D'),
+                'value' => pack('H*', '0040411D70A3D70A3D40411D70A3D70A3D'),
                 'methods' => array(
                     array('readByteOrder', null, 0),
                     array('readDoubles', 2, array(34.23, 34.23))
                 )
             ),
             'readXDRPosition' => array(
-                'value'   => pack('H*', '0040411D70A3D70A3D40411D70A3D70A3D'),
+                'value' => pack('H*', '0040411D70A3D70A3D40411D70A3D70A3D'),
                 'methods' => array(
                     array('readByteOrder', null, 0),
                     array('getCurrentPosition', null, 1),
@@ -242,8 +241,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     {
         $reader = new Reader();
 
-        $value  = '01';
-        $value  = pack('H*', $value);
+        $value = '01';
+        $value = pack('H*', $value);
 
         $reader->load($value);
 
@@ -251,7 +250,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, $result);
 
-        $value  = '01';
+        $value = '01';
 
         $reader->load($value);
 
@@ -259,7 +258,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, $result);
 
-        $value  = '0x01';
+        $value = '0x01';
 
         $reader->load($value);
 
@@ -267,8 +266,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, $result);
 
-        $value  = '0040411D70A3D70A3D';
-        $value  = pack('H*', $value);
+        $value = '0040411D70A3D70A3D';
+        $value = pack('H*', $value);
 
         $reader->load($value);
 

@@ -23,6 +23,7 @@
 
 namespace LongitudeOne\Geo\WKB;
 
+use LongitudeOne\Geo\WKB\Exception\InvalidArgumentException;
 use LongitudeOne\Geo\WKB\Exception\RangeException;
 use LongitudeOne\Geo\WKB\Exception\UnexpectedValueException;
 
@@ -112,7 +113,8 @@ class Reader
      */
     public function readLong()
     {
-        $value           = self::WKB_NDR === $this->getByteOrder() ? $this->unpackInput('V') : $this->unpackInput('N');
+        $format = self::WKB_NDR === $this->getByteOrder() ? 'V' : 'N';
+        $value = $this->unpackInput($format);
         $this->previous  = 4;
         $this->position += $this->previous;
 
@@ -145,7 +147,7 @@ class Reader
             $double = $double['value'];
         }
 
-        $this->previous  = 8;
+        $this->previous = 8;
         $this->position += $this->previous;
 
         return $double;
@@ -179,7 +181,7 @@ class Reader
         for ($i = 0; $i < $count; $i++) {
             $float = $this->readFloat();
 
-            if (! is_nan($float)) {
+            if (!is_null($float) && !is_nan($float)) {
                 $floats[] = $float;
             }
         }
@@ -238,17 +240,21 @@ class Reader
     /**
      * @param string $format
      *
-     * @return array
-     * @throws RangeException
+     * @throws InvalidArgumentException
      */
     private function unpackInput($format)
     {
-        $code = version_compare(PHP_VERSION, '5.5.0-dev', '>=') ? 'a' : 'A';
+        set_error_handler([$this, 'onWarning'], E_WARNING);
+        $result = unpack($format . 'result/a*input', $this->input);
+        restore_error_handler();
 
-        try {
-            $result = unpack($format . 'result/' . $code . '*input', $this->input);
-        } catch (\Exception $e) {
-            throw new RangeException($e->getMessage(), $e->getCode(), $e->getPrevious());
+        if (false === $result) {
+            // this code is certainly unreachable
+            $message = sprintf(
+                '%s: Unpack failed, the native PHP `unpack` function is returning false without triggering a warning',
+                static::class
+            );
+            throw new InvalidArgumentException($message);
         }
 
         $this->input = $result['input'];
@@ -268,5 +274,12 @@ class Reader
         }
 
         return self::$machineByteOrder;
+    }
+
+    private function onWarning(int $errorNumber, string $errorMessage): void
+    {
+        $message = sprintf('%s: Error number %d: %s', static::class, $errorNumber, $errorMessage);
+
+        throw new InvalidArgumentException($message);
     }
 }

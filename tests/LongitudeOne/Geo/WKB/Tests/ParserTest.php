@@ -23,18 +23,98 @@
 
 namespace LongitudeOne\Geo\WKB\Tests;
 
+use LongitudeOne\Geo\WKB\Exception\RangeException;
+use LongitudeOne\Geo\WKB\Exception\UnexpectedValueException;
 use LongitudeOne\Geo\WKB\Parser;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Parser tests
  *
- * @author  Derek J. Lambert <dlambert@dereklambert.com>
- * @license http://dlambert.mit-license.org MIT
- *
  * @covers \LongitudeOne\Geo\WKB\Parser
  */
-class ParserTest extends \PHPUnit_Framework_TestCase
+class ParserTest extends TestCase
 {
+    /**
+     * @see https://github.com/postgis/postgis/blob/9eefe39f1c33c7e294ff181183e84500beef9bcf/doc/ZMSgeoms.txt#L70
+     *
+     * @return \Generator<string, array{int, int}, null, void>
+     */
+    public static function wkbGeometryType(): \Generator
+    {
+        yield 'wkbPoint' => [1, Parser::WKB_TYPE_POINT];
+        yield 'wkbLineString' => [2, Parser::WKB_TYPE_LINESTRING];
+        yield 'wkbPolygon' => [3, Parser::WKB_TYPE_POLYGON];
+        yield 'wkbMultiPoint' => [4, Parser::WKB_TYPE_MULTIPOINT];
+        yield 'wkbMultiLineString' => [5, Parser::WKB_TYPE_MULTILINESTRING];
+        yield 'wkbMultiPolygon' => [6, Parser::WKB_TYPE_MULTIPOLYGON];
+        yield 'wkbGeometryCollection' => [7, Parser::WKB_TYPE_GEOMETRYCOLLECTION];
+
+        // | 0x80000000
+        yield 'wkbPointZ' => [0x80000001, Parser::WKB_FLAG_Z | Parser::WKB_TYPE_POINT];
+        yield 'wkbLineStringZ' => [0x80000002, Parser::WKB_FLAG_Z | Parser::WKB_TYPE_LINESTRING];
+        yield 'wkbPolygonZ' => [0x80000003, Parser::WKB_FLAG_Z | Parser::WKB_TYPE_POLYGON];
+        yield 'wkbMultiPointZ' => [0x80000004, Parser::WKB_FLAG_Z | Parser::WKB_TYPE_MULTIPOINT];
+        yield 'wkbMultiLineStringZ' => [0x80000005, Parser::WKB_FLAG_Z | Parser::WKB_TYPE_MULTILINESTRING];
+        yield 'wkbMultiPolygonZ' => [0x80000006, Parser::WKB_FLAG_Z | Parser::WKB_TYPE_MULTIPOLYGON];
+        yield 'wkbGeometryCollectionZ' => [0x80000007, Parser::WKB_FLAG_Z | Parser::WKB_TYPE_GEOMETRYCOLLECTION];
+
+        // | 0x40000000
+        yield 'wkbPointM' => [0x40000001, Parser::WKB_FLAG_M | Parser::WKB_TYPE_POINT];
+        yield 'wkbLineStringM' => [0x40000002, Parser::WKB_FLAG_M | Parser::WKB_TYPE_LINESTRING];
+        yield 'wkbPolygonM' => [0x40000003, Parser::WKB_FLAG_M | Parser::WKB_TYPE_POLYGON];
+        yield 'wkbMultiPointM' => [0x40000004, Parser::WKB_FLAG_M | Parser::WKB_TYPE_MULTIPOINT];
+        yield 'wkbMultiLineStringM' => [0x40000005, Parser::WKB_FLAG_M | Parser::WKB_TYPE_MULTILINESTRING];
+        yield 'wkbMultiPolygonM' => [0x40000006, Parser::WKB_FLAG_M | Parser::WKB_TYPE_MULTIPOLYGON];
+        yield 'wkbGeometryCollectionM' => [0x40000007, Parser::WKB_FLAG_M | Parser::WKB_TYPE_GEOMETRYCOLLECTION];
+
+        // | 0x40000000 | 0x80000000
+        yield 'wkbPointZM' => [0xC0000001, Parser::WKB_FLAG_M | Parser::WKB_FLAG_Z | Parser::WKB_TYPE_POINT];
+        yield 'wkbLineStringZM' => [0xC0000002, Parser::WKB_FLAG_M | Parser::WKB_FLAG_Z | Parser::WKB_TYPE_LINESTRING];
+        yield 'wkbPolygonZM' => [0xC0000003, Parser::WKB_FLAG_M | Parser::WKB_FLAG_Z | Parser::WKB_TYPE_POLYGON];
+        yield 'wkbMultiPointZM' => [0xC0000004, Parser::WKB_FLAG_M | Parser::WKB_FLAG_Z | Parser::WKB_TYPE_MULTIPOINT];
+        yield 'wkbMultiLineStringZM' => [0xC0000005, Parser::WKB_FLAG_M | Parser::WKB_FLAG_Z | Parser::WKB_TYPE_MULTILINESTRING];
+        yield 'wkbMultiPolygonZM' => [0xC0000006, Parser::WKB_FLAG_M | Parser::WKB_FLAG_Z | Parser::WKB_TYPE_MULTIPOLYGON];
+        yield 'wkbGeometryCollectionZM' => [0xC0000007, Parser::WKB_FLAG_M | Parser::WKB_FLAG_Z | Parser::WKB_TYPE_GEOMETRYCOLLECTION];
+
+        // | 0x20000000
+        yield 'wkbPointSRID' => [0x20000001, Parser::WKB_FLAG_SRID | Parser::WKB_TYPE_POINT];
+        yield 'wkbLineStringSRID' => [0x20000002, Parser::WKB_FLAG_SRID | Parser::WKB_TYPE_LINESTRING];
+        yield 'wkbPolygonSRID' => [0x20000003, Parser::WKB_FLAG_SRID | Parser::WKB_TYPE_POLYGON];
+        yield 'wkbMultiPointSRID' => [0x20000004, Parser::WKB_FLAG_SRID | Parser::WKB_TYPE_MULTIPOINT];
+        yield 'wkbMultiLineStringSRID' => [0x20000005, Parser::WKB_FLAG_SRID | Parser::WKB_TYPE_MULTILINESTRING];
+        yield 'wkbMultiPolygonSRID' => [0x20000006, Parser::WKB_FLAG_SRID | Parser::WKB_TYPE_MULTIPOLYGON];
+        yield 'wkbGeometryCollectionSRID' => [0x20000007, Parser::WKB_FLAG_SRID | Parser::WKB_TYPE_GEOMETRYCOLLECTION];
+
+        // | 0x20000000 | 0x80000000
+        yield 'wkbPointSRIDZ' => [0xA0000001, Parser::WKB_FLAG_SRID | Parser::WKB_FLAG_Z | Parser::WKB_TYPE_POINT];
+        yield 'wkbLineStringSRIDZ' => [0xA0000002, Parser::WKB_FLAG_SRID | Parser::WKB_FLAG_Z | Parser::WKB_TYPE_LINESTRING];
+        yield 'wkbPolygonSRIDZ' => [0xA0000003, Parser::WKB_FLAG_SRID | Parser::WKB_FLAG_Z | Parser::WKB_TYPE_POLYGON];
+        yield 'wkbMultiPointSRIDZ' => [0xA0000004, Parser::WKB_FLAG_SRID | Parser::WKB_FLAG_Z | Parser::WKB_TYPE_MULTIPOINT];
+        yield 'wkbMultiLineStringSRIDZ' => [0xA0000005, Parser::WKB_FLAG_SRID | Parser::WKB_FLAG_Z | Parser::WKB_TYPE_MULTILINESTRING];
+        yield 'wkbMultiPolygonSRIDZ' => [0xA0000006, Parser::WKB_FLAG_SRID | Parser::WKB_FLAG_Z | Parser::WKB_TYPE_MULTIPOLYGON];
+        yield 'wkbGeometryCollectionSRIDZ' => [0xA0000007, Parser::WKB_FLAG_SRID | Parser::WKB_FLAG_Z | Parser::WKB_TYPE_GEOMETRYCOLLECTION];
+
+        // | 0x20000000 | 0x40000000
+        yield 'wkbPointSRIDM' => [0x60000001, Parser::WKB_FLAG_SRID | Parser::WKB_FLAG_M | Parser::WKB_TYPE_POINT];
+        yield 'wkbLineStringSRIDM' => [0x60000002, Parser::WKB_FLAG_SRID | Parser::WKB_FLAG_M | Parser::WKB_TYPE_LINESTRING];
+        yield 'wkbPolygonSRIDM' => [0x60000003, Parser::WKB_FLAG_SRID | Parser::WKB_FLAG_M | Parser::WKB_TYPE_POLYGON];
+        yield 'wkbMultiPointSRIDM' => [0x60000004, Parser::WKB_FLAG_SRID | Parser::WKB_FLAG_M | Parser::WKB_TYPE_MULTIPOINT];
+        yield 'wkbMultiLineStringSRIDM' => [0x60000005, Parser::WKB_FLAG_SRID | Parser::WKB_FLAG_M | Parser::WKB_TYPE_MULTILINESTRING];
+        yield 'wkbMultiPolygonSRIDM' => [0x60000006, Parser::WKB_FLAG_SRID | Parser::WKB_FLAG_M | Parser::WKB_TYPE_MULTIPOLYGON];
+        yield 'wkbGeometryCollectionSRIDM' => [0x60000007, Parser::WKB_FLAG_SRID | Parser::WKB_FLAG_M | Parser::WKB_TYPE_GEOMETRYCOLLECTION];
+
+        // | 0x20000000 | 0x40000000 | 0x80000000
+        yield 'wkbPointSRIDZM' => [0xE0000001, Parser::WKB_FLAG_SRID | Parser::WKB_FLAG_M | Parser::WKB_FLAG_Z | Parser::WKB_TYPE_POINT];
+        yield 'wkbLineStringSRIDZM' => [0xE0000002, Parser::WKB_FLAG_SRID | Parser::WKB_FLAG_M | Parser::WKB_FLAG_Z | Parser::WKB_TYPE_LINESTRING];
+        yield 'wkbPolygonSRIDZM' => [0xE0000003, Parser::WKB_FLAG_SRID | Parser::WKB_FLAG_M | Parser::WKB_FLAG_Z | Parser::WKB_TYPE_POLYGON];
+        yield 'wkbMultiPointSRIDZM' => [0xE0000004, Parser::WKB_FLAG_SRID | Parser::WKB_FLAG_M | Parser::WKB_FLAG_Z | Parser::WKB_TYPE_MULTIPOINT];
+        yield 'wkbMultiLineStringSRIDZM' => [0xE0000005, Parser::WKB_FLAG_SRID | Parser::WKB_FLAG_M | Parser::WKB_FLAG_Z | Parser::WKB_TYPE_MULTILINESTRING];
+        yield 'wkbMultiPolygonSRIDZM' => [0xE0000006, Parser::WKB_FLAG_SRID | Parser::WKB_FLAG_M | Parser::WKB_FLAG_Z | Parser::WKB_TYPE_MULTIPOLYGON];
+        yield 'wkbGeometryCollectionSRIDZM' => [0xE0000007, Parser::WKB_FLAG_SRID | Parser::WKB_FLAG_M | Parser::WKB_FLAG_Z | Parser::WKB_TYPE_GEOMETRYCOLLECTION];
+    }
+
     /**
      * @param mixed  $value
      * @param string $exception
@@ -44,20 +124,12 @@ class ParserTest extends \PHPUnit_Framework_TestCase
      */
     public function testBadBinaryData($value, $exception, $message)
     {
-        if (version_compare(\PHPUnit_Runner_Version::id(), '5.0', '>=')) {
-            $this->expectException($exception);
+        self::expectException($exception);
 
-            if ('/' === $message[0]) {
-                $this->expectExceptionMessageRegExp($message);
-            } else {
-                $this->expectExceptionMessage($message);
-            }
+        if ('/' === $message[0]) {
+            self::expectExceptionMessageMatches($message);
         } else {
-            if ('/' === $message[0]) {
-                $this->setExpectedExceptionRegExp($exception, $message);
-            } else {
-                $this->setExpectedException($exception, $message);
-            }
+            self::expectExceptionMessage($message);
         }
 
         $parser = new Parser($value);
@@ -68,85 +140,91 @@ class ParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array[]
      */
-    public function badBinaryData()
+    public static function badBinaryData(): array
     {
         return array(
             'badByteOrder' => array(
                 'value'     => pack('H*', '03010000003D0AD7A3701D41400000000000C055C0'),
-                'exception' => 'LongitudeOne\Geo\WKB\Exception\UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message'   => 'Invalid byte order "3" at byte 0'
             ),
             'badSimpleType' => array(
                 'value'     => pack('H*', '01150000003D0AD7A3701D41400000000000C055C0'),
-                'exception' => 'LongitudeOne\Geo\WKB\Exception\UnexpectedValueException',
-                'message'   => 'Unsupported WKB type "21" at byte 1'
+                'exception' => UnexpectedValueException::class,
+                'message'   => 'Unsupported WKB type "21" (0x15) at byte 1'
             ),
             'shortNDRPoint' => array(
                 'value'     => pack('H*', '01010000003D0AD7A3701D414000000000'),
-                'exception' => 'LongitudeOne\Geo\WKB\Exception\RangeException',
-                'message'   => '/Type d: not enough input, need 8, have 4 at byte 5$/'
+                'exception' => RangeException::class,
+                'message'   => 'Type d: not enough input values, need 8 values but only 4 were provided'
             ),
             'badPointSize' => array(
                 'value'     => pack('H*', '0000000FA1'),
-                'exception' => 'LongitudeOne\Geo\WKB\Exception\UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message'   => 'POINT with unsupported dimensions 0xFA0 (4000) at byte 1'
             ),
             'badPointInMultiPoint' => array(
                 'value'     => pack('H*', '0080000004000000020000000001'),
-                'exception' => 'LongitudeOne\Geo\WKB\Exception\UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message'   => 'Bad POINT with dimensions 0x0 (0) in MULTIPOINT, expected dimensions 0x80000000 (2147483648) at byte 10'
             ),
             'unexpectedLineStringInMultiPoint' => array(
                 'value'     => pack('H*', '0080000004000000020000000002'),
-                'exception' => 'LongitudeOne\Geo\WKB\Exception\UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message'   => 'Unexpected LINESTRING with dimensions 0x0 (0) in MULTIPOINT, expected POINT with dimensions 0x80000000 (2147483648) at byte 10'
             ),
             'badLineStringInMultiLineString' => array(
                 'value'     => pack('H*', '0000000005000000020080000002'),
-                'exception' => 'LongitudeOne\Geo\WKB\Exception\UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message'   => 'Bad LINESTRING with dimensions 0x80000000 (2147483648) in MULTILINESTRING, expected dimensions 0x0 (0) at byte 10'
             ),
             'badPolygonInMultiPolygon' => array(
                 'value'     => pack('H*', '0080000006000000020000000003'),
-                'exception' => 'LongitudeOne\Geo\WKB\Exception\UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message'   => 'Bad POLYGON with dimensions 0x0 (0) in MULTIPOLYGON, expected dimensions 0x80000000 (2147483648) at byte 10'
             ),
             'badCircularStringInCompoundCurve' => array(
                 'value'     => pack('H*', '0080000009000000020000000008'),
-                'exception' => 'LongitudeOne\Geo\WKB\Exception\UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message'   => 'Bad CIRCULARSTRING with dimensions 0x0 (0) in COMPOUNDCURVE, expected dimensions 0x80000000 (2147483648) at byte 10'
             ),
             'unexpectedPointInCompoundCurve' => array(
                 'value'     => pack('H*', '0080000009000000020000000001'),
-                'exception' => 'LongitudeOne\Geo\WKB\Exception\UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message'   => 'Unexpected POINT with dimensions 0x0 (0) in COMPOUNDCURVE, expected LINESTRING or CIRCULARSTRING with dimensions 0x80000000 (2147483648) at byte 10'
             ),
             'badCompoundCurveInCurvePolygon' => array(
                 'value'     => pack('H*', '000000000a000000010080000009'),
-                'exception' => 'LongitudeOne\Geo\WKB\Exception\UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message'   => 'Bad COMPOUNDCURVE with dimensions 0x80000000 (2147483648) in CURVEPOLYGON, expected dimensions 0x0 (0) at byte 10'
             ),
             'badCircularStringInCurvePolygon' => array(
                 'value'     => pack('H*', '008000000a000000010080000009000000020000000008'),
-                'exception' => 'LongitudeOne\Geo\WKB\Exception\UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message'   => 'Bad CIRCULARSTRING with dimensions 0x0 (0) in CURVEPOLYGON, expected dimensions 0x80000000 (2147483648) at byte 19'
             ),
             'unexpectedPolygonInMultiCurve' => array(
                 'value'     => pack('H*', '004000000b000000010040000003'),
-                'exception' => 'LongitudeOne\Geo\WKB\Exception\UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message'   => 'Unexpected POLYGON with dimensions 0x40000000 (1073741824) in MULTICURVE, expected LINESTRING, CIRCULARSTRING or COMPOUNDCURVE with dimensions 0x40000000 (1073741824) at byte 10'
             ),
             'unexpectedPointInMultiSurface' => array(
                 'value'     => pack('H*', '008000000c000000020080000001'),
-                'exception' => 'LongitudeOne\Geo\WKB\Exception\UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message'   => 'Unexpected POINT with dimensions 0x80000000 (2147483648) in MULTISURFACE, expected POLYGON or CURVEPOLYGON with dimensions 0x80000000 (2147483648) at byte 10'
             ),
             'unexpectedPointInPolyhedralSurface' => array(
                 'value'     => pack('H*', '010f000080050000000101000080'),
-                'exception' => 'LongitudeOne\Geo\WKB\Exception\UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message'   => 'Unexpected POINT with dimensions 0x80000000 (2147483648) in POLYHEDRALSURFACE, expected POLYGON with dimensions 0x80000000 (2147483648) at byte 10'
             ),
         );
+    }
+
+    #[DataProvider('wkbGeometryType')]
+    public function testGeometryType(int $expected, int $actual): void
+    {
+        self::assertSame($expected, $actual);
     }
 
     /**
@@ -267,7 +345,7 @@ class ParserTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function goodBinaryData()
+    public static function goodBinaryData(): array
     {
         return array(
             'ndrEmptyPointValue' => array(
