@@ -244,12 +244,20 @@ class Reader
     }
 
     /**
-     * @param string $format
+     * @param string|boolean|null $format
      *
      * @throws InvalidArgumentException
      */
     private function unpackInput($format)
     {
+        if (null === $this->input) {
+            $this->onWarning(1, 'No input data to read. Input is null.');
+        }
+
+        if (false === $this->input) {
+            $this->onWarning(2, 'Invalid boolean data to read. Input is false.');
+        }
+
         set_error_handler([$this, 'onWarning'], E_WARNING);
         $result = unpack($format.'result/a*input', $this->input);
         restore_error_handler();

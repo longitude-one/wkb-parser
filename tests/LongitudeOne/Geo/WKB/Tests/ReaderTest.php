@@ -34,7 +34,13 @@ class ReaderTest extends TestCase
                 'value' => null,
                 'methods' => ['readByteOrder'],
                 'exception' => InvalidArgumentException::class,
-                'message' => 'LongitudeOne\Geo\WKB\Reader: Error number 2: unpack(): Type C: not enough input values, need 1 values but only 0 were provided',
+                'message' => 'LongitudeOne\Geo\WKB\Reader: Error number 1: No input data to read. Input is null.',
+            ],
+            'readFalsePackage' => [
+                'value' => false,
+                'methods' => ['readByteOrder'],
+                'exception' => InvalidArgumentException::class,
+                'message' => 'LongitudeOne\Geo\WKB\Reader: Error number 2: Invalid boolean data to read. Input is false.',
             ],
             'readBinaryBadByteOrder' => [
                 'value' => pack('H*', '04'),
