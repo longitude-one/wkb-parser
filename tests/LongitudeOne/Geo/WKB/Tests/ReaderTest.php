@@ -57,7 +57,7 @@ class ReaderTest extends TestCase
             'readBinaryShortFloat' => [
                 'value' => pack('H*', '013D0AD'),
                 'methods' => ['readByteOrder', 'readFloat'],
-                'exception' => RangeException::class,
+                'exception' => InvalidArgumentException::class,
                 'message' => '/Type d: not enough input values, need 8 values but only 3 were provided$/',
             ],
         ];

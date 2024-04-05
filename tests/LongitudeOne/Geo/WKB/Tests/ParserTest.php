@@ -12,6 +12,7 @@
 
 namespace LongitudeOne\Geo\WKB\Tests;
 
+use LongitudeOne\Geo\WKB\Exception\InvalidArgumentException;
 use LongitudeOne\Geo\WKB\Exception\RangeException;
 use LongitudeOne\Geo\WKB\Exception\UnexpectedValueException;
 use LongitudeOne\Geo\WKB\Parser;
@@ -43,7 +44,7 @@ class ParserTest extends TestCase
             ],
             'shortNDRPoint' => [
                 'value' => pack('H*', '01010000003D0AD7A3701D414000000000'),
-                'exception' => RangeException::class,
+                'exception' => InvalidArgumentException::class,
                 'message' => 'Type d: not enough input values, need 8 values but only 4 were provided',
             ],
             'badPointSize' => [
