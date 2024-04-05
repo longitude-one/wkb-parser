@@ -15,6 +15,6 @@ namespace LongitudeOne\Geo\WKB\Exception;
 /**
  * Exception interface for library exceptions.
  */
-interface ExceptionInterface
+interface ExceptionInterface extends \Throwable
 {
 }
