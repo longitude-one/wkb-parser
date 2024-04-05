@@ -41,11 +41,6 @@ class Reader
     /**
      * @var int
      */
-    private $length;
-
-    /**
-     * @var int
-     */
     private $position;
 
     /**
@@ -93,7 +88,6 @@ class Reader
 
         if (ord($input) < 32) {
             $this->input = $input;
-            $this->length = strlen($input);
 
             return;
         }
@@ -105,7 +99,6 @@ class Reader
         }
 
         $this->input = pack('H*', $input);
-        $this->length = strlen($this->input);
     }
 
     /**
