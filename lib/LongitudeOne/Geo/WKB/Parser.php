@@ -59,10 +59,6 @@ class Parser
     public const WKB_TYPE_SURFACE = 0x0000000E;
     public const WKB_TYPE_TIN = 0x00000010;
     public const WKB_TYPE_TRIANGLE = 0x00000011;
-    /**
-     * @var int
-     */
-    private $byteOrder;
 
     /**
      * @var int
@@ -657,7 +653,7 @@ class Parser
         $this->srid = null;
 
         try {
-            $this->byteOrder = $this->readByteOrder();
+            $this->readByteOrder();
             $this->type = $this->readType();
 
             if ($this->hasFlag($this->type, self::WKB_FLAG_SRID)) {
