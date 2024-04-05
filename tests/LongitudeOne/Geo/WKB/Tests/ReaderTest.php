@@ -1,44 +1,187 @@
 <?php
+
 /**
- * Copyright (C) 2016 Derek J. Lambert
+ * This file is part of the LongitudeOne WKB-Parser project.
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * PHP 8.1 | 8.2 | 8.3
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * Copyright LongitudeOne - Alexandre Tranchant - Derek J. Lambert.
+ * Copyright 2024.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
  */
 
 namespace LongitudeOne\Geo\WKB\Tests;
 
 use LongitudeOne\Geo\WKB\Exception\InvalidArgumentException;
 use LongitudeOne\Geo\WKB\Exception\RangeException;
-use LongitudeOne\Geo\WKB\Exception\UnexpectedValueException;
 use LongitudeOne\Geo\WKB\Reader;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Reader tests
+ * Reader tests.
  *
  * @covers \LongitudeOne\Geo\WKB\Reader
  */
 class ReaderTest extends TestCase
 {
     /**
-     * @param mixed $value
-     * @param array $methods
+     * @return array[]
+     */
+    public static function badTestData(): array
+    {
+        return [
+            'readNullPackage' => [
+                'value' => null,
+                'methods' => ['readByteOrder'],
+                'exception' => InvalidArgumentException::class,
+                'message' => 'LongitudeOne\Geo\WKB\Reader: Error number 2: unpack(): Type C: not enough input values, need 1 values but only 0 were provided',
+            ],
+            'readBinaryBadByteOrder' => [
+                'value' => pack('H*', '04'),
+                'methods' => ['readByteOrder'],
+                'exception' => '\LongitudeOne\Geo\WKB\Exception\UnexpectedValueException',
+                'message' => 'Invalid byte order "4"',
+            ],
+            'readBinaryWithoutByteOrder' => [
+                'value' => pack('H*', '0101000000'),
+                'methods' => ['readLong'],
+                'exception' => '\LongitudeOne\Geo\WKB\Exception\UnexpectedValueException',
+                'message' => 'Invalid byte order "unset"',
+            ],
+            'readHexWithoutByteOrder' => [
+                'value' => '0101000000',
+                'methods' => ['readLong'],
+                'exception' => '\LongitudeOne\Geo\WKB\Exception\UnexpectedValueException',
+                'message' => 'Invalid byte order "unset"',
+            ],
+            'readBinaryShortFloat' => [
+                'value' => pack('H*', '013D0AD'),
+                'methods' => ['readByteOrder', 'readFloat'],
+                'exception' => RangeException::class,
+                'message' => '/Type d: not enough input values, need 8 values but only 3 were provided$/',
+            ],
+        ];
+    }
+
+    /**
+     * @return array[]
+     */
+    public static function goodTestData(): array
+    {
+        return [
+            'readBinaryByteOrder' => [
+                'value' => pack('H*', '01'),
+                'methods' => [
+                    ['readByteOrder', null, 1],
+                ],
+            ],
+            'readHexByteOrder' => [
+                'value' => '01',
+                'methods' => [
+                    ['readByteOrder', null, 1],
+                ],
+            ],
+            'readPrefixedHexByteOrder' => [
+                'value' => '0x01',
+                'methods' => [
+                    ['readByteOrder', null, 1],
+                ],
+            ],
+            'readNDRBinaryLong' => [
+                'value' => pack('H*', '0101000000'),
+                'methods' => [
+                    ['readByteOrder', null, 1],
+                    ['readLong', null, 1],
+                ],
+            ],
+            'readXDRBinaryLong' => [
+                'value' => pack('H*', '0000000001'),
+                'methods' => [
+                    ['readByteOrder', null, 0],
+                    ['readLong', null, 1],
+                ],
+            ],
+            'readNDRHexLong' => [
+                'value' => '0101000000',
+                'methods' => [
+                    ['readByteOrder', null, 1],
+                    ['readLong', null, 1],
+                ],
+            ],
+            'readXDRHexLong' => [
+                'value' => '0000000001',
+                'methods' => [
+                    ['readByteOrder', null, 0],
+                    ['readLong', null, 1],
+                ],
+            ],
+            'readNDRBinaryFloat' => [
+                'value' => pack('H*', '013D0AD7A3701D4140'),
+                'methods' => [
+                    ['readByteOrder', null, 1],
+                    ['readFloat', null, 34.23],
+                ],
+            ],
+            'readNDRBinaryDouble' => [
+                'value' => pack('H*', '013D0AD7A3701D4140'),
+                'methods' => [
+                    ['readByteOrder', null, 1],
+                    ['readDouble', null, 34.23],
+                ],
+            ],
+            'readXDRBinaryFloat' => [
+                'value' => pack('H*', '0040411D70A3D70A3D'),
+                'methods' => [
+                    ['readByteOrder', null, 0],
+                    ['readFloat', null, 34.23],
+                ],
+            ],
+            'readNDRHexFloat' => [
+                'value' => '013D0AD7A3701D4140',
+                'methods' => [
+                    ['readByteOrder', null, 1],
+                    ['readFloat', null, 34.23],
+                ],
+            ],
+            'readXDRHexFloat' => [
+                'value' => '0040411D70A3D70A3D',
+                'methods' => [
+                    ['readByteOrder', null, 0],
+                    ['readFloat', null, 34.23],
+                ],
+            ],
+            'readXDRBinaryFloats' => [
+                'value' => pack('H*', '0040411D70A3D70A3D40411D70A3D70A3D'),
+                'methods' => [
+                    ['readByteOrder', null, 0],
+                    ['readFloats', 2, [34.23, 34.23]],
+                ],
+            ],
+            'readXDRBinaryDoubles' => [
+                'value' => pack('H*', '0040411D70A3D70A3D40411D70A3D70A3D'),
+                'methods' => [
+                    ['readByteOrder', null, 0],
+                    ['readDoubles', 2, [34.23, 34.23]],
+                ],
+            ],
+            'readXDRPosition' => [
+                'value' => pack('H*', '0040411D70A3D70A3D40411D70A3D70A3D'),
+                'methods' => [
+                    ['readByteOrder', null, 0],
+                    ['getCurrentPosition', null, 1],
+                    ['getLastPosition', null, 0],
+                    ['readFloat', null, 34.23],
+                    ['getCurrentPosition', null, 9],
+                    ['getLastPosition', null, 1],
+                    ['readFloat', null, 34.23],
+                    ['getCurrentPosition', null, 17],
+                    ['getLastPosition', null, 9],
+                ],
+            ],
+        ];
+    }
+
+    /**
      * @param string $exception
      * @param string $message
      *
@@ -62,9 +205,6 @@ class ReaderTest extends TestCase
     }
 
     /**
-     * @param mixed $value
-     * @param array $methods
-     *
      * @dataProvider goodTestData
      */
     public function testGood($value, array $methods)
@@ -78,163 +218,6 @@ class ReaderTest extends TestCase
 
             $this->assertSame($expected, $actual);
         }
-    }
-
-    /**
-     * @return array[]
-     */
-    public static function badTestData(): array
-    {
-        return array(
-            'readNullPackage' => array(
-                'value' => null,
-                'methods' => array('readByteOrder'),
-                'exception' => InvalidArgumentException::class,
-                'message' => 'LongitudeOne\Geo\WKB\Reader: Error number 2: unpack(): Type C: not enough input values, need 1 values but only 0 were provided'
-            ),
-            'readBinaryBadByteOrder' => array(
-                'value' => pack('H*', '04'),
-                'methods' => array('readByteOrder'),
-                'exception' => '\LongitudeOne\Geo\WKB\Exception\UnexpectedValueException',
-                'message' => 'Invalid byte order "4"'
-            ),
-            'readBinaryWithoutByteOrder' => array(
-                'value' => pack('H*', '0101000000'),
-                'methods' => array('readLong'),
-                'exception' => '\LongitudeOne\Geo\WKB\Exception\UnexpectedValueException',
-                'message' => 'Invalid byte order "unset"'
-            ),
-            'readHexWithoutByteOrder' => array(
-                'value' => '0101000000',
-                'methods' => array('readLong'),
-                'exception' => '\LongitudeOne\Geo\WKB\Exception\UnexpectedValueException',
-                'message' => 'Invalid byte order "unset"'
-            ),
-            'readBinaryShortFloat' => array(
-                'value' => pack('H*', '013D0AD'),
-                'methods' => array('readByteOrder', 'readFloat'),
-                'exception' => RangeException::class,
-                'message' => '/Type d: not enough input values, need 8 values but only 3 were provided$/'
-            ),
-        );
-    }
-
-    /**
-     * @return array[]
-     */
-    public static function goodTestData(): array
-    {
-        return array(
-            'readBinaryByteOrder' => array(
-                'value' => pack('H*', '01'),
-                'methods' => array(
-                    array('readByteOrder', null, 1)
-                )
-            ),
-            'readHexByteOrder' => array(
-                'value' => '01',
-                'methods' => array(
-                    array('readByteOrder', null, 1)
-                )
-            ),
-            'readPrefixedHexByteOrder' => array(
-                'value' => '0x01',
-                'methods' => array(
-                    array('readByteOrder', null, 1)
-                )
-            ),
-            'readNDRBinaryLong' => array(
-                'value' => pack('H*', '0101000000'),
-                'methods' => array(
-                    array('readByteOrder', null, 1),
-                    array('readLong', null, 1)
-                )
-            ),
-            'readXDRBinaryLong' => array(
-                'value' => pack('H*', '0000000001'),
-                'methods' => array(
-                    array('readByteOrder', null, 0),
-                    array('readLong', null, 1)
-                )
-            ),
-            'readNDRHexLong' => array(
-                'value' => '0101000000',
-                'methods' => array(
-                    array('readByteOrder', null, 1),
-                    array('readLong', null, 1)
-                )
-            ),
-            'readXDRHexLong' => array(
-                'value' => '0000000001',
-                'methods' => array(
-                    array('readByteOrder', null, 0),
-                    array('readLong', null, 1)
-                )
-            ),
-            'readNDRBinaryFloat' => array(
-                'value' => pack('H*', '013D0AD7A3701D4140'),
-                'methods' => array(
-                    array('readByteOrder', null, 1),
-                    array('readFloat', null, 34.23)
-                )
-            ),
-            'readNDRBinaryDouble' => array(
-                'value' => pack('H*', '013D0AD7A3701D4140'),
-                'methods' => array(
-                    array('readByteOrder', null, 1),
-                    array('readDouble', null, 34.23)
-                )
-            ),
-            'readXDRBinaryFloat' => array(
-                'value' => pack('H*', '0040411D70A3D70A3D'),
-                'methods' => array(
-                    array('readByteOrder', null, 0),
-                    array('readFloat', null, 34.23)
-                )
-            ),
-            'readNDRHexFloat' => array(
-                'value' => '013D0AD7A3701D4140',
-                'methods' => array(
-                    array('readByteOrder', null, 1),
-                    array('readFloat', null, 34.23)
-                )
-            ),
-            'readXDRHexFloat' => array(
-                'value' => '0040411D70A3D70A3D',
-                'methods' => array(
-                    array('readByteOrder', null, 0),
-                    array('readFloat', null, 34.23)
-                )
-            ),
-            'readXDRBinaryFloats' => array(
-                'value' => pack('H*', '0040411D70A3D70A3D40411D70A3D70A3D'),
-                'methods' => array(
-                    array('readByteOrder', null, 0),
-                    array('readFloats', 2, array(34.23, 34.23))
-                )
-            ),
-            'readXDRBinaryDoubles' => array(
-                'value' => pack('H*', '0040411D70A3D70A3D40411D70A3D70A3D'),
-                'methods' => array(
-                    array('readByteOrder', null, 0),
-                    array('readDoubles', 2, array(34.23, 34.23))
-                )
-            ),
-            'readXDRPosition' => array(
-                'value' => pack('H*', '0040411D70A3D70A3D40411D70A3D70A3D'),
-                'methods' => array(
-                    array('readByteOrder', null, 0),
-                    array('getCurrentPosition', null, 1),
-                    array('getLastPosition', null, 0),
-                    array('readFloat', null, 34.23),
-                    array('getCurrentPosition', null, 9),
-                    array('getLastPosition', null, 1),
-                    array('readFloat', null, 34.23),
-                    array('getCurrentPosition', null, 17),
-                    array('getLastPosition', null, 9)
-                )
-            ),
-        );
     }
 
     public function testReaderReuse()
