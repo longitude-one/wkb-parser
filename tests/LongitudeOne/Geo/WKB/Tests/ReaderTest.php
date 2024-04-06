@@ -12,8 +12,10 @@
 
 namespace LongitudeOne\Geo\WKB\Tests;
 
+use LongitudeOne\Geo\WKB\Exception\ExceptionInterface;
 use LongitudeOne\Geo\WKB\Exception\InvalidArgumentException;
 use LongitudeOne\Geo\WKB\Exception\RangeException;
+use LongitudeOne\Geo\WKB\Exception\UnexpectedValueException;
 use LongitudeOne\Geo\WKB\Reader;
 use PHPUnit\Framework\TestCase;
 
@@ -25,7 +27,7 @@ use PHPUnit\Framework\TestCase;
 class ReaderTest extends TestCase
 {
     /**
-     * @return array[]
+     * @return array<string, array{value:null|string, methods:string[], exception:class-string<ExceptionInterface>, message:string}>
      */
     public static function badTestData(): array
     {
@@ -36,28 +38,22 @@ class ReaderTest extends TestCase
                 'exception' => InvalidArgumentException::class,
                 'message' => 'LongitudeOne\Geo\WKB\Reader: Error number 1: No input data to read. Input is null.',
             ],
-            'readFalsePackage' => [
-                'value' => false,
-                'methods' => ['readByteOrder'],
-                'exception' => InvalidArgumentException::class,
-                'message' => 'LongitudeOne\Geo\WKB\Reader: Error number 2: Invalid boolean data to read. Input is false.',
-            ],
             'readBinaryBadByteOrder' => [
                 'value' => pack('H*', '04'),
                 'methods' => ['readByteOrder'],
-                'exception' => '\LongitudeOne\Geo\WKB\Exception\UnexpectedValueException',
+                'exception' => UnexpectedValueException::class,
                 'message' => 'Invalid byte order "4"',
             ],
             'readBinaryWithoutByteOrder' => [
                 'value' => pack('H*', '0101000000'),
                 'methods' => ['readLong'],
-                'exception' => '\LongitudeOne\Geo\WKB\Exception\UnexpectedValueException',
+                'exception' => UnexpectedValueException::Class,
                 'message' => 'Invalid byte order "unset"',
             ],
             'readHexWithoutByteOrder' => [
                 'value' => '0101000000',
                 'methods' => ['readLong'],
-                'exception' => '\LongitudeOne\Geo\WKB\Exception\UnexpectedValueException',
+                'exception' => UnexpectedValueException::Class,
                 'message' => 'Invalid byte order "unset"',
             ],
             'readBinaryShortFloat' => [
@@ -70,7 +66,7 @@ class ReaderTest extends TestCase
     }
 
     /**
-     * @return array[]
+     * @return array<string, array{value:string, methods:array{0:string, 1:int|null, 2:float|float[]|int|null}[]}>
      */
     public static function goodTestData(): array
     {
@@ -128,13 +124,6 @@ class ReaderTest extends TestCase
                     ['readFloat', null, 34.23],
                 ],
             ],
-            'readNDRBinaryDouble' => [
-                'value' => pack('H*', '013D0AD7A3701D4140'),
-                'methods' => [
-                    ['readByteOrder', null, 1],
-                    ['readDouble', null, 34.23],
-                ],
-            ],
             'readXDRBinaryFloat' => [
                 'value' => pack('H*', '0040411D70A3D70A3D'),
                 'methods' => [
@@ -163,13 +152,6 @@ class ReaderTest extends TestCase
                     ['readFloats', 2, [34.23, 34.23]],
                 ],
             ],
-            'readXDRBinaryDoubles' => [
-                'value' => pack('H*', '0040411D70A3D70A3D40411D70A3D70A3D'),
-                'methods' => [
-                    ['readByteOrder', null, 0],
-                    ['readDoubles', 2, [34.23, 34.23]],
-                ],
-            ],
             'readXDRPosition' => [
                 'value' => pack('H*', '0040411D70A3D70A3D40411D70A3D70A3D'),
                 'methods' => [
@@ -188,12 +170,12 @@ class ReaderTest extends TestCase
     }
 
     /**
-     * @param string $exception
-     * @param string $message
+     * @param string[] $methods
+     * @param class-string<ExceptionInterface> $exception
      *
      * @dataProvider badTestData
      */
-    public function testBad($value, array $methods, $exception, $message): void
+    public function testBad(null|string $value, array $methods, string $exception, string $message): void
     {
         self::expectException($exception);
 
@@ -211,9 +193,10 @@ class ReaderTest extends TestCase
     }
 
     /**
+     * @param array{0:string, 1:float|int|null, 2:array<int|float>|int|float|null}[] $methods
      * @dataProvider goodTestData
      */
-    public function testGood($value, array $methods): void
+    public function testGood(string $value, array $methods): void
     {
         $reader = new Reader($value);
 

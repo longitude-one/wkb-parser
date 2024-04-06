@@ -23,30 +23,28 @@ class Reader
 {
     public const WKB_NDR = 1;
     public const WKB_XDR = 0;
+
     /**
-     * @var int
+     * Byte order for current machine.
      */
-    private static $machineByteOrder;
+    private static ?int $machineByteOrder = null;
+
+    /**
+     * Byte order for current input.
+     */
+    private ?int $byteOrder = null;
+
+    private ?string $input = null;
 
     /**
      * @var int
      */
-    private $byteOrder;
-
-    /**
-     * @var string
-     */
-    private $input;
+    private int $position = 0;
 
     /**
      * @var int
      */
-    private $position;
-
-    /**
-     * @var int
-     */
-    private $previous;
+    private int $previous = 0;
 
     /**
      * @param string $input
@@ -63,7 +61,7 @@ class Reader
     /**
      * @return int
      */
-    public function getCurrentPosition()
+    public function getCurrentPosition(): int
     {
         return $this->position;
     }
@@ -71,17 +69,15 @@ class Reader
     /**
      * @return int
      */
-    public function getLastPosition()
+    public function getLastPosition() :int
     {
         return $this->position - $this->previous;
     }
 
     /**
-     * @param string $input
-     *
      * @throws UnexpectedValueException
      */
-    public function load($input)
+    public function load(string $input): void
     {
         $this->position = 0;
         $this->previous = 0;
@@ -107,8 +103,9 @@ class Reader
      * @throws RangeException
      * @throws UnexpectedValueException
      */
-    public function readByteOrder()
+    public function readByteOrder(): int
     {
+        /** @var int $byteOrder */
         $byteOrder = $this->unpackInput('C');
 
         $this->previous = 1;
@@ -129,14 +126,13 @@ class Reader
      *
      * @deprecated use readFloat()
      */
-    public function readDouble()
+    public function readDouble(): float
     {
+        trigger_error(static::class.': Method readDouble is deprecated, use readFloat instead.', E_USER_DEPRECATED);
         return $this->readFloat();
     }
 
     /**
-     * @param int $count
-     *
      * @return float[]
      *
      * @throws RangeException
@@ -144,8 +140,9 @@ class Reader
      *
      * @deprecated use readFloats()
      */
-    public function readDoubles($count)
+    public function readDoubles(int $count): array
     {
+        trigger_error(static::class.': Method readDoubles is deprecated, use readFloats instead.', E_USER_DEPRECATED);
         return $this->readFloats($count);
     }
 
@@ -155,13 +152,15 @@ class Reader
      * @throws RangeException
      * @throws UnexpectedValueException
      */
-    public function readFloat()
+    public function readFloat(): float
     {
+        /** @var float $double */
         $double = $this->unpackInput('d');
 
-        if ($this->isMachineByteOrdered() !== $this->getByteOrder()) {
-            $double = unpack('dvalue', strrev(pack('d', $double)));
-            $double = $double['value'];
+        if ($this->getMachineByteOrder() !== $this->getByteOrder()) {
+            /** @var array{value: float} $unpacked */
+            $unpacked = unpack('dvalue', strrev(pack('d', $double)));
+            $double = $unpacked['value'];
         }
 
         $this->previous = 8;
@@ -171,21 +170,19 @@ class Reader
     }
 
     /**
-     * @param int $count
-     *
      * @return float[]
      *
      * @throws RangeException
      * @throws UnexpectedValueException
      */
-    public function readFloats($count)
+    public function readFloats(int $count): array
     {
         $floats = [];
 
         for ($i = 0; $i < $count; ++$i) {
             $float = $this->readFloat();
 
-            if (!is_null($float) && !is_nan($float)) {
+            if (!is_nan($float)) {
                 $floats[] = $float;
             }
         }
@@ -194,11 +191,9 @@ class Reader
     }
 
     /**
-     * @return int
-     *
      * @throws UnexpectedValueException
      */
-    public function readLong()
+    public function readLong(): float|int
     {
         $format = self::WKB_NDR === $this->getByteOrder() ? 'V' : 'N';
         $value = $this->unpackInput($format);
@@ -223,12 +218,20 @@ class Reader
     }
 
     /**
-     * @return bool
+     * @return int Return the Byte order for current machine.
      */
-    private function isMachineByteOrdered()
+    private function getMachineByteOrder(): int
     {
         if (null === self::$machineByteOrder) {
             $result = unpack('S', "\x01\x00");
+
+            if (false === $result) {
+                $message = sprintf(
+                    '%s: Unable to determine the current machine Byte order. Unpack failed.',
+                    static::class
+                );
+                throw new InvalidArgumentException($message);
+            }
 
             self::$machineByteOrder = 1 === $result[1] ? self::WKB_NDR : self::WKB_XDR;
         }
@@ -238,24 +241,23 @@ class Reader
 
     private function onWarning(int $errorNumber, string $errorMessage): void
     {
+        throw $this->getInvalidArgumentException($errorNumber, $errorMessage);
+    }
+
+    private function getInvalidArgumentException(int $errorNumber, string $errorMessage): InvalidArgumentException
+    {
         $message = sprintf('%s: Error number %d: %s', static::class, $errorNumber, $errorMessage);
 
-        throw new InvalidArgumentException($message);
+        return new InvalidArgumentException($message);
     }
 
     /**
-     * @param string|boolean|null $format
-     *
      * @throws InvalidArgumentException
      */
-    private function unpackInput($format)
+    private function unpackInput(string $format): float|int
     {
         if (null === $this->input) {
-            $this->onWarning(1, 'No input data to read. Input is null.');
-        }
-
-        if (false === $this->input) {
-            $this->onWarning(2, 'Invalid boolean data to read. Input is false.');
+            throw $this->getInvalidArgumentException(1, 'No input data to read. Input is null.');
         }
 
         set_error_handler([$this, 'onWarning'], E_WARNING);

@@ -12,8 +12,8 @@
 
 namespace LongitudeOne\Geo\WKB\Tests;
 
+use LongitudeOne\Geo\WKB\Exception\ExceptionInterface;
 use LongitudeOne\Geo\WKB\Exception\InvalidArgumentException;
-use LongitudeOne\Geo\WKB\Exception\RangeException;
 use LongitudeOne\Geo\WKB\Exception\UnexpectedValueException;
 use LongitudeOne\Geo\WKB\Parser;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -27,7 +27,7 @@ use PHPUnit\Framework\TestCase;
 class ParserTest extends TestCase
 {
     /**
-     * @return array[]
+     * @return array<string, array{value:string, exception:class-string<ExceptionInterface>, message:string}>
      */
     public static function badBinaryData(): array
     {
@@ -110,6 +110,9 @@ class ParserTest extends TestCase
         ];
     }
 
+    /**
+     * @return array<string, array{value:string, expected:array{srid: ?int, type:string, value:array<int|float|int[]|float[]>, dimension: ?string}}>
+     */
     public static function goodBinaryData(): array
     {
         return [
@@ -4619,12 +4622,11 @@ class ParserTest extends TestCase
     }
 
     /**
-     * @param string $exception
-     * @param string $message
+     * @param class-string<ExceptionInterface> $exception
      *
      * @dataProvider badBinaryData
      */
-    public function testBadBinaryData($value, $exception, $message)
+    public function testBadBinaryData(string $value, string $exception, string $message): void
     {
         self::expectException($exception);
 
@@ -4646,9 +4648,10 @@ class ParserTest extends TestCase
     }
 
     /**
+     * @param array{srid: ?int, type:string, value:array<int|float|int[]|float[]>, dimension: ?string} $expected
      * @dataProvider goodBinaryData
      */
-    public function testParserBinary($value, array $expected)
+    public function testParserBinary(string $value, array $expected): void
     {
         $parser = new Parser(pack('H*', $value));
         $actual = $parser->parse();
@@ -4657,9 +4660,10 @@ class ParserTest extends TestCase
     }
 
     /**
+     * @param array{srid: ?int, type:string, value:array<int|float|int[]|float[]>, dimension: ?string} $expected
      * @dataProvider goodBinaryData
      */
-    public function testParserPrependLower0XHex($value, array $expected)
+    public function testParserPrependLower0XHex(string $value, array $expected): void
     {
         $parser = new Parser('0x'.$value);
         $actual = $parser->parse();
@@ -4668,9 +4672,10 @@ class ParserTest extends TestCase
     }
 
     /**
+     * @param array{srid: ?int, type:string, value:array<int|float|int[]|float[]>, dimension: ?string} $expected
      * @dataProvider goodBinaryData
      */
-    public function testParserPrependLowerXHex($value, array $expected)
+    public function testParserPrependLowerXHex(string $value, array $expected): void
     {
         $parser = new Parser('x'.$value);
         $actual = $parser->parse();
@@ -4679,9 +4684,10 @@ class ParserTest extends TestCase
     }
 
     /**
+     * @param array{srid: ?int, type:string, value:array<int|float|int[]|float[]>, dimension: ?string} $expected
      * @dataProvider goodBinaryData
      */
-    public function testParserPrependUpper0XHex($value, array $expected)
+    public function testParserPrependUpper0XHex(string $value, array $expected): void
     {
         $parser = new Parser('0X'.$value);
         $actual = $parser->parse();
@@ -4690,9 +4696,10 @@ class ParserTest extends TestCase
     }
 
     /**
+     * @param array{srid: ?int, type:string, value:array<int|float|int[]|float[]>, dimension: ?string} $expected
      * @dataProvider goodBinaryData
      */
-    public function testParserPrependUpperXHex($value, array $expected)
+    public function testParserPrependUpperXHex(string $value, array $expected): void
     {
         $parser = new Parser('X'.$value);
         $actual = $parser->parse();
@@ -4701,9 +4708,10 @@ class ParserTest extends TestCase
     }
 
     /**
+     * @param array{srid: ?int, type:string, value:array<int|float|int[]|float[]>, dimension: ?string} $expected
      * @dataProvider goodBinaryData
      */
-    public function testParserRawHex($value, array $expected)
+    public function testParserRawHex(string $value, array $expected): void
     {
         $parser = new Parser($value);
         $actual = $parser->parse();
@@ -4711,7 +4719,7 @@ class ParserTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public function testReusedParser()
+    public function testReusedParser(): void
     {
         $parser = new Parser();
 
