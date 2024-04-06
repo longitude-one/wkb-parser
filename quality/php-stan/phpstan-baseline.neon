@@ -1,2 +1,6 @@
 parameters:
 	ignoreErrors:
+		-
+			message: "#^Parameter \\#1 \\$type of method LongitudeOne\\\\Geo\\\\WKB\\\\Parser\\:\\:getTypeName\\(\\) expects int, int\\|null given\\.$#"
+			count: 1
+			path: ../../lib/LongitudeOne/Geo/WKB/Parser.php
