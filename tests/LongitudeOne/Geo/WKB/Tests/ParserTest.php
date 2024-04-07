@@ -27,86 +27,84 @@ use PHPUnit\Framework\TestCase;
 class ParserTest extends TestCase
 {
     /**
-     * @return array<string, array{value:string, exception:class-string<ExceptionInterface>, message:string}>
+     * @return \Generator<string, array{value:string, exception:class-string<ExceptionInterface>, message:string}, null, void>
      */
-    public static function badBinaryData(): array
+    public static function badBinaryData(): \Generator
     {
-        return [
-            'badByteOrder' => [
-                'value' => pack('H*', '03010000003D0AD7A3701D41400000000000C055C0'),
-                'exception' => UnexpectedValueException::class,
-                'message' => 'Invalid byte order "3" at byte 0',
-            ],
-            'badSimpleType' => [
-                'value' => pack('H*', '01150000003D0AD7A3701D41400000000000C055C0'),
-                'exception' => UnexpectedValueException::class,
-                'message' => 'Unsupported WKB type "21" (0x15) at byte 1',
-            ],
-            'shortNDRPoint' => [
-                'value' => pack('H*', '01010000003D0AD7A3701D414000000000'),
-                'exception' => InvalidArgumentException::class,
-                'message' => 'Type d: not enough input values, need 8 values but only 4 were provided',
-            ],
-            'badPointSize' => [
-                'value' => pack('H*', '0000000FA1'),
-                'exception' => UnexpectedValueException::class,
-                'message' => 'POINT with unsupported dimensions 0xFA0 (4000) at byte 1',
-            ],
-            'badPointInMultiPoint' => [
-                'value' => pack('H*', '0080000004000000020000000001'),
-                'exception' => UnexpectedValueException::class,
-                'message' => 'Bad POINT with dimensions 0x0 (0) in MULTIPOINT, expected dimensions 0x80000000 (2147483648) at byte 10',
-            ],
-            'unexpectedLineStringInMultiPoint' => [
-                'value' => pack('H*', '0080000004000000020000000002'),
-                'exception' => UnexpectedValueException::class,
-                'message' => 'Unexpected LINESTRING with dimensions 0x0 (0) in MULTIPOINT, expected POINT with dimensions 0x80000000 (2147483648) at byte 10',
-            ],
-            'badLineStringInMultiLineString' => [
-                'value' => pack('H*', '0000000005000000020080000002'),
-                'exception' => UnexpectedValueException::class,
-                'message' => 'Bad LINESTRING with dimensions 0x80000000 (2147483648) in MULTILINESTRING, expected dimensions 0x0 (0) at byte 10',
-            ],
-            'badPolygonInMultiPolygon' => [
-                'value' => pack('H*', '0080000006000000020000000003'),
-                'exception' => UnexpectedValueException::class,
-                'message' => 'Bad POLYGON with dimensions 0x0 (0) in MULTIPOLYGON, expected dimensions 0x80000000 (2147483648) at byte 10',
-            ],
-            'badCircularStringInCompoundCurve' => [
-                'value' => pack('H*', '0080000009000000020000000008'),
-                'exception' => UnexpectedValueException::class,
-                'message' => 'Bad CIRCULARSTRING with dimensions 0x0 (0) in COMPOUNDCURVE, expected dimensions 0x80000000 (2147483648) at byte 10',
-            ],
-            'unexpectedPointInCompoundCurve' => [
-                'value' => pack('H*', '0080000009000000020000000001'),
-                'exception' => UnexpectedValueException::class,
-                'message' => 'Unexpected POINT with dimensions 0x0 (0) in COMPOUNDCURVE, expected LINESTRING or CIRCULARSTRING with dimensions 0x80000000 (2147483648) at byte 10',
-            ],
-            'badCompoundCurveInCurvePolygon' => [
-                'value' => pack('H*', '000000000a000000010080000009'),
-                'exception' => UnexpectedValueException::class,
-                'message' => 'Bad COMPOUNDCURVE with dimensions 0x80000000 (2147483648) in CURVEPOLYGON, expected dimensions 0x0 (0) at byte 10',
-            ],
-            'badCircularStringInCurvePolygon' => [
-                'value' => pack('H*', '008000000a000000010080000009000000020000000008'),
-                'exception' => UnexpectedValueException::class,
-                'message' => 'Bad CIRCULARSTRING with dimensions 0x0 (0) in CURVEPOLYGON, expected dimensions 0x80000000 (2147483648) at byte 19',
-            ],
-            'unexpectedPolygonInMultiCurve' => [
-                'value' => pack('H*', '004000000b000000010040000003'),
-                'exception' => UnexpectedValueException::class,
-                'message' => 'Unexpected POLYGON with dimensions 0x40000000 (1073741824) in MULTICURVE, expected LINESTRING, CIRCULARSTRING or COMPOUNDCURVE with dimensions 0x40000000 (1073741824) at byte 10',
-            ],
-            'unexpectedPointInMultiSurface' => [
-                'value' => pack('H*', '008000000c000000020080000001'),
-                'exception' => UnexpectedValueException::class,
-                'message' => 'Unexpected POINT with dimensions 0x80000000 (2147483648) in MULTISURFACE, expected POLYGON or CURVEPOLYGON with dimensions 0x80000000 (2147483648) at byte 10',
-            ],
-            'unexpectedPointInPolyhedralSurface' => [
-                'value' => pack('H*', '010f000080050000000101000080'),
-                'exception' => UnexpectedValueException::class,
-                'message' => 'Unexpected POINT with dimensions 0x80000000 (2147483648) in POLYHEDRALSURFACE, expected POLYGON with dimensions 0x80000000 (2147483648) at byte 10',
-            ],
+        yield 'badByteOrder' => [
+            'value' => pack('H*', '03010000003D0AD7A3701D41400000000000C055C0'),
+            'exception' => UnexpectedValueException::class,
+            'message' => 'Invalid byte order "3" at byte 0',
+        ];
+        yield 'badSimpleType' => [
+            'value' => pack('H*', '01150000003D0AD7A3701D41400000000000C055C0'),
+            'exception' => UnexpectedValueException::class,
+            'message' => 'Unsupported WKB type "21" (0x15) at byte 1',
+        ];
+        yield 'shortNDRPoint' => [
+            'value' => pack('H*', '01010000003D0AD7A3701D414000000000'),
+            'exception' => InvalidArgumentException::class,
+            'message' => 'Type d: not enough input values, need 8 values but only 4 were provided',
+        ];
+        yield 'badPointSize' => [
+            'value' => pack('H*', '0000000FA1'),
+            'exception' => UnexpectedValueException::class,
+            'message' => 'POINT with unsupported dimensions 0xFA0 (4000) at byte 1',
+        ];
+        yield 'badPointInMultiPoint' => [
+            'value' => pack('H*', '0080000004000000020000000001'),
+            'exception' => UnexpectedValueException::class,
+            'message' => 'Bad POINT with dimensions 0x0 (0) in MULTIPOINT, expected dimensions 0x80000000 (2147483648) at byte 10',
+        ];
+        yield 'unexpectedLineStringInMultiPoint' => [
+            'value' => pack('H*', '0080000004000000020000000002'),
+            'exception' => UnexpectedValueException::class,
+            'message' => 'Unexpected LINESTRING with dimensions 0x0 (0) in MULTIPOINT, expected POINT with dimensions 0x80000000 (2147483648) at byte 10',
+        ];
+        yield 'badLineStringInMultiLineString' => [
+            'value' => pack('H*', '0000000005000000020080000002'),
+            'exception' => UnexpectedValueException::class,
+            'message' => 'Bad LINESTRING with dimensions 0x80000000 (2147483648) in MULTILINESTRING, expected dimensions 0x0 (0) at byte 10',
+        ];
+        yield 'badPolygonInMultiPolygon' => [
+            'value' => pack('H*', '0080000006000000020000000003'),
+            'exception' => UnexpectedValueException::class,
+            'message' => 'Bad POLYGON with dimensions 0x0 (0) in MULTIPOLYGON, expected dimensions 0x80000000 (2147483648) at byte 10',
+        ];
+        yield 'badCircularStringInCompoundCurve' => [
+            'value' => pack('H*', '0080000009000000020000000008'),
+            'exception' => UnexpectedValueException::class,
+            'message' => 'Bad CIRCULARSTRING with dimensions 0x0 (0) in COMPOUNDCURVE, expected dimensions 0x80000000 (2147483648) at byte 10',
+        ];
+        yield 'unexpectedPointInCompoundCurve' => [
+            'value' => pack('H*', '0080000009000000020000000001'),
+            'exception' => UnexpectedValueException::class,
+            'message' => 'Unexpected POINT with dimensions 0x0 (0) in COMPOUNDCURVE, expected LINESTRING or CIRCULARSTRING with dimensions 0x80000000 (2147483648) at byte 10',
+        ];
+        yield 'badCompoundCurveInCurvePolygon' => [
+            'value' => pack('H*', '000000000a000000010080000009'),
+            'exception' => UnexpectedValueException::class,
+            'message' => 'Bad COMPOUNDCURVE with dimensions 0x80000000 (2147483648) in CURVEPOLYGON, expected dimensions 0x0 (0) at byte 10',
+        ];
+        yield 'badCircularStringInCurvePolygon' => [
+            'value' => pack('H*', '008000000a000000010080000009000000020000000008'),
+            'exception' => UnexpectedValueException::class,
+            'message' => 'Bad CIRCULARSTRING with dimensions 0x0 (0) in CURVEPOLYGON, expected dimensions 0x80000000 (2147483648) at byte 19',
+        ];
+        yield 'unexpectedPolygonInMultiCurve' => [
+            'value' => pack('H*', '004000000b000000010040000003'),
+            'exception' => UnexpectedValueException::class,
+            'message' => 'Unexpected POLYGON with dimensions 0x40000000 (1073741824) in MULTICURVE, expected LINESTRING, CIRCULARSTRING or COMPOUNDCURVE with dimensions 0x40000000 (1073741824) at byte 10',
+        ];
+        yield 'unexpectedPointInMultiSurface' => [
+            'value' => pack('H*', '008000000c000000020080000001'),
+            'exception' => UnexpectedValueException::class,
+            'message' => 'Unexpected POINT with dimensions 0x80000000 (2147483648) in MULTISURFACE, expected POLYGON or CURVEPOLYGON with dimensions 0x80000000 (2147483648) at byte 10',
+        ];
+        yield 'unexpectedPointInPolyhedralSurface' => [
+            'value' => pack('H*', '010f000080050000000101000080'),
+            'exception' => UnexpectedValueException::class,
+            'message' => 'Unexpected POINT with dimensions 0x80000000 (2147483648) in POLYHEDRALSURFACE, expected POLYGON with dimensions 0x80000000 (2147483648) at byte 10',
         ];
     }
 
