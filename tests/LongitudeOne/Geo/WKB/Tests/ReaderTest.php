@@ -14,7 +14,6 @@ namespace LongitudeOne\Geo\WKB\Tests;
 
 use LongitudeOne\Geo\WKB\Exception\ExceptionInterface;
 use LongitudeOne\Geo\WKB\Exception\InvalidArgumentException;
-use LongitudeOne\Geo\WKB\Exception\RangeException;
 use LongitudeOne\Geo\WKB\Exception\UnexpectedValueException;
 use LongitudeOne\Geo\WKB\Reader;
 use PHPUnit\Framework\TestCase;
@@ -27,7 +26,7 @@ use PHPUnit\Framework\TestCase;
 class ReaderTest extends TestCase
 {
     /**
-     * @return array<string, array{value:null|string, methods:string[], exception:class-string<ExceptionInterface>, message:string}>
+     * @return array<string, array{value:string|null, methods:string[], exception:class-string<ExceptionInterface>, message:string}>
      */
     public static function badTestData(): array
     {
@@ -47,13 +46,13 @@ class ReaderTest extends TestCase
             'readBinaryWithoutByteOrder' => [
                 'value' => pack('H*', '0101000000'),
                 'methods' => ['readLong'],
-                'exception' => UnexpectedValueException::Class,
+                'exception' => UnexpectedValueException::class,
                 'message' => 'Invalid byte order "unset"',
             ],
             'readHexWithoutByteOrder' => [
                 'value' => '0101000000',
                 'methods' => ['readLong'],
-                'exception' => UnexpectedValueException::Class,
+                'exception' => UnexpectedValueException::class,
                 'message' => 'Invalid byte order "unset"',
             ],
             'readBinaryShortFloat' => [
@@ -170,12 +169,12 @@ class ReaderTest extends TestCase
     }
 
     /**
-     * @param string[] $methods
+     * @param string[]                         $methods
      * @param class-string<ExceptionInterface> $exception
      *
      * @dataProvider badTestData
      */
-    public function testBad(null|string $value, array $methods, string $exception, string $message): void
+    public function testBad(?string $value, array $methods, string $exception, string $message): void
     {
         self::expectException($exception);
 
@@ -194,6 +193,7 @@ class ReaderTest extends TestCase
 
     /**
      * @param array{0:string, 1:float|int|null, 2:array<int|float>|int|float|null}[] $methods
+     *
      * @dataProvider goodTestData
      */
     public function testGood(string $value, array $methods): void

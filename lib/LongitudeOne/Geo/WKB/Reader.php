@@ -36,14 +36,8 @@ class Reader
 
     private ?string $input = null;
 
-    /**
-     * @var int
-     */
     private int $position = 0;
 
-    /**
-     * @var int
-     */
     private int $previous = 0;
 
     /**
@@ -58,18 +52,12 @@ class Reader
         }
     }
 
-    /**
-     * @return int
-     */
     public function getCurrentPosition(): int
     {
         return $this->position;
     }
 
-    /**
-     * @return int
-     */
-    public function getLastPosition() :int
+    public function getLastPosition(): int
     {
         return $this->position - $this->previous;
     }
@@ -98,8 +86,6 @@ class Reader
     }
 
     /**
-     * @return int
-     *
      * @throws RangeException
      * @throws UnexpectedValueException
      */
@@ -119,8 +105,6 @@ class Reader
     }
 
     /**
-     * @return float
-     *
      * @throws UnexpectedValueException
      * @throws RangeException
      *
@@ -129,6 +113,7 @@ class Reader
     public function readDouble(): float
     {
         trigger_error(static::class.': Method readDouble is deprecated, use readFloat instead.', E_USER_DEPRECATED);
+
         return $this->readFloat();
     }
 
@@ -143,12 +128,11 @@ class Reader
     public function readDoubles(int $count): array
     {
         trigger_error(static::class.': Method readDoubles is deprecated, use readFloats instead.', E_USER_DEPRECATED);
+
         return $this->readFloats($count);
     }
 
     /**
-     * @return float
-     *
      * @throws RangeException
      * @throws UnexpectedValueException
      */
@@ -217,8 +201,15 @@ class Reader
         return $this->byteOrder;
     }
 
+    private function getInvalidArgumentException(int $errorNumber, string $errorMessage): InvalidArgumentException
+    {
+        $message = sprintf('%s: Error number %d: %s', static::class, $errorNumber, $errorMessage);
+
+        return new InvalidArgumentException($message);
+    }
+
     /**
-     * @return int Return the Byte order for current machine.
+     * @return int return the Byte order for current machine
      */
     private function getMachineByteOrder(): int
     {
@@ -242,13 +233,6 @@ class Reader
     private function onWarning(int $errorNumber, string $errorMessage): void
     {
         throw $this->getInvalidArgumentException($errorNumber, $errorMessage);
-    }
-
-    private function getInvalidArgumentException(int $errorNumber, string $errorMessage): InvalidArgumentException
-    {
-        $message = sprintf('%s: Error number %d: %s', static::class, $errorNumber, $errorMessage);
-
-        return new InvalidArgumentException($message);
     }
 
     /**

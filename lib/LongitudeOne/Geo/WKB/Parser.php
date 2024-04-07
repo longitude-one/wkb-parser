@@ -38,11 +38,9 @@ class Parser
     public const TYPE_TIN = 'Tin';
     public const TYPE_TRIANGLE = 'Triangle';
 
-
     public const WKB_FLAG_M = 0x40000000;
     public const WKB_FLAG_SRID = 0x20000000;
     public const WKB_FLAG_Z = 0x80000000;
-
 
     public const WKB_TYPE_CIRCULARSTRING = 0x00000008;
     public const WKB_TYPE_COMPOUNDCURVE = 0x00000009;
@@ -94,7 +92,7 @@ class Parser
      *
      * @param string $input
      *
-     * @return array{type:string, srid: ?int, value:array<array<array<array<array<array<array<(float|int)[]>|float|int|string>|float|int>|float|int|string>|float|int>|float|int|string>|float>, dimension: ?string}
+     * @return array{type:string, srid: ?int, value: (float|int)[]|(float|int)[][]|(float|int)[][][]|(float|int)[][][][]|(float|int)[][][][][]|array{type: string, value:(float|int)[][]}[]|array{type: string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]|array{type: string, value:(float|int)[][][]|array{type: string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]}[]|array{type: string, value:(float|int)[][][]}[]|array{type:string, value:(float|int)[]|(float|int)[][]|(float|int)[][][]|(float|int)[][][][]|(float|int)[][][][][]|array{type: string, value:(float|int)[][]}[]|array{type: string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]|array{type: string, value:(float|int)[][][]|array{type: string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]}[]|array{type: string, value:(float|int)[][][]}[]}[], dimension: ?string}
      *
      * @throws ExceptionInterface
      */
@@ -110,7 +108,7 @@ class Parser
     /**
      * Parse CIRCULARSTRING value.
      *
-     * @return float[][]|int[][]
+     * @return (float|int)[][]
      *
      * @throws UnexpectedValueException
      */
@@ -122,7 +120,7 @@ class Parser
     /**
      * Parse COMPOUNDCURVE value.
      *
-     * @return array{type: string, value:float[][]|int[][]}[]
+     * @return array{type: string, value:(float|int)[][]}[]
      *
      * @throws UnexpectedValueException
      */
@@ -154,7 +152,7 @@ class Parser
     /**
      * Parse CURVEPOLYGON value.
      *
-     * @return array{type: string, value:float[][]|int[][]|array{type: string, value:float[][]|int[][]}[]}[]
+     * @return array{type: string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]
      *
      * @throws UnexpectedValueException
      */
@@ -191,8 +189,13 @@ class Parser
 
     /**
      * Parse GEOMETRYCOLLECTION value.
+     * The type of each geometry is stored in the 'type' key of the returned array.
+     * The value of each geometry is stored in the 'value' key of the returned array.
+     * This value can be point|line-string|multiPoint|polygon|multiLineString|multiPolygon|compoundCurve||multiCurve|multiSurface| polyhedralSurface,
+     * OR a geometryCollection of all these previous types because Geometry collections are recursive.
+     * So, geometry collections can contain geometry collections.
      *
-     * @return int[][]|float[][]|int[][][]|float[][][]|int[][][][]|float[][][][]|int[][][][][]|float[][][][][]
+     * @return array{type:string, value:(float|int)[]|(float|int)[][]|(float|int)[][][]|(float|int)[][][][]|(float|int)[][][][][]|array{type: string, value:(float|int)[][]}[]|array{type: string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]|array{type: string, value:(float|int)[][][]|array{type: string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]}[]|array{type: string, value:(float|int)[][][]}[]}[]
      *
      * @throws UnexpectedValueException
      */
@@ -207,10 +210,26 @@ class Parser
             $type = $this->readType();
             $typeName = $this->getTypeName($type);
 
+            $value = match ($typeName) {
+                self::TYPE_POINT => $this->point(),
+                self::TYPE_LINESTRING => $this->lineString(),
+                self::TYPE_POLYGON => $this->polygon(),
+                self::TYPE_MULTIPOINT => $this->multiPoint(),
+                self::TYPE_MULTILINESTRING => $this->multiLineString(),
+                self::TYPE_MULTIPOLYGON => $this->multiPolygon(),
+                self::TYPE_GEOMETRYCOLLECTION => $this->geometryCollection(),
+                self::TYPE_CIRCULARSTRING => $this->circularString(),
+                self::TYPE_COMPOUNDCURVE => $this->compoundCurve(),
+                self::TYPE_CURVEPOLYGON => $this->curvePolygon(),
+                self::TYPE_MULTICURVE => $this->multiCurve(),
+                self::TYPE_MULTISURFACE => $this->multiSurface(),
+                self::TYPE_POLYHEDRALSURFACE => $this->polyhedralSurface(),
+                default => throw new UnexpectedValueException(sprintf('Unsupported WKB type "%1$d" (0x%1$x)', $type)),
+            };
+
             $values[] = [
                 'type' => $typeName,
-                //FIXME : $this->$typeName() is not safe
-                'value' => $this->$typeName(),
+                'value' => $value,
             ];
         }
 
@@ -385,7 +404,7 @@ class Parser
     /**
      * Parse MULTICURVE value.
      *
-     * @return array{type:string, value:float[][]|int[][]|array{type: string, value:float[][]|int[][]}[]}[]
+     * @return array{type:string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]
      *
      * @throws UnexpectedValueException
      */
@@ -418,7 +437,7 @@ class Parser
     /**
      * Parse MULTILINESTRING value.
      *
-     * @return float[][][]|int[][][]
+     * @return (float|int)[][][]
      *
      * @throws UnexpectedValueException
      */
@@ -445,7 +464,7 @@ class Parser
     /**
      * Parse MULTIPOINT value.
      *
-     * @return float[][]|int[][]
+     * @return (float|int)[][]
      *
      * @throws UnexpectedValueException
      */
@@ -476,7 +495,7 @@ class Parser
      *
      * @throws UnexpectedValueException
      */
-    private function multiPolygon():array
+    private function multiPolygon(): array
     {
         $count = $this->readCount();
         $values = [];
@@ -499,11 +518,11 @@ class Parser
     /**
      * Parse MULTISURFACE value.
      *
-     * @return array{type: string, value:float[][][]|int[][][]|array{type: string, value:float[][]|int[][]|array{type: string, value:float[][]|int[][]}[]}[]}[]
+     * @return array{type: string, value:(float|int)[][][]|array{type: string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]}[]
      *
      * @throws UnexpectedValueException
      */
-    private function multiSurface():array
+    private function multiSurface(): array
     {
         $values = [];
         $count = $this->readCount();
@@ -536,7 +555,7 @@ class Parser
     /**
      * Parse POINT values.
      *
-     * @return float[]
+     * @return (float|int)[]
      *
      * @throws UnexpectedValueException
      */
@@ -552,7 +571,7 @@ class Parser
      *
      * @throws UnexpectedValueException
      */
-    private function polygon():array
+    private function polygon(): array
     {
         return $this->readLinearRings($this->readCount());
     }
@@ -560,7 +579,7 @@ class Parser
     /**
      * Parse POLYHEDRALSURFACE value.
      *
-     * @return array{type: string, value:float[][][]|int[][][]}[]
+     * @return array{type: string, value:(float|int)[][][]}[]
      *
      * @throws UnexpectedValueException
      */
@@ -603,8 +622,6 @@ class Parser
     }
 
     /**
-     * @return int
-     *
      * @throws UnexpectedValueException
      */
     private function readCount(): int
@@ -621,7 +638,7 @@ class Parser
     /**
      * Parse geometry data.
      *
-     * @return array{type:string, srid: ?int, value:array<array<array<array<array<array<array<(float|int)[]>|float|int|string>|float|int>|float|int|string>|float|int>|float|int|string>|float>, dimension: ?string}
+     * @return array{type:string, srid: ?int, value: (float|int)[]|(float|int)[][]|(float|int)[][][]|(float|int)[][][][]|(float|int)[][][][][]|array{type: string, value:(float|int)[][]}[]|array{type: string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]|array{type: string, value:(float|int)[][][]|array{type: string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]}[]|array{type: string, value:(float|int)[][][]}[]|array{type:string, value:(float|int)[]|(float|int)[][]|(float|int)[][][]|(float|int)[][][][]|(float|int)[][][][][]|array{type: string, value:(float|int)[][]}[]|array{type: string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]|array{type: string, value:(float|int)[][][]|array{type: string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]}[]|array{type: string, value:(float|int)[][][]}[]}[], dimension: ?string}
      *
      * @throws ExceptionInterface
      */
@@ -688,8 +705,6 @@ class Parser
     }
 
     /**
-     * @param int $count
-     *
      * @return (float|int)[][]
      *
      * @throws UnexpectedValueException

@@ -4649,6 +4649,7 @@ class ParserTest extends TestCase
 
     /**
      * @param array{srid: ?int, type:string, value:array<int|float|int[]|float[]>, dimension: ?string} $expected
+     *
      * @dataProvider goodBinaryData
      */
     public function testParserBinary(string $value, array $expected): void
@@ -4661,6 +4662,7 @@ class ParserTest extends TestCase
 
     /**
      * @param array{srid: ?int, type:string, value:array<int|float|int[]|float[]>, dimension: ?string} $expected
+     *
      * @dataProvider goodBinaryData
      */
     public function testParserPrependLower0XHex(string $value, array $expected): void
@@ -4673,6 +4675,7 @@ class ParserTest extends TestCase
 
     /**
      * @param array{srid: ?int, type:string, value:array<int|float|int[]|float[]>, dimension: ?string} $expected
+     *
      * @dataProvider goodBinaryData
      */
     public function testParserPrependLowerXHex(string $value, array $expected): void
@@ -4685,6 +4688,7 @@ class ParserTest extends TestCase
 
     /**
      * @param array{srid: ?int, type:string, value:array<int|float|int[]|float[]>, dimension: ?string} $expected
+     *
      * @dataProvider goodBinaryData
      */
     public function testParserPrependUpper0XHex(string $value, array $expected): void
@@ -4697,6 +4701,7 @@ class ParserTest extends TestCase
 
     /**
      * @param array{srid: ?int, type:string, value:array<int|float|int[]|float[]>, dimension: ?string} $expected
+     *
      * @dataProvider goodBinaryData
      */
     public function testParserPrependUpperXHex(string $value, array $expected): void
@@ -4709,6 +4714,7 @@ class ParserTest extends TestCase
 
     /**
      * @param array{srid: ?int, type:string, value:array<int|float|int[]|float[]>, dimension: ?string} $expected
+     *
      * @dataProvider goodBinaryData
      */
     public function testParserRawHex(string $value, array $expected): void
