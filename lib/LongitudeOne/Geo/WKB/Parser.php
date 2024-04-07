@@ -211,20 +211,20 @@ class Parser
             $typeName = $this->getTypeName($type);
 
             $value = match ($typeName) {
-                self::TYPE_POINT => $this->point(),
-                self::TYPE_LINESTRING => $this->lineString(),
-                self::TYPE_POLYGON => $this->polygon(),
-                self::TYPE_MULTIPOINT => $this->multiPoint(),
-                self::TYPE_MULTILINESTRING => $this->multiLineString(),
-                self::TYPE_MULTIPOLYGON => $this->multiPolygon(),
-                self::TYPE_GEOMETRYCOLLECTION => $this->geometryCollection(),
-                self::TYPE_CIRCULARSTRING => $this->circularString(),
-                self::TYPE_COMPOUNDCURVE => $this->compoundCurve(),
-                self::TYPE_CURVEPOLYGON => $this->curvePolygon(),
-                self::TYPE_MULTICURVE => $this->multiCurve(),
-                self::TYPE_MULTISURFACE => $this->multiSurface(),
-                self::TYPE_POLYHEDRALSURFACE => $this->polyhedralSurface(),
-                default => throw new UnexpectedValueException(sprintf('Unsupported WKB type "%1$d" (0x%1$x)', $type)),
+                strtoupper(self::TYPE_POINT) => $this->point(),
+                strtoupper(self::TYPE_LINESTRING) => $this->lineString(),
+                strtoupper(self::TYPE_POLYGON) => $this->polygon(),
+                strtoupper(self::TYPE_MULTIPOINT) => $this->multiPoint(),
+                strtoupper(self::TYPE_MULTILINESTRING) => $this->multiLineString(),
+                strtoupper(self::TYPE_MULTIPOLYGON) => $this->multiPolygon(),
+                strtoupper(self::TYPE_GEOMETRYCOLLECTION) => $this->geometryCollection(),
+                strtoupper(self::TYPE_CIRCULARSTRING) => $this->circularString(),
+                strtoupper(self::TYPE_COMPOUNDCURVE) => $this->compoundCurve(),
+                strtoupper(self::TYPE_CURVEPOLYGON) => $this->curvePolygon(),
+                strtoupper(self::TYPE_MULTICURVE) => $this->multiCurve(),
+                strtoupper(self::TYPE_MULTISURFACE) => $this->multiSurface(),
+                strtoupper(self::TYPE_POLYHEDRALSURFACE) => $this->polyhedralSurface(),
+                default => throw new UnexpectedValueException(sprintf('Unsupported typeName "%s" with type (0x%2$x)', $typeName, $type)),
             };
 
             $values[] = [
@@ -518,7 +518,7 @@ class Parser
     /**
      * Parse MULTISURFACE value.
      *
-     * @return array{type: string, value:(float|int)[][][]|array{type: string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]}[]
+     * @return array{type: string, value:float[][][]|int[][][]|array{type: string, value:float[][]|int[][]|array{type: string, value:float[][]|int[][]}[]}[]}[]
      *
      * @throws UnexpectedValueException
      */
