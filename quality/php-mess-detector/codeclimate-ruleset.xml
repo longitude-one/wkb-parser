@@ -7,24 +7,31 @@
     <description>
         Specific custom rule set that checks longitude-one/geo-parser test code.
     </description>
-    <!-- Import the entire unused code rule set, but UnusedPrivateMethod -->
-    <rule ref="rulesets/unusedcode.xml" />
-    <!-- Import the entire codeside rule -->
+    <!-- Import the entire unused code rule set, but unused private method -->
+    <rule ref="rulesets/unusedcode.xml">
+        <!-- Excluded because PHPMessDetector doesn't detect how the `onWarning` private method is called -->
+        <exclude name="UnusedPrivateMethod"/>
+    </rule>
+    <!-- Import the entire codesize rule, but excessive class complexity -->
     <rule ref="rulesets/codesize.xml">
+        <!-- Exclude the ExcessiveClassLength rule, because there are never too many tests in ParserTest -->
+        <exclude name="ExcessiveClassLength"/>
         <!-- Exclude the ExcessiveMethodLength rule, because there are never too many tests in provider -->
         <exclude name="ExcessiveMethodLength"/>
         <!-- Exclude the TooManyPublicMethods rule, because there are never too many tests -->
         <exclude name="TooManyPublicMethods"/>
+        <exclude name="ExcessiveClassComplexity"/>
     </rule>
-    <rule ref="rulesets/codesize.xml/ExcessiveMethodLength">
+    <rule ref="rulesets/codesize.xml/ExcessiveClassComplexity">
         <properties>
-            <property name="minimum" value="102"/>
+            <!-- Set the maximum class complexity to 70 because of Parser, but Parser needs to be simplified -->
+            <property name="maximum" value="70"/>
         </properties>
     </rule>
     <!-- Import the entire naming rule set -->
     <rule ref="rulesets/naming.xml" />
     <!-- Import the entire controversial rule set -->
-    <rule ref="rulesets/controversial.xml"/>
+    <rule ref="rulesets/controversial.xml" />
     <!-- Import the entire design rule set -->
     <rule ref="rulesets/design.xml"/>
 </ruleset>
