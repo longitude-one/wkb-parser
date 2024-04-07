@@ -109,4243 +109,3825 @@ class ParserTest extends TestCase
     }
 
     /**
-     * @return array<string, array{value:string, expected:array{srid: ?int, type:string, value:array<int|float|int[]|float[]>, dimension: ?string}}>
+     * @return \Generator<string, array{value:string, expected:array{srid: ?int, type:string, value:array<int|float|(int|float)[]>, dimension: ?string}}, null, void>
      */
-    public static function goodBinaryData(): array
+    public static function goodBinaryData(): \Generator
     {
-        return [
-            'ndrEmptyPointValue' => [
-                'value' => '0101000000000000000000F87F000000000000F87F',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'POINT',
-                    'value' => [],
-                    'dimension' => null,
-                ],
+        yield 'ndrEmptyPointValue' => [
+            'value' => '0101000000000000000000F87F000000000000F87F',
+            'expected' => [
+                'srid' => null,
+                'type' => 'POINT',
+                'value' => [],
+                'dimension' => null,
             ],
-            'ndrPointValue' => [
-                'value' => '01010000003D0AD7A3701D41400000000000C055C0',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'POINT',
-                    'value' => [34.23, -87],
-                    'dimension' => null,
-                ],
+        ];
+        yield 'ndrPointValue' => [
+            'value' => '01010000003D0AD7A3701D41400000000000C055C0',
+            'expected' => [
+                'srid' => null,
+                'type' => 'POINT',
+                'value' => [34.23, -87],
+                'dimension' => null,
             ],
-            'xdrPointValue' => [
-                'value' => '000000000140411D70A3D70A3DC055C00000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'POINT',
-                    'value' => [34.23, -87],
-                    'dimension' => null,
-                ],
+        ];
+        yield 'xdrPointValue' => [
+            'value' => '000000000140411D70A3D70A3DC055C00000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'POINT',
+                'value' => [34.23, -87],
+                'dimension' => null,
             ],
-            'ndrPointZValue' => [
-                'value' => '0101000080000000000000F03F00000000000000400000000000000840',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'POINT',
-                    'value' => [1, 2, 3],
-                    'dimension' => 'Z',
-                ],
+        ];
+        yield 'ndrPointZValue' => [
+            'value' => '0101000080000000000000F03F00000000000000400000000000000840',
+            'expected' => [
+                'srid' => null,
+                'type' => 'POINT',
+                'value' => [1, 2, 3],
+                'dimension' => 'Z',
             ],
-            'xdrPointZValue' => [
-                'value' => '00800000013FF000000000000040000000000000004008000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'POINT',
-                    'value' => [1, 2, 3],
-                    'dimension' => 'Z',
-                ],
+        ];
+        yield 'xdrPointZValue' => [
+            'value' => '00800000013FF000000000000040000000000000004008000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'POINT',
+                'value' => [1, 2, 3],
+                'dimension' => 'Z',
             ],
-            'xdrPointZOGCValue' => [
-                'value' => '00000003E94117C89F84189375411014361BA5E3540000000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'POINT',
-                    'value' => [389671.879, 263437.527, 0],
-                    'dimension' => 'Z',
-                ],
+        ];
+        yield 'xdrPointZOGCValue' => [
+            'value' => '00000003E94117C89F84189375411014361BA5E3540000000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'POINT',
+                'value' => [389671.879, 263437.527, 0],
+                'dimension' => 'Z',
             ],
-            'ndrPointMValue' => [
-                'value' => '0101000040000000000000F03F00000000000000400000000000000840',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'POINT',
-                    'value' => [1, 2, 3],
-                    'dimension' => 'M',
-                ],
+        ];
+        yield 'ndrPointMValue' => [
+            'value' => '0101000040000000000000F03F00000000000000400000000000000840',
+            'expected' => [
+                'srid' => null,
+                'type' => 'POINT',
+                'value' => [1, 2, 3],
+                'dimension' => 'M',
             ],
-            'xdrPointMValue' => [
-                'value' => '00400000013FF000000000000040000000000000004008000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'POINT',
-                    'value' => [1, 2, 3],
-                    'dimension' => 'M',
-                ],
+        ];
+        yield 'xdrPointMValue' => [
+            'value' => '00400000013FF000000000000040000000000000004008000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'POINT',
+                'value' => [1, 2, 3],
+                'dimension' => 'M',
             ],
-            'ndrEmptyPointZMValue' => [
-                'value' => '01010000C0000000000000F87F000000000000F87F000000000000F87F000000000000F87F',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'POINT',
-                    'value' => [],
-                    'dimension' => 'ZM',
-                ],
+        ];
+        yield 'ndrEmptyPointZMValue' => [
+            'value' => '01010000C0000000000000F87F000000000000F87F000000000000F87F000000000000F87F',
+            'expected' => [
+                'srid' => null,
+                'type' => 'POINT',
+                'value' => [],
+                'dimension' => 'ZM',
             ],
-            'xdrEmptyPointZMValue' => [
-                'value' => '00C00000017FF80000000000007FF80000000000007FF80000000000007FF8000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'POINT',
-                    'value' => [],
-                    'dimension' => 'ZM',
-                ],
+        ];
+        yield 'xdrEmptyPointZMValue' => [
+            'value' => '00C00000017FF80000000000007FF80000000000007FF80000000000007FF8000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'POINT',
+                'value' => [],
+                'dimension' => 'ZM',
             ],
-            'ndrPointZMValue' => [
-                'value' => '01010000C0000000000000F03F000000000000004000000000000008400000000000001040',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'POINT',
-                    'value' => [1, 2, 3, 4],
-                    'dimension' => 'ZM',
-                ],
+        ];
+        yield 'ndrPointZMValue' => [
+            'value' => '01010000C0000000000000F03F000000000000004000000000000008400000000000001040',
+            'expected' => [
+                'srid' => null,
+                'type' => 'POINT',
+                'value' => [1, 2, 3, 4],
+                'dimension' => 'ZM',
             ],
-            'xdrPointZMValue' => [
-                'value' => '00C00000013FF0000000000000400000000000000040080000000000004010000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'POINT',
-                    'value' => [1, 2, 3, 4],
-                    'dimension' => 'ZM',
-                ],
+        ];
+        yield 'xdrPointZMValue' => [
+            'value' => '00C00000013FF0000000000000400000000000000040080000000000004010000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'POINT',
+                'value' => [1, 2, 3, 4],
+                'dimension' => 'ZM',
             ],
-            'ndrPointValueWithSrid' => [
-                'value' => '01010000003D0AD7A3701D41400000000000C055C0',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'POINT',
-                    'value' => [34.23, -87],
-                    'dimension' => null,
-                ],
+        ];
+        yield 'ndrPointValueWithSrid' => [
+            'value' => '01010000003D0AD7A3701D41400000000000C055C0',
+            'expected' => [
+                'srid' => null,
+                'type' => 'POINT',
+                'value' => [34.23, -87],
+                'dimension' => null,
             ],
-            'xdrPointValueWithSrid' => [
-                'value' => '0020000001000010E640411D70A3D70A3DC055C00000000000',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'POINT',
-                    'value' => [34.23, -87],
-                    'dimension' => null,
-                ],
+        ];
+        yield 'xdrPointValueWithSrid' => [
+            'value' => '0020000001000010E640411D70A3D70A3DC055C00000000000',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'POINT',
+                'value' => [34.23, -87],
+                'dimension' => null,
             ],
-            'ndrPointZValueWithSrid' => [
-                'value' => '01010000A0E6100000000000000000F03F00000000000000400000000000000840',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'POINT',
-                    'value' => [1, 2, 3],
-                    'dimension' => 'Z',
-                ],
+        ];
+        yield 'ndrPointZValueWithSrid' => [
+            'value' => '01010000A0E6100000000000000000F03F00000000000000400000000000000840',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'POINT',
+                'value' => [1, 2, 3],
+                'dimension' => 'Z',
             ],
-            'xdrPointZValueWithSrid' => [
-                'value' => '00A0000001000010E63FF000000000000040000000000000004008000000000000',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'POINT',
-                    'value' => [1, 2, 3],
-                    'dimension' => 'Z',
-                ],
+        ];
+        yield 'xdrPointZValueWithSrid' => [
+            'value' => '00A0000001000010E63FF000000000000040000000000000004008000000000000',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'POINT',
+                'value' => [1, 2, 3],
+                'dimension' => 'Z',
             ],
-            'ndrPointMValueWithSrid' => [
-                'value' => '0101000060e6100000000000000000f03f00000000000000400000000000000840',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'POINT',
-                    'value' => [1, 2, 3],
-                    'dimension' => 'M',
-                ],
+        ];
+        yield 'ndrPointMValueWithSrid' => [
+            'value' => '0101000060e6100000000000000000f03f00000000000000400000000000000840',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'POINT',
+                'value' => [1, 2, 3],
+                'dimension' => 'M',
             ],
-            'xdrPointMValueWithSrid' => [
-                'value' => '0060000001000010e63ff000000000000040000000000000004008000000000000',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'POINT',
-                    'value' => [1, 2, 3],
-                    'dimension' => 'M',
-                ],
+        ];
+        yield 'xdrPointMValueWithSrid' => [
+            'value' => '0060000001000010e63ff000000000000040000000000000004008000000000000',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'POINT',
+                'value' => [1, 2, 3],
+                'dimension' => 'M',
             ],
-            'ndrEmptyPointZMValueWithSrid' => [
-                'value' => '01010000E08C100000000000000000F87F000000000000F87F000000000000F87F000000000000F87F',
-                'expected' => [
-                    'srid' => 4236,
-                    'type' => 'POINT',
-                    'value' => [],
-                    'dimension' => 'ZM',
-                ],
+        ];
+        yield 'ndrEmptyPointZMValueWithSrid' => [
+            'value' => '01010000E08C100000000000000000F87F000000000000F87F000000000000F87F000000000000F87F',
+            'expected' => [
+                'srid' => 4236,
+                'type' => 'POINT',
+                'value' => [],
+                'dimension' => 'ZM',
             ],
-            'ndrPointZMValueWithSrid' => [
-                'value' => '01010000e0e6100000000000000000f03f000000000000004000000000000008400000000000001040',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'POINT',
-                    'value' => [1, 2, 3, 4],
-                    'dimension' => 'ZM',
-                ],
+        ];
+        yield 'ndrPointZMValueWithSrid' => [
+            'value' => '01010000e0e6100000000000000000f03f000000000000004000000000000008400000000000001040',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'POINT',
+                'value' => [1, 2, 3, 4],
+                'dimension' => 'ZM',
             ],
-            'xdrPointZMValueWithSrid' => [
-                'value' => '00e0000001000010e63ff0000000000000400000000000000040080000000000004010000000000000',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'POINT',
-                    'value' => [1, 2, 3, 4],
-                    'dimension' => 'ZM',
-                ],
+        ];
+        yield 'xdrPointZMValueWithSrid' => [
+            'value' => '00e0000001000010e63ff0000000000000400000000000000040080000000000004010000000000000',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'POINT',
+                'value' => [1, 2, 3, 4],
+                'dimension' => 'ZM',
             ],
-            'ndrEmptyLineStringValue' => [
-                'value' => '010200000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'LINESTRING',
-                    'value' => [],
-                    'dimension' => null,
-                ],
+        ];
+        yield 'ndrEmptyLineStringValue' => [
+            'value' => '010200000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'LINESTRING',
+                'value' => [],
+                'dimension' => null,
             ],
-            'ndrLineStringValue' => [
-                'value' => '0102000000020000003D0AD7A3701D41400000000000C055C06666666666A6464000000000000057C0',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'LINESTRING',
-                    'value' => [
-                        [34.23, -87],
-                        [45.3, -92],
+        ];
+        yield 'ndrLineStringValue' => [
+            'value' => '0102000000020000003D0AD7A3701D41400000000000C055C06666666666A6464000000000000057C0',
+            'expected' => [
+                'srid' => null,
+                'type' => 'LINESTRING',
+                'value' => [
+                    [34.23, -87],
+                    [45.3, -92],
+                ],
+                'dimension' => null,
+            ],
+        ];
+        yield 'xdrLineStringValue' => [
+            'value' => '00000000020000000240411D70A3D70A3DC055C000000000004046A66666666666C057000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'LINESTRING',
+                'value' => [
+                    [34.23, -87],
+                    [45.3, -92],
+                ],
+                'dimension' => null,
+            ],
+        ];
+
+        yield 'ndrLineStringZValue' => [
+            'value' => '010200008002000000000000000000000000000000000000000000000000000040000000000000f03f000000000000f03f0000000000000840',
+            'expected' => [
+                'srid' => null,
+                'type' => 'LINESTRING',
+                'value' => [
+                    [0, 0, 2],
+                    [1, 1, 3],
+                ],
+                'dimension' => 'Z',
+            ],
+        ];
+
+        yield 'xdrLineStringZValue' => [
+            'value' => '0080000002000000020000000000000000000000000000000040000000000000003ff00000000000003ff00000000000004008000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'LINESTRING',
+                'value' => [
+                    [0, 0, 2],
+                    [1, 1, 3],
+                ],
+                'dimension' => 'Z',
+            ],
+        ];
+        yield 'ndrLineStringMValue' => [
+            'value' => '010200004002000000000000000000000000000000000000000000000000000040000000000000f03f000000000000f03f0000000000000840',
+            'expected' => [
+                'srid' => null,
+                'type' => 'LINESTRING',
+                'value' => [
+                    [0, 0, 2],
+                    [1, 1, 3],
+                ],
+                'dimension' => 'M',
+            ],
+        ];
+
+        yield 'xdrLineStringMValue' => [
+            'value' => '0040000002000000020000000000000000000000000000000040000000000000003ff00000000000003ff00000000000004008000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'LINESTRING',
+                'value' => [
+                    [0, 0, 2],
+                    [1, 1, 3],
+                ],
+                'dimension' => 'M',
+            ],
+        ];
+
+        yield 'ndrLineStringZMValue' => [
+            'value' => '01020000c0020000000000000000000000000000000000000000000000000000400000000000000840000000000000f03f000000000000f03f00000000000010400000000000001440',
+            'expected' => [
+                'srid' => null,
+                'type' => 'LINESTRING',
+                'value' => [
+                    [0, 0, 2, 3],
+                    [1, 1, 4, 5],
+                ],
+                'dimension' => 'ZM',
+            ],
+        ];
+        yield 'xdrLineStringZMValue' => [
+            'value' => '00c00000020000000200000000000000000000000000000000400000000000000040080000000000003ff00000000000003ff000000000000040100000000000004014000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'LINESTRING',
+                'value' => [
+                    [0, 0, 2, 3],
+                    [1, 1, 4, 5],
+                ],
+                'dimension' => 'ZM',
+            ],
+        ];
+
+        yield 'ndrLineStringValueWithSrid' => [
+            'value' => '0102000020E6100000020000003D0AD7A3701D41400000000000C055C06666666666A6464000000000000057C0',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'LINESTRING',
+                'value' => [
+                    [34.23, -87],
+                    [45.3, -92],
+                ],
+                'dimension' => null,
+            ],
+        ];
+        yield 'xdrLineStringValueWithSrid' => [
+            'value' => '0020000002000010E60000000240411D70A3D70A3DC055C000000000004046A66666666666C057000000000000',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'LINESTRING',
+                'value' => [
+                    [34.23, -87],
+                    [45.3, -92],
+                ],
+                'dimension' => null,
+            ],
+        ];
+        yield 'ndrLineStringZValueWithSrid' => [
+            'value' => '01020000a0e610000002000000000000000000000000000000000000000000000000000040000000000000f03f000000000000f03f0000000000000840',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'LINESTRING',
+                'value' => [
+                    [0, 0, 2],
+                    [1, 1, 3],
+                ],
+                'dimension' => 'Z',
+            ],
+        ];
+        yield 'xdrLineStringZValueWithSrid' => [
+            'value' => '00a0000002000010e6000000020000000000000000000000000000000040000000000000003ff00000000000003ff00000000000004008000000000000',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'LINESTRING',
+                'value' => [
+                    [0, 0, 2],
+                    [1, 1, 3],
+                ],
+                'dimension' => 'Z',
+            ],
+        ];
+        yield 'ndrLineStringMValueWithSrid' => [
+            'value' => '0102000060e610000002000000000000000000000000000000000000000000000000000040000000000000f03f000000000000f03f0000000000000840',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'LINESTRING',
+                'value' => [
+                    [0, 0, 2],
+                    [1, 1, 3],
+                ],
+                'dimension' => 'M',
+            ],
+        ];
+        yield 'xdrLineStringMValueWithSrid' => [
+            'value' => '0060000002000010e6000000020000000000000000000000000000000040000000000000003ff00000000000003ff00000000000004008000000000000',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'LINESTRING',
+                'value' => [
+                    [0, 0, 2],
+                    [1, 1, 3],
+                ],
+                'dimension' => 'M',
+            ],
+        ];
+        yield 'ndrLineStringZMValueWithSrid' => [
+            'value' => '01020000e0e6100000020000000000000000000000000000000000000000000000000000400000000000000840000000000000f03f000000000000f03f00000000000010400000000000001440',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'LINESTRING',
+                'value' => [
+                    [0, 0, 2, 3],
+                    [1, 1, 4, 5],
+                ],
+                'dimension' => 'ZM',
+            ],
+        ];
+        yield 'xdrLineStringZMValueWithSrid' => [
+            'value' => '00e0000002000010e60000000200000000000000000000000000000000400000000000000040080000000000003ff00000000000003ff000000000000040100000000000004014000000000000',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'LINESTRING',
+                'value' => [
+                    [0, 0, 2, 3],
+                    [1, 1, 4, 5],
+                ],
+                'dimension' => 'ZM',
+            ],
+        ];
+        yield 'ndrEmptyPolygonValue' => [
+            'value' => '010300000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'POLYGON',
+                'value' => [],
+                'dimension' => null,
+            ],
+        ];
+        yield 'ndrPolygonValue' => [
+            'value' => '010300000001000000050000000000000000000000000000000000000000000000000024400000000000000000000000000000244000000000000024400000000000000000000000000000244000000000000000000000000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'POLYGON',
+                'value' => [
+                    [
+                        [0, 0],
+                        [10, 0],
+                        [10, 10],
+                        [0, 10],
+                        [0, 0],
                     ],
-                    'dimension' => null,
                 ],
+                'dimension' => null,
             ],
-            'xdrLineStringValue' => [
-                'value' => '00000000020000000240411D70A3D70A3DC055C000000000004046A66666666666C057000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'LINESTRING',
-                    'value' => [
-                        [34.23, -87],
-                        [45.3, -92],
+        ];
+        yield 'xdrPolygonValue' => [
+            'value' => '000000000300000001000000050000000000000000000000000000000040240000000000000000000000000000402400000000000040240000000000000000000000000000402400000000000000000000000000000000000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'POLYGON',
+                'value' => [
+                    [
+                        [0, 0],
+                        [10, 0],
+                        [10, 10],
+                        [0, 10],
+                        [0, 0],
                     ],
-                    'dimension' => null,
                 ],
+                'dimension' => null,
             ],
-            'ndrLineStringZValue' => [
-                'value' => '010200008002000000000000000000000000000000000000000000000000000040000000000000f03f000000000'
-                    .'000f03f0000000000000840',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'LINESTRING',
-                    'value' => [
-                        [0, 0, 2],
-                        [1, 1, 3],
+        ];
+        yield 'ndrPolygonValueWithSrid' => [
+            'value' => '0103000020E610000001000000050000000000000000000000000000000000000000000000000024400000000000000000000000000000244000000000000024400000000000000000000000000000244000000000000000000000000000000000',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'POLYGON',
+                'value' => [
+                    [
+                        [0, 0],
+                        [10, 0],
+                        [10, 10],
+                        [0, 10],
+                        [0, 0],
                     ],
-                    'dimension' => 'Z',
                 ],
+                'dimension' => null,
             ],
-            'xdrLineStringZValue' => [
-                'value' => '0080000002000000020000000000000000000000000000000040000000000000003ff00000000000003ff000000'
-                    .'00000004008000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'LINESTRING',
-                    'value' => [
-                        [0, 0, 2],
-                        [1, 1, 3],
+        ];
+        yield 'xdrPolygonValueWithSrid' => [
+            'value' => '0020000003000010E600000001000000050000000000000000000000000000000040240000000000000000000000000000402400000000000040240000000000000000000000000000402400000000000000000000000000000000000000000000',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'POLYGON',
+                'value' => [
+                    [
+                        [0, 0],
+                        [10, 0],
+                        [10, 10],
+                        [0, 10],
+                        [0, 0],
                     ],
-                    'dimension' => 'Z',
                 ],
+                'dimension' => null,
             ],
-            'ndrLineStringMValue' => [
-                'value' => '010200004002000000000000000000000000000000000000000000000000000040000000000000f03f000000000'
-                    .'000f03f0000000000000840',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'LINESTRING',
-                    'value' => [
-                        [0, 0, 2],
-                        [1, 1, 3],
+        ];
+        yield 'ndrMultiRingPolygonValue' => [
+            'value' => '01030000000200000005000000000000000000000000000000000000000000000000002440000000000000000000000000000024400000000000002440000000000000000000000000000024400000000000000000000000000000000005000000000000000000144000000000000014400000000000001C4000000000000014400000000000001C400000000000001C4000000000000014400000000000001C4000000000000014400000000000001440',
+            'expected' => [
+                'srid' => null,
+                'type' => 'POLYGON',
+                'value' => [
+                    [
+                        [0, 0],
+                        [10, 0],
+                        [10, 10],
+                        [0, 10],
+                        [0, 0],
                     ],
-                    'dimension' => 'M',
-                ],
-            ],
-            'xdrLineStringMValue' => [
-                'value' => '0040000002000000020000000000000000000000000000000040000000000000003ff00000000000003ff000000'
-                    .'00000004008000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'LINESTRING',
-                    'value' => [
-                        [0, 0, 2],
-                        [1, 1, 3],
+                    [
+                        [5, 5],
+                        [7, 5],
+                        [7, 7],
+                        [5, 7],
+                        [5, 5],
                     ],
-                    'dimension' => 'M',
                 ],
+                'dimension' => null,
             ],
-            'ndrLineStringZMValue' => [
-                'value' => '01020000c0020000000000000000000000000000000000000000000000000000400000000000000840000000000'
-                    .'000f03f000000000000f03f00000000000010400000000000001440',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'LINESTRING',
-                    'value' => [
-                        [0, 0, 2, 3],
-                        [1, 1, 4, 5],
+        ];
+        yield 'xdrMultiRingPolygonValue' => [
+            'value' => '0000000003000000020000000500000000000000000000000000000000402400000000000000000000000000004024000000000000402400000000000000000000000000004024000000000000000000000000000000000000000000000000000540140000000000004014000000000000401C0000000000004014000000000000401C000000000000401C0000000000004014000000000000401C00000000000040140000000000004014000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'POLYGON',
+                'value' => [
+                    [
+                        [0, 0],
+                        [10, 0],
+                        [10, 10],
+                        [0, 10],
+                        [0, 0],
                     ],
-                    'dimension' => 'ZM',
-                ],
-            ],
-            'xdrLineStringZMValue' => [
-                'value' => '00c00000020000000200000000000000000000000000000000400000000000000040080000000000003ff000000'
-                    .'00000003ff000000000000040100000000000004014000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'LINESTRING',
-                    'value' => [
-                        [0, 0, 2, 3],
-                        [1, 1, 4, 5],
+                    [
+                        [5, 5],
+                        [7, 5],
+                        [7, 7],
+                        [5, 7],
+                        [5, 5],
                     ],
-                    'dimension' => 'ZM',
                 ],
+                'dimension' => null,
             ],
-            'ndrLineStringValueWithSrid' => [
-                'value' => '0102000020E6100000020000003D0AD7A3701D41400000000000C055C06666666666A6464000000000000057C0',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'LINESTRING',
-                    'value' => [
-                        [34.23, -87],
-                        [45.3, -92],
+        ];
+        yield 'ndrMultiRingPolygonZValue' => [
+            'value' => '0103000080020000000500000000000000000000000000000000000000000000000000f03f00000000000024400000000000000000000000000000004000000000000024400000000000002440000000000000004000000000000000000000000000002440000000000000004000000000000000000000000000000000000000000000f03f05000000000000000000004000000000000000400000000000001440000000000000004000000000000014400000000000001040000000000000144000000000000014400000000000000840000000000000144000000000000000400000000000000840000000000000004000000000000000400000000000001440',
+            'expected' => [
+                'srid' => null,
+                'type' => 'POLYGON',
+                'value' => [
+                    [
+                        [0, 0, 1],
+                        [10, 0, 2],
+                        [10, 10, 2],
+                        [0, 10, 2],
+                        [0, 0, 1],
                     ],
-                    'dimension' => null,
-                ],
-            ],
-            'xdrLineStringValueWithSrid' => [
-                'value' => '0020000002000010E60000000240411D70A3D70A3DC055C000000000004046A66666666666C057000000000000',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'LINESTRING',
-                    'value' => [
-                        [34.23, -87],
-                        [45.3, -92],
+                    [
+                        [2, 2, 5],
+                        [2, 5, 4],
+                        [5, 5, 3],
+                        [5, 2, 3],
+                        [2, 2, 5],
                     ],
-                    'dimension' => null,
                 ],
+                'dimension' => 'Z',
             ],
-            'ndrLineStringZValueWithSrid' => [
-                'value' => '01020000a0e610000002000000000000000000000000000000000000000000000000000040000000000000f03f0'
-                    .'00000000000f03f0000000000000840',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'LINESTRING',
-                    'value' => [
-                        [0, 0, 2],
-                        [1, 1, 3],
+        ];
+        yield 'xdrMultiRingPolygonZValue' => [
+            'value' => '00800000030000000200000005000000000000000000000000000000003ff0000000000000402400000000000000000000000000004000000000000000402400000000000040240000000000004000000000000000000000000000000040240000000000004000000000000000000000000000000000000000000000003ff000000000000000000005400000000000000040000000000000004014000000000000400000000000000040140000000000004010000000000000401400000000000040140000000000004008000000000000401400000000000040000000000000004008000000000000400000000000000040000000000000004014000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'POLYGON',
+                'value' => [
+                    [
+                        [0, 0, 1],
+                        [10, 0, 2],
+                        [10, 10, 2],
+                        [0, 10, 2],
+                        [0, 0, 1],
                     ],
-                    'dimension' => 'Z',
-                ],
-            ],
-            'xdrLineStringZValueWithSrid' => [
-                'value' => '00a0000002000010e6000000020000000000000000000000000000000040000000000000003ff00000000000003'
-                    .'ff00000000000004008000000000000',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'LINESTRING',
-                    'value' => [
-                        [0, 0, 2],
-                        [1, 1, 3],
+                    [
+                        [2, 2, 5],
+                        [2, 5, 4],
+                        [5, 5, 3],
+                        [5, 2, 3],
+                        [2, 2, 5],
                     ],
-                    'dimension' => 'Z',
                 ],
+                'dimension' => 'Z',
             ],
-            'ndrLineStringMValueWithSrid' => [
-                'value' => '0102000060e610000002000000000000000000000000000000000000000000000000000040000000000000f03f0'
-                    .'00000000000f03f0000000000000840',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'LINESTRING',
-                    'value' => [
-                        [0, 0, 2],
-                        [1, 1, 3],
+        ];
+        yield 'ndrMultiRingPolygonMValue' => [
+            'value' => '0103000040020000000500000000000000000000000000000000000000000000000000f03f00000000000024400000000000000000000000000000004000000000000024400000000000002440000000000000004000000000000000000000000000002440000000000000004000000000000000000000000000000000000000000000f03f05000000000000000000004000000000000000400000000000001440000000000000004000000000000014400000000000001040000000000000144000000000000014400000000000000840000000000000144000000000000000400000000000000840000000000000004000000000000000400000000000001440',
+            'expected' => [
+                'srid' => null,
+                'type' => 'POLYGON',
+                'value' => [
+                    [
+                        [0, 0, 1],
+                        [10, 0, 2],
+                        [10, 10, 2],
+                        [0, 10, 2],
+                        [0, 0, 1],
                     ],
-                    'dimension' => 'M',
-                ],
-            ],
-            'xdrLineStringMValueWithSrid' => [
-                'value' => '0060000002000010e6000000020000000000000000000000000000000040000000000000003ff00000000000003'
-                    .'ff00000000000004008000000000000',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'LINESTRING',
-                    'value' => [
-                        [0, 0, 2],
-                        [1, 1, 3],
+                    [
+                        [2, 2, 5],
+                        [2, 5, 4],
+                        [5, 5, 3],
+                        [5, 2, 3],
+                        [2, 2, 5],
                     ],
-                    'dimension' => 'M',
                 ],
+                'dimension' => 'M',
             ],
-            'ndrLineStringZMValueWithSrid' => [
-                'value' => '01020000e0e61000000200000000000000000000000000000000000000000000000000004000000000000008400'
-                    .'00000000000f03f000000000000f03f00000000000010400000000000001440',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'LINESTRING',
-                    'value' => [
-                        [0, 0, 2, 3],
-                        [1, 1, 4, 5],
+        ];
+        yield 'xdrMultiRingPolygonMValue' => [
+            'value' => '00400000030000000200000005000000000000000000000000000000003ff0000000000000402400000000000000000000000000004000000000000000402400000000000040240000000000004000000000000000000000000000000040240000000000004000000000000000000000000000000000000000000000003ff000000000000000000005400000000000000040000000000000004014000000000000400000000000000040140000000000004010000000000000401400000000000040140000000000004008000000000000401400000000000040000000000000004008000000000000400000000000000040000000000000004014000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'POLYGON',
+                'value' => [
+                    [
+                        [0, 0, 1],
+                        [10, 0, 2],
+                        [10, 10, 2],
+                        [0, 10, 2],
+                        [0, 0, 1],
                     ],
-                    'dimension' => 'ZM',
-                ],
-            ],
-            'xdrLineStringZMValueWithSrid' => [
-                'value' => '00e0000002000010e60000000200000000000000000000000000000000400000000000000040080000000000003'
-                    .'ff00000000000003ff000000000000040100000000000004014000000000000',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'LINESTRING',
-                    'value' => [
-                        [0, 0, 2, 3],
-                        [1, 1, 4, 5],
+                    [
+                        [2, 2, 5],
+                        [2, 5, 4],
+                        [5, 5, 3],
+                        [5, 2, 3],
+                        [2, 2, 5],
                     ],
-                    'dimension' => 'ZM',
                 ],
+                'dimension' => 'M',
             ],
-            'ndrEmptyPolygonValue' => [
-                'value' => '010300000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'POLYGON',
-                    'value' => [],
-                    'dimension' => null,
-                ],
-            ],
-            'ndrPolygonValue' => [
-                'value' => '0103000000010000000500000000000000000000000000000000000000000000000000244000000000000000000'
-                    .'00000000000244000000000000024400000000000000000000000000000244000000000000000000000000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'POLYGON',
-                    'value' => [
-                        [
-                            [0, 0],
-                            [10, 0],
-                            [10, 10],
-                            [0, 10],
-                            [0, 0],
-                        ],
+        ];
+        yield 'ndrMultiRingPolygonZMValue' => [
+            'value' => '01030000c0020000000500000000000000000000000000000000000000000000000000f03f000000000000f0bf00000000000024400000000000000000000000000000004000000000000000c000000000000024400000000000002440000000000000004000000000000000c000000000000000000000000000002440000000000000004000000000000010c000000000000000000000000000000000000000000000f03f000000000000f0bf050000000000000000000040000000000000004000000000000014400000000000000000000000000000004000000000000014400000000000001040000000000000f03f0000000000001440000000000000144000000000000008400000000000000040000000000000144000000000000000400000000000000840000000000000f03f0000000000000040000000000000004000000000000014400000000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'POLYGON',
+                'value' => [
+                    [
+                        [0, 0, 1, -1],
+                        [10, 0, 2, -2],
+                        [10, 10, 2, -2],
+                        [0, 10, 2, -4],
+                        [0, 0, 1, -1],
                     ],
-                    'dimension' => null,
-                ],
-            ],
-            'xdrPolygonValue' => [
-                'value' => '0000000003000000010000000500000000000000000000000000000000402400000000000000000000000000004'
-                    .'02400000000000040240000000000000000000000000000402400000000000000000000000000000000000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'POLYGON',
-                    'value' => [
-                        [
-                            [0, 0],
-                            [10, 0],
-                            [10, 10],
-                            [0, 10],
-                            [0, 0],
-                        ],
+                    [
+                        [2, 2, 5, 0],
+                        [2, 5, 4, 1],
+                        [5, 5, 3, 2],
+                        [5, 2, 3, 1],
+                        [2, 2, 5, 0],
                     ],
-                    'dimension' => null,
                 ],
+                'dimension' => 'ZM',
             ],
-            'ndrPolygonValueWithSrid' => [
-                'value' => '0103000020E61000000100000005000000000000000000000000000000000000000000000000002440000000000'
-                    .'000000000000000000024400000000000002440000000000000000000000000000024400000000000000000000000000'
-                    .'0000000',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'POLYGON',
-                    'value' => [
-                        [
-                            [0, 0],
-                            [10, 0],
-                            [10, 10],
-                            [0, 10],
-                            [0, 0],
-                        ],
+        ];
+        yield 'xdrMultiRingPolygonZMValue' => [
+            'value' => '00c00000030000000200000005000000000000000000000000000000003ff0000000000000bff0000000000000402400000000000000000000000000004000000000000000c000000000000000402400000000000040240000000000004000000000000000c000000000000000000000000000000040240000000000004000000000000000c010000000000000000000000000000000000000000000003ff0000000000000bff00000000000000000000540000000000000004000000000000000401400000000000000000000000000004000000000000000401400000000000040100000000000003ff000000000000040140000000000004014000000000000400800000000000040000000000000004014000000000000400000000000000040080000000000003ff00000000000004000000000000000400000000000000040140000000000000000000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'POLYGON',
+                'value' => [
+                    [
+                        [0, 0, 1, -1],
+                        [10, 0, 2, -2],
+                        [10, 10, 2, -2],
+                        [0, 10, 2, -4],
+                        [0, 0, 1, -1],
                     ],
-                    'dimension' => null,
-                ],
-            ],
-            'xdrPolygonValueWithSrid' => [
-                'value' => '0020000003000010E60000000100000005000000000000000000000000000000004024000000000000000000000'
-                    .'000000040240000000000004024000000000000000000000000000040240000000000000000000000000000000000000'
-                    .'0000000',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'POLYGON',
-                    'value' => [
-                        [
-                            [0, 0],
-                            [10, 0],
-                            [10, 10],
-                            [0, 10],
-                            [0, 0],
-                        ],
+                    [
+                        [2, 2, 5, 0],
+                        [2, 5, 4, 1],
+                        [5, 5, 3, 2],
+                        [5, 2, 3, 1],
+                        [2, 2, 5, 0],
                     ],
-                    'dimension' => null,
                 ],
+                'dimension' => 'ZM',
             ],
-            'ndrMultiRingPolygonValue' => [
-                'value' => '0103000000020000000500000000000000000000000000000000000000000000000000244000000000000000000'
-                    .'000000000002440000000000000244000000000000000000000000000002440000000000000000000000000000000000'
-                    .'5000000000000000000144000000000000014400000000000001C4000000000000014400000000000001C40000000000'
-                    .'0001C4000000000000014400000000000001C4000000000000014400000000000001440',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'POLYGON',
-                    'value' => [
-                        [
-                            [0, 0],
-                            [10, 0],
-                            [10, 10],
-                            [0, 10],
-                            [0, 0],
-                        ],
-                        [
-                            [5, 5],
-                            [7, 5],
-                            [7, 7],
-                            [5, 7],
-                            [5, 5],
-                        ],
+        ];
+        yield 'ndrMultiRingPolygonValueWithSrid' => [
+            'value' => '0103000020E61000000200000005000000000000000000000000000000000000000000000000002440000000000000000000000000000024400000000000002440000000000000000000000000000024400000000000000000000000000000000005000000000000000000144000000000000014400000000000001C4000000000000014400000000000001C400000000000001C4000000000000014400000000000001C4000000000000014400000000000001440',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'POLYGON',
+                'value' => [
+                    [
+                        [0, 0],
+                        [10, 0],
+                        [10, 10],
+                        [0, 10],
+                        [0, 0],
                     ],
-                    'dimension' => null,
-                ],
-            ],
-            'xdrMultiRingPolygonValue' => [
-                'value' => '0000000003000000020000000500000000000000000000000000000000402400000000000000000000000000004'
-                    .'024000000000000402400000000000000000000000000004024000000000000000000000000000000000000000000000'
-                    .'000000540140000000000004014000000000000401C0000000000004014000000000000401C000000000000401C00000'
-                    .'00000004014000000000000401C00000000000040140000000000004014000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'POLYGON',
-                    'value' => [
-                        [
-                            [0, 0],
-                            [10, 0],
-                            [10, 10],
-                            [0, 10],
-                            [0, 0],
-                        ],
-                        [
-                            [5, 5],
-                            [7, 5],
-                            [7, 7],
-                            [5, 7],
-                            [5, 5],
-                        ],
+                    [
+                        [5, 5],
+                        [7, 5],
+                        [7, 7],
+                        [5, 7],
+                        [5, 5],
                     ],
-                    'dimension' => null,
                 ],
+                'dimension' => null,
             ],
-            'ndrMultiRingPolygonZValue' => [
-                'value' => '0103000080020000000500000000000000000000000000000000000000000000000000f03f00000000000024400'
-                    .'000000000000000000000000000004000000000000024400000000000002440000000000000004000000000000000000'
-                    .'000000000002440000000000000004000000000000000000000000000000000000000000000f03f05000000000000000'
-                    .'000004000000000000000400000000000001440000000000000004000000000000014400000000000001040000000000'
-                    .'000144000000000000014400000000000000840000000000000144000000000000000400000000000000840000000000'
-                    .'000004000000000000000400000000000001440',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'POLYGON',
-                    'value' => [
-                        [
-                            [0, 0, 1],
-                            [10, 0, 2],
-                            [10, 10, 2],
-                            [0, 10, 2],
-                            [0, 0, 1],
-                        ],
-                        [
-                            [2, 2, 5],
-                            [2, 5, 4],
-                            [5, 5, 3],
-                            [5, 2, 3],
-                            [2, 2, 5],
-                        ],
+        ];
+        yield 'xdrMultiRingPolygonValueWithSrid' => [
+            'value' => '0020000003000010E6000000020000000500000000000000000000000000000000402400000000000000000000000000004024000000000000402400000000000000000000000000004024000000000000000000000000000000000000000000000000000540140000000000004014000000000000401C0000000000004014000000000000401C000000000000401C0000000000004014000000000000401C00000000000040140000000000004014000000000000',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'POLYGON',
+                'value' => [
+                    [
+                        [0, 0],
+                        [10, 0],
+                        [10, 10],
+                        [0, 10],
+                        [0, 0],
                     ],
-                    'dimension' => 'Z',
-                ],
-            ],
-            'xdrMultiRingPolygonZValue' => [
-                'value' => '00800000030000000200000005000000000000000000000000000000003ff000000000000040240000000000000'
-                    .'000000000000000400000000000000040240000000000004024000000000000400000000000000000000000000000004'
-                    .'0240000000000004000000000000000000000000000000000000000000000003ff000000000000000000005400000000'
-                    .'000000040000000000000004014000000000000400000000000000040140000000000004010000000000000401400000'
-                    .'000000040140000000000004008000000000000401400000000000040000000000000004008000000000000400000000'
-                    .'000000040000000000000004014000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'POLYGON',
-                    'value' => [
-                        [
-                            [0, 0, 1],
-                            [10, 0, 2],
-                            [10, 10, 2],
-                            [0, 10, 2],
-                            [0, 0, 1],
-                        ],
-                        [
-                            [2, 2, 5],
-                            [2, 5, 4],
-                            [5, 5, 3],
-                            [5, 2, 3],
-                            [2, 2, 5],
-                        ],
+                    [
+                        [5, 5],
+                        [7, 5],
+                        [7, 7],
+                        [5, 7],
+                        [5, 5],
                     ],
-                    'dimension' => 'Z',
                 ],
+                'dimension' => null,
             ],
-            'ndrMultiRingPolygonMValue' => [
-                'value' => '0103000040020000000500000000000000000000000000000000000000000000000000f03f00000000000024400'
-                    .'000000000000000000000000000004000000000000024400000000000002440000000000000004000000000000000000'
-                    .'000000000002440000000000000004000000000000000000000000000000000000000000000f03f05000000000000000'
-                    .'000004000000000000000400000000000001440000000000000004000000000000014400000000000001040000000000'
-                    .'000144000000000000014400000000000000840000000000000144000000000000000400000000000000840000000000'
-                    .'000004000000000000000400000000000001440',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'POLYGON',
-                    'value' => [
-                        [
-                            [0, 0, 1],
-                            [10, 0, 2],
-                            [10, 10, 2],
-                            [0, 10, 2],
-                            [0, 0, 1],
-                        ],
-                        [
-                            [2, 2, 5],
-                            [2, 5, 4],
-                            [5, 5, 3],
-                            [5, 2, 3],
-                            [2, 2, 5],
-                        ],
+        ];
+        yield 'ndrMultiRingPolygonZValueWithSrid' => [
+            'value' => '01030000a0e6100000020000000500000000000000000000000000000000000000000000000000f03f00000000000024400000000000000000000000000000004000000000000024400000000000002440000000000000004000000000000000000000000000002440000000000000004000000000000000000000000000000000000000000000f03f05000000000000000000004000000000000000400000000000001440000000000000004000000000000014400000000000001040000000000000144000000000000014400000000000000840000000000000144000000000000000400000000000000840000000000000004000000000000000400000000000001440',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'POLYGON',
+                'value' => [
+                    [
+                        [0, 0, 1],
+                        [10, 0, 2],
+                        [10, 10, 2],
+                        [0, 10, 2],
+                        [0, 0, 1],
                     ],
-                    'dimension' => 'M',
-                ],
-            ],
-            'xdrMultiRingPolygonMValue' => [
-                'value' => '00400000030000000200000005000000000000000000000000000000003ff000000000000040240000000000000'
-                    .'000000000000000400000000000000040240000000000004024000000000000400000000000000000000000000000004'
-                    .'0240000000000004000000000000000000000000000000000000000000000003ff000000000000000000005400000000'
-                    .'000000040000000000000004014000000000000400000000000000040140000000000004010000000000000401400000'
-                    .'000000040140000000000004008000000000000401400000000000040000000000000004008000000000000400000000'
-                    .'000000040000000000000004014000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'POLYGON',
-                    'value' => [
-                        [
-                            [0, 0, 1],
-                            [10, 0, 2],
-                            [10, 10, 2],
-                            [0, 10, 2],
-                            [0, 0, 1],
-                        ],
-                        [
-                            [2, 2, 5],
-                            [2, 5, 4],
-                            [5, 5, 3],
-                            [5, 2, 3],
-                            [2, 2, 5],
-                        ],
+                    [
+                        [2, 2, 5],
+                        [2, 5, 4],
+                        [5, 5, 3],
+                        [5, 2, 3],
+                        [2, 2, 5],
                     ],
-                    'dimension' => 'M',
                 ],
+                'dimension' => 'Z',
             ],
-            'ndrMultiRingPolygonZMValue' => [
-                'value' => '01030000c0020000000500000000000000000000000000000000000000000000000000f03f000000000000f0bf0'
-                    .'0000000000024400000000000000000000000000000004000000000000000c0000000000000244000000000000024400'
-                    .'00000000000004000000000000000c000000000000000000000000000002440000000000000004000000000000010c00'
-                    .'0000000000000000000000000000000000000000000f03f000000000000f0bf050000000000000000000040000000000'
-                    .'000004000000000000014400000000000000000000000000000004000000000000014400000000000001040000000000'
-                    .'000f03f00000000000014400000000000001440000000000000084000000000000000400000000000001440000000000'
-                    .'00000400000000000000840000000000000f03f000000000000004000000000000000400000000000001440000000000'
-                    .'0000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'POLYGON',
-                    'value' => [
-                        [
-                            [0, 0, 1, -1],
-                            [10, 0, 2, -2],
-                            [10, 10, 2, -2],
-                            [0, 10, 2, -4],
-                            [0, 0, 1, -1],
-                        ],
-                        [
-                            [2, 2, 5, 0],
-                            [2, 5, 4, 1],
-                            [5, 5, 3, 2],
-                            [5, 2, 3, 1],
-                            [2, 2, 5, 0],
-                        ],
+        ];
+        yield 'xdrMultiRingPolygonZValueWithSrid' => [
+            'value' => '00a0000003000010e60000000200000005000000000000000000000000000000003ff0000000000000402400000000000000000000000000004000000000000000402400000000000040240000000000004000000000000000000000000000000040240000000000004000000000000000000000000000000000000000000000003ff000000000000000000005400000000000000040000000000000004014000000000000400000000000000040140000000000004010000000000000401400000000000040140000000000004008000000000000401400000000000040000000000000004008000000000000400000000000000040000000000000004014000000000000',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'POLYGON',
+                'value' => [
+                    [
+                        [0, 0, 1],
+                        [10, 0, 2],
+                        [10, 10, 2],
+                        [0, 10, 2],
+                        [0, 0, 1],
                     ],
-                    'dimension' => 'ZM',
-                ],
-            ],
-            'xdrMultiRingPolygonZMValue' => [
-                'value' => '00c00000030000000200000005000000000000000000000000000000003ff0000000000000bff00000000000004'
-                    .'02400000000000000000000000000004000000000000000c000000000000000402400000000000040240000000000004'
-                    .'000000000000000c000000000000000000000000000000040240000000000004000000000000000c0100000000000000'
-                    .'00000000000000000000000000000003ff0000000000000bff0000000000000000000054000000000000000400000000'
-                    .'0000000401400000000000000000000000000004000000000000000401400000000000040100000000000003ff000000'
-                    .'000000040140000000000004014000000000000400800000000000040000000000000004014000000000000400000000'
-                    .'000000040080000000000003ff0000000000000400000000000000040000000000000004014000000000000000000000'
-                    .'0000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'POLYGON',
-                    'value' => [
-                        [
-                            [0, 0, 1, -1],
-                            [10, 0, 2, -2],
-                            [10, 10, 2, -2],
-                            [0, 10, 2, -4],
-                            [0, 0, 1, -1],
-                        ],
-                        [
-                            [2, 2, 5, 0],
-                            [2, 5, 4, 1],
-                            [5, 5, 3, 2],
-                            [5, 2, 3, 1],
-                            [2, 2, 5, 0],
-                        ],
+                    [
+                        [2, 2, 5],
+                        [2, 5, 4],
+                        [5, 5, 3],
+                        [5, 2, 3],
+                        [2, 2, 5],
                     ],
-                    'dimension' => 'ZM',
                 ],
+                'dimension' => 'Z',
             ],
-            'ndrMultiRingPolygonValueWithSrid' => [
-                'value' => '0103000020E61000000200000005000000000000000000000000000000000000000000000000002440000000000'
-                    .'000000000000000000024400000000000002440000000000000000000000000000024400000000000000000000000000'
-                    .'000000005000000000000000000144000000000000014400000000000001C4000000000000014400000000000001C400'
-                    .'000000000001C4000000000000014400000000000001C4000000000000014400000000000001440',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'POLYGON',
-                    'value' => [
-                        [
-                            [0, 0],
-                            [10, 0],
-                            [10, 10],
-                            [0, 10],
-                            [0, 0],
-                        ],
-                        [
-                            [5, 5],
-                            [7, 5],
-                            [7, 7],
-                            [5, 7],
-                            [5, 5],
-                        ],
+        ];
+        yield 'ndrMultiRingPolygonMValueWithSrid' => [
+            'value' => '0103000060e6100000020000000500000000000000000000000000000000000000000000000000f03f00000000000024400000000000000000000000000000004000000000000024400000000000002440000000000000004000000000000000000000000000002440000000000000004000000000000000000000000000000000000000000000f03f05000000000000000000004000000000000000400000000000001440000000000000004000000000000014400000000000001040000000000000144000000000000014400000000000000840000000000000144000000000000000400000000000000840000000000000004000000000000000400000000000001440',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'POLYGON',
+                'value' => [
+                    [
+                        [0, 0, 1],
+                        [10, 0, 2],
+                        [10, 10, 2],
+                        [0, 10, 2],
+                        [0, 0, 1],
                     ],
-                    'dimension' => null,
-                ],
-            ],
-            'xdrMultiRingPolygonValueWithSrid' => [
-                'value' => '0020000003000010E60000000200000005000000000000000000000000000000004024000000000000000000000'
-                    .'000000040240000000000004024000000000000000000000000000040240000000000000000000000000000000000000'
-                    .'00000000000000540140000000000004014000000000000401C0000000000004014000000000000401C0000000000004'
-                    .'01C0000000000004014000000000000401C00000000000040140000000000004014000000000000',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'POLYGON',
-                    'value' => [
-                        [
-                            [0, 0],
-                            [10, 0],
-                            [10, 10],
-                            [0, 10],
-                            [0, 0],
-                        ],
-                        [
-                            [5, 5],
-                            [7, 5],
-                            [7, 7],
-                            [5, 7],
-                            [5, 5],
-                        ],
+                    [
+                        [2, 2, 5],
+                        [2, 5, 4],
+                        [5, 5, 3],
+                        [5, 2, 3],
+                        [2, 2, 5],
                     ],
-                    'dimension' => null,
                 ],
+                'dimension' => 'M',
             ],
-            'ndrMultiRingPolygonZValueWithSrid' => [
-                'value' => '01030000a0e6100000020000000500000000000000000000000000000000000000000000000000f03f000000000'
-                    .'000244000000000000000000000000000000040000000000000244000000000000024400000000000000040000000000'
-                    .'00000000000000000002440000000000000004000000000000000000000000000000000000000000000f03f050000000'
-                    .'000000000000040000000000000004000000000000014400000000000000040000000000000144000000000000010400'
-                    .'000000000001440000000000000144000000000000008400000000000001440000000000000004000000000000008400'
-                    .'00000000000004000000000000000400000000000001440',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'POLYGON',
-                    'value' => [
-                        [
-                            [0, 0, 1],
-                            [10, 0, 2],
-                            [10, 10, 2],
-                            [0, 10, 2],
-                            [0, 0, 1],
-                        ],
-                        [
-                            [2, 2, 5],
-                            [2, 5, 4],
-                            [5, 5, 3],
-                            [5, 2, 3],
-                            [2, 2, 5],
-                        ],
+        ];
+        yield 'xdrMultiRingPolygonMValueWithSrid' => [
+            'value' => '0060000003000010e60000000200000005000000000000000000000000000000003ff0000000000000402400000000000000000000000000004000000000000000402400000000000040240000000000004000000000000000000000000000000040240000000000004000000000000000000000000000000000000000000000003ff000000000000000000005400000000000000040000000000000004014000000000000400000000000000040140000000000004010000000000000401400000000000040140000000000004008000000000000401400000000000040000000000000004008000000000000400000000000000040000000000000004014000000000000',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'POLYGON',
+                'value' => [
+                    [
+                        [0, 0, 1],
+                        [10, 0, 2],
+                        [10, 10, 2],
+                        [0, 10, 2],
+                        [0, 0, 1],
                     ],
-                    'dimension' => 'Z',
-                ],
-            ],
-            'xdrMultiRingPolygonZValueWithSrid' => [
-                'value' => '00a0000003000010e60000000200000005000000000000000000000000000000003ff0000000000000402400000'
-                    .'000000000000000000000004000000000000000402400000000000040240000000000004000000000000000000000000'
-                    .'000000040240000000000004000000000000000000000000000000000000000000000003ff0000000000000000000054'
-                    .'000000000000000400000000000000040140000000000004000000000000000401400000000000040100000000000004'
-                    .'014000000000000401400000000000040080000000000004014000000000000400000000000000040080000000000004'
-                    .'00000000000000040000000000000004014000000000000',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'POLYGON',
-                    'value' => [
-                        [
-                            [0, 0, 1],
-                            [10, 0, 2],
-                            [10, 10, 2],
-                            [0, 10, 2],
-                            [0, 0, 1],
-                        ],
-                        [
-                            [2, 2, 5],
-                            [2, 5, 4],
-                            [5, 5, 3],
-                            [5, 2, 3],
-                            [2, 2, 5],
-                        ],
+                    [
+                        [2, 2, 5],
+                        [2, 5, 4],
+                        [5, 5, 3],
+                        [5, 2, 3],
+                        [2, 2, 5],
                     ],
-                    'dimension' => 'Z',
                 ],
+                'dimension' => 'M',
             ],
-            'ndrMultiRingPolygonMValueWithSrid' => [
-                'value' => '0103000060e6100000020000000500000000000000000000000000000000000000000000000000f03f000000000'
-                    .'000244000000000000000000000000000000040000000000000244000000000000024400000000000000040000000000'
-                    .'00000000000000000002440000000000000004000000000000000000000000000000000000000000000f03f050000000'
-                    .'000000000000040000000000000004000000000000014400000000000000040000000000000144000000000000010400'
-                    .'000000000001440000000000000144000000000000008400000000000001440000000000000004000000000000008400'
-                    .'00000000000004000000000000000400000000000001440',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'POLYGON',
-                    'value' => [
-                        [
-                            [0, 0, 1],
-                            [10, 0, 2],
-                            [10, 10, 2],
-                            [0, 10, 2],
-                            [0, 0, 1],
-                        ],
-                        [
-                            [2, 2, 5],
-                            [2, 5, 4],
-                            [5, 5, 3],
-                            [5, 2, 3],
-                            [2, 2, 5],
-                        ],
+        ];
+        yield 'ndrMultiRingPolygonZMValueWithSrid' => [
+            'value' => '01030000e0e6100000020000000500000000000000000000000000000000000000000000000000f03f000000000000f0bf00000000000024400000000000000000000000000000004000000000000000c000000000000024400000000000002440000000000000004000000000000000c000000000000000000000000000002440000000000000004000000000000010c000000000000000000000000000000000000000000000f03f000000000000f0bf050000000000000000000040000000000000004000000000000014400000000000000000000000000000004000000000000014400000000000001040000000000000f03f0000000000001440000000000000144000000000000008400000000000000040000000000000144000000000000000400000000000000840000000000000f03f0000000000000040000000000000004000000000000014400000000000000000',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'POLYGON',
+                'value' => [
+                    [
+                        [0, 0, 1, -1],
+                        [10, 0, 2, -2],
+                        [10, 10, 2, -2],
+                        [0, 10, 2, -4],
+                        [0, 0, 1, -1],
                     ],
-                    'dimension' => 'M',
-                ],
-            ],
-            'xdrMultiRingPolygonMValueWithSrid' => [
-                'value' => '0060000003000010e60000000200000005000000000000000000000000000000003ff0000000000000402400000'
-                    .'000000000000000000000004000000000000000402400000000000040240000000000004000000000000000000000000'
-                    .'000000040240000000000004000000000000000000000000000000000000000000000003ff0000000000000000000054'
-                    .'000000000000000400000000000000040140000000000004000000000000000401400000000000040100000000000004'
-                    .'014000000000000401400000000000040080000000000004014000000000000400000000000000040080000000000004'
-                    .'00000000000000040000000000000004014000000000000',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'POLYGON',
-                    'value' => [
-                        [
-                            [0, 0, 1],
-                            [10, 0, 2],
-                            [10, 10, 2],
-                            [0, 10, 2],
-                            [0, 0, 1],
-                        ],
-                        [
-                            [2, 2, 5],
-                            [2, 5, 4],
-                            [5, 5, 3],
-                            [5, 2, 3],
-                            [2, 2, 5],
-                        ],
+                    [
+                        [2, 2, 5, 0],
+                        [2, 5, 4, 1],
+                        [5, 5, 3, 2],
+                        [5, 2, 3, 1],
+                        [2, 2, 5, 0],
                     ],
-                    'dimension' => 'M',
                 ],
+                'dimension' => 'ZM',
             ],
-            'ndrMultiRingPolygonZMValueWithSrid' => [
-                'value' => '01030000e0e6100000020000000500000000000000000000000000000000000000000000000000f03f000000000'
-                    .'000f0bf00000000000024400000000000000000000000000000004000000000000000c00000000000002440000000000'
-                    .'0002440000000000000004000000000000000c0000000000000000000000000000024400000000000000040000000000'
-                    .'00010c000000000000000000000000000000000000000000000f03f000000000000f0bf0500000000000000000000400'
-                    .'000000000000040000000000000144000000000000000000000000000000040000000000000144000000000000010400'
-                    .'00000000000f03f000000000000144000000000000014400000000000000840000000000000004000000000000014400'
-                    .'0000000000000400000000000000840000000000000f03f0000000000000040000000000000004000000000000014400'
-                    .'000000000000000',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'POLYGON',
-                    'value' => [
-                        [
-                            [0, 0, 1, -1],
-                            [10, 0, 2, -2],
-                            [10, 10, 2, -2],
-                            [0, 10, 2, -4],
-                            [0, 0, 1, -1],
-                        ],
-                        [
-                            [2, 2, 5, 0],
-                            [2, 5, 4, 1],
-                            [5, 5, 3, 2],
-                            [5, 2, 3, 1],
-                            [2, 2, 5, 0],
-                        ],
+        ];
+        yield 'xdrMultiRingPolygonZMValueWithSrid' => [
+            'value' => '00e0000003000010e60000000200000005000000000000000000000000000000003ff0000000000000bff0000000000000402400000000000000000000000000004000000000000000c000000000000000402400000000000040240000000000004000000000000000c000000000000000000000000000000040240000000000004000000000000000c010000000000000000000000000000000000000000000003ff0000000000000bff00000000000000000000540000000000000004000000000000000401400000000000000000000000000004000000000000000401400000000000040100000000000003ff000000000000040140000000000004014000000000000400800000000000040000000000000004014000000000000400000000000000040080000000000003ff00000000000004000000000000000400000000000000040140000000000000000000000000000',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'POLYGON',
+                'value' => [
+                    [
+                        [0, 0, 1, -1],
+                        [10, 0, 2, -2],
+                        [10, 10, 2, -2],
+                        [0, 10, 2, -4],
+                        [0, 0, 1, -1],
                     ],
-                    'dimension' => 'ZM',
-                ],
-            ],
-            'xdrMultiRingPolygonZMValueWithSrid' => [
-                'value' => '00e0000003000010e60000000200000005000000000000000000000000000000003ff0000000000000bff000000'
-                    .'0000000402400000000000000000000000000004000000000000000c0000000000000004024000000000000402400000'
-                    .'00000004000000000000000c000000000000000000000000000000040240000000000004000000000000000c01000000'
-                    .'0000000000000000000000000000000000000003ff0000000000000bff00000000000000000000540000000000000004'
-                    .'000000000000000401400000000000000000000000000004000000000000000401400000000000040100000000000003'
-                    .'ff0000000000000401400000000000040140000000000004008000000000000400000000000000040140000000000004'
-                    .'00000000000000040080000000000003ff00000000000004000000000000000400000000000000040140000000000000'
-                    .'000000000000000',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'POLYGON',
-                    'value' => [
-                        [
-                            [0, 0, 1, -1],
-                            [10, 0, 2, -2],
-                            [10, 10, 2, -2],
-                            [0, 10, 2, -4],
-                            [0, 0, 1, -1],
-                        ],
-                        [
-                            [2, 2, 5, 0],
-                            [2, 5, 4, 1],
-                            [5, 5, 3, 2],
-                            [5, 2, 3, 1],
-                            [2, 2, 5, 0],
-                        ],
+                    [
+                        [2, 2, 5, 0],
+                        [2, 5, 4, 1],
+                        [5, 5, 3, 2],
+                        [5, 2, 3, 1],
+                        [2, 2, 5, 0],
                     ],
-                    'dimension' => 'ZM',
                 ],
+                'dimension' => 'ZM',
             ],
-            'ndrMultiPointValue' => [
-                'value' => '0104000000040000000101000000000000000000000000000000000000000101000000000000000000244000000'
-                    .'00000000000010100000000000000000024400000000000002440010100000000000000000000000000000000002440',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTIPOINT',
-                    'value' => [
+        ];
+        yield 'ndrMultiPointValue' => [
+            'value' => '010400000004000000010100000000000000000000000000000000000000010100000000000000000024400000000000000000010100000000000000000024400000000000002440010100000000000000000000000000000000002440',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTIPOINT',
+                'value' => [
+                    [0, 0],
+                    [10, 0],
+                    [10, 10],
+                    [0, 10],
+                ],
+                'dimension' => null,
+            ],
+        ];
+        yield 'xdrMultiPointValue' => [
+            'value' => '000000000400000004000000000100000000000000000000000000000000000000000140240000000000000000000000000000000000000140240000000000004024000000000000000000000100000000000000004024000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTIPOINT',
+                'value' => [
+                    [0, 0],
+                    [10, 0],
+                    [10, 10],
+                    [0, 10],
+                ],
+                'dimension' => null,
+            ],
+        ];
+        yield 'ndrMultiPointZValue' => [
+            'value' => '0104000080020000000101000080000000000000000000000000000000000000000000000000010100008000000000000000400000000000000000000000000000f03f',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTIPOINT',
+                'value' => [
+                    [0, 0, 0],
+                    [2, 0, 1],
+                ],
+                'dimension' => 'Z',
+            ],
+        ];
+        yield 'xdrMultiPointZValue' => [
+            'value' => '00800000040000000200800000010000000000000000000000000000000000000000000000000080000001400000000000000000000000000000003ff0000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTIPOINT',
+                'value' => [
+                    [0, 0, 0],
+                    [2, 0, 1],
+                ],
+                'dimension' => 'Z',
+            ],
+        ];
+        yield 'ndrMultiPointMValue' => [
+            'value' => '0104000040020000000101000040000000000000000000000000000000000000000000000040010100004000000000000000400000000000000000000000000000f03f',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTIPOINT',
+                'value' => [
+                    [0, 0, 2],
+                    [2, 0, 1],
+                ],
+                'dimension' => 'M',
+            ],
+        ];
+        yield 'xdrMultiPointMValue' => [
+            'value' => '00400000040000000200400000010000000000000000000000000000000040000000000000000040000001400000000000000000000000000000003ff0000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTIPOINT',
+                'value' => [
+                    [0, 0, 2],
+                    [2, 0, 1],
+                ],
+                'dimension' => 'M',
+            ],
+        ];
+        yield 'ndrMultiPointZMValue' => [
+            'value' => '01040000c00200000001010000c00000000000000000000000000000f03f0000000000000040000000000000084001010000c000000000000008400000000000000040000000000000f03f0000000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTIPOINT',
+                'value' => [
+                    [0, 1, 2, 3],
+                    [3, 2, 1, 0],
+                ],
+                'dimension' => 'ZM',
+            ],
+        ];
+        yield 'xdrMultiPointZMValue' => [
+            'value' => '00c00000040000000200c000000100000000000000003ff00000000000004000000000000000400800000000000000c0000001400800000000000040000000000000003ff00000000000000000000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTIPOINT',
+                'value' => [
+                    [0, 1, 2, 3],
+                    [3, 2, 1, 0],
+                ],
+                'dimension' => 'ZM',
+            ],
+        ];
+        yield 'ndrMultiPointValueWithSrid' => [
+            'value' => '0104000020E610000004000000010100000000000000000000000000000000000000010100000000000000000024400000000000000000010100000000000000000024400000000000002440010100000000000000000000000000000000002440',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'MULTIPOINT',
+                'value' => [
+                    [0, 0],
+                    [10, 0],
+                    [10, 10],
+                    [0, 10],
+                ],
+                'dimension' => null,
+            ],
+        ];
+        yield 'xdrMultiPointValueWithSrid' => [
+            'value' => '0020000004000010E600000004000000000100000000000000000000000000000000000000000140240000000000000000000000000000000000000140240000000000004024000000000000000000000100000000000000004024000000000000',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'MULTIPOINT',
+                'value' => [
+                    [0, 0],
+                    [10, 0],
+                    [10, 10],
+                    [0, 10],
+                ],
+                'dimension' => null,
+            ],
+        ];
+        yield 'ndrMultiPointZValueWithSrid' => [
+            'value' => '0104000080020000000101000080000000000000000000000000000000000000000000000000010100008000000000000000400000000000000000000000000000f03f',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTIPOINT',
+                'value' => [
+                    [0, 0, 0],
+                    [2, 0, 1],
+                ],
+                'dimension' => 'Z',
+            ],
+        ];
+        yield 'xdrMultiPointZValueWithSrid' => [
+            'value' => '00800000040000000200800000010000000000000000000000000000000000000000000000000080000001400000000000000000000000000000003ff0000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTIPOINT',
+                'value' => [
+                    [0, 0, 0],
+                    [2, 0, 1],
+                ],
+                'dimension' => 'Z',
+            ],
+        ];
+        yield 'ndrMultiPointMValueWithSrid' => [
+            'value' => '0104000040020000000101000040000000000000000000000000000000000000000000000040010100004000000000000000400000000000000000000000000000f03f',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTIPOINT',
+                'value' => [
+                    [0, 0, 2],
+                    [2, 0, 1],
+                ],
+                'dimension' => 'M',
+            ],
+        ];
+        yield 'xdrMultiPointMValueWithSrid' => [
+            'value' => '00400000040000000200400000010000000000000000000000000000000040000000000000000040000001400000000000000000000000000000003ff0000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTIPOINT',
+                'value' => [
+                    [0, 0, 2],
+                    [2, 0, 1],
+                ],
+                'dimension' => 'M',
+            ],
+        ];
+        yield 'ndrMultiPointZMValueWithSrid' => [
+            'value' => '01040000c00200000001010000c00000000000000000000000000000f03f0000000000000040000000000000084001010000c000000000000008400000000000000040000000000000f03f0000000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTIPOINT',
+                'value' => [
+                    [0, 1, 2, 3],
+                    [3, 2, 1, 0],
+                ],
+                'dimension' => 'ZM',
+            ],
+        ];
+        yield 'xdrMultiPointZMValueWithSrid' => [
+            'value' => '00c00000040000000200c000000100000000000000003ff00000000000004000000000000000400800000000000000c0000001400800000000000040000000000000003ff00000000000000000000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTIPOINT',
+                'value' => [
+                    [0, 1, 2, 3],
+                    [3, 2, 1, 0],
+                ],
+                'dimension' => 'ZM',
+            ],
+        ];
+        yield 'ndrMultiLineStringValue' => [
+            'value' => '01050000000200000001020000000400000000000000000000000000000000000000000000000000244000000000000000000000000000002440000000000000244000000000000000000000000000002440010200000004000000000000000000144000000000000014400000000000001C4000000000000014400000000000001C400000000000001C4000000000000014400000000000001C40',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTILINESTRING',
+                'value' => [
+                    [
                         [0, 0],
                         [10, 0],
                         [10, 10],
                         [0, 10],
                     ],
-                    'dimension' => null,
+                    [
+                        [5, 5],
+                        [7, 5],
+                        [7, 7],
+                        [5, 7],
+                    ],
                 ],
+                'dimension' => null,
             ],
-            'xdrMultiPointValue' => [
-                'value' => '0000000004000000040000000001000000000000000000000000000000000000000001402400000000000000000'
-                    .'00000000000000000000140240000000000004024000000000000000000000100000000000000004024000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTIPOINT',
-                    'value' => [
+        ];
+        yield 'xdrMultiLineStringValue' => [
+            'value' => '0000000005000000020000000002000000040000000000000000000000000000000040240000000000000000000000000000402400000000000040240000000000000000000000000000402400000000000000000000020000000440140000000000004014000000000000401C0000000000004014000000000000401C000000000000401C0000000000004014000000000000401C000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTILINESTRING',
+                'value' => [
+                    [
                         [0, 0],
                         [10, 0],
                         [10, 10],
                         [0, 10],
                     ],
-                    'dimension' => null,
-                ],
-            ],
-            'ndrMultiPointZValue' => [
-                'value' => '0104000080020000000101000080000000000000000000000000000000000000000000000000010100008000000'
-                    .'000000000400000000000000000000000000000f03f',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTIPOINT',
-                    'value' => [
-                        [0, 0, 0],
-                        [2, 0, 1],
+                    [
+                        [5, 5],
+                        [7, 5],
+                        [7, 7],
+                        [5, 7],
                     ],
-                    'dimension' => 'Z',
                 ],
+                'dimension' => null,
             ],
-            'xdrMultiPointZValue' => [
-                'value' => '0080000004000000020080000001000000000000000000000000000000000000000000000000008000000140000'
-                    .'0000000000000000000000000003ff0000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTIPOINT',
-                    'value' => [
-                        [0, 0, 0],
-                        [2, 0, 1],
+        ];
+        yield 'ndrMultiLineStringZValue' => [
+            'value' => '01050000800200000001020000800200000000000000000000000000000000000000000000000000f03f000000000000004000000000000000000000000000000040010200008002000000000000000000f03f000000000000f03f0000000000000840000000000000004000000000000000400000000000001040',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTILINESTRING',
+                'value' => [
+                    [
+                        [0, 0, 1],
+                        [2, 0, 2],
                     ],
-                    'dimension' => 'Z',
-                ],
-            ],
-            'ndrMultiPointMValue' => [
-                'value' => '0104000040020000000101000040000000000000000000000000000000000000000000000040010100004000000'
-                    .'000000000400000000000000000000000000000f03f',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTIPOINT',
-                    'value' => [
-                        [0, 0, 2],
-                        [2, 0, 1],
+                    [
+                        [1, 1, 3],
+                        [2, 2, 4],
                     ],
-                    'dimension' => 'M',
                 ],
+                'dimension' => 'Z',
             ],
-            'xdrMultiPointMValue' => [
-                'value' => '0040000004000000020040000001000000000000000000000000000000004000000000000000004000000140000'
-                    .'0000000000000000000000000003ff0000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTIPOINT',
-                    'value' => [
-                        [0, 0, 2],
-                        [2, 0, 1],
+        ];
+        yield 'xdrMultiLineStringZValue' => [
+            'value' => '008000000500000002008000000200000002000000000000000000000000000000003ff00000000000004000000000000000000000000000000040000000000000000080000002000000023ff00000000000003ff00000000000004008000000000000400000000000000040000000000000004010000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTILINESTRING',
+                'value' => [
+                    [
+                        [0, 0, 1],
+                        [2, 0, 2],
                     ],
-                    'dimension' => 'M',
-                ],
-            ],
-            'ndrMultiPointZMValue' => [
-                'value' => '01040000c00200000001010000c00000000000000000000000000000f03f0000000000000040000000000000084'
-                    .'001010000c000000000000008400000000000000040000000000000f03f0000000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTIPOINT',
-                    'value' => [
-                        [0, 1, 2, 3],
-                        [3, 2, 1, 0],
+                    [
+                        [1, 1, 3],
+                        [2, 2, 4],
                     ],
-                    'dimension' => 'ZM',
                 ],
+                'dimension' => 'Z',
             ],
-            'xdrMultiPointZMValue' => [
-                'value' => '00c00000040000000200c000000100000000000000003ff00000000000004000000000000000400800000000000'
-                    .'000c0000001400800000000000040000000000000003ff00000000000000000000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTIPOINT',
-                    'value' => [
-                        [0, 1, 2, 3],
-                        [3, 2, 1, 0],
+        ];
+        yield 'ndrMultiLineStringMValue' => [
+            'value' => '01050000400200000001020000400200000000000000000000000000000000000000000000000000f03f000000000000004000000000000000000000000000000040010200004002000000000000000000f03f000000000000f03f0000000000000840000000000000004000000000000000400000000000001040',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTILINESTRING',
+                'value' => [
+                    [
+                        [0, 0, 1],
+                        [2, 0, 2],
                     ],
-                    'dimension' => 'ZM',
+                    [
+                        [1, 1, 3],
+                        [2, 2, 4],
+                    ],
                 ],
+                'dimension' => 'M',
             ],
-            'ndrMultiPointValueWithSrid' => [
-                'value' => '0104000020E61000000400000001010000000000000000000000000000000000000001010000000000000000002'
-                    .'440000000000000000001010000000000000000002440000000000000244001010000000000000000000000000000000'
-                    .'0002440',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'MULTIPOINT',
-                    'value' => [
+        ];
+        yield 'xdrMultiLineStringMValue' => [
+            'value' => '004000000500000002004000000200000002000000000000000000000000000000003ff00000000000004000000000000000000000000000000040000000000000000040000002000000023ff00000000000003ff00000000000004008000000000000400000000000000040000000000000004010000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTILINESTRING',
+                'value' => [
+                    [
+                        [0, 0, 1],
+                        [2, 0, 2],
+                    ],
+                    [
+                        [1, 1, 3],
+                        [2, 2, 4],
+                    ],
+                ],
+                'dimension' => 'M',
+            ],
+        ];
+        yield 'ndrMultiLineStringZMValue' => [
+            'value' => '01050000c00200000001020000c00200000000000000000000000000000000000000000000000000f03f0000000000001440000000000000004000000000000000000000000000000040000000000000104001020000c002000000000000000000f03f000000000000f03f000000000000084000000000000008400000000000000040000000000000004000000000000010400000000000000040',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTILINESTRING',
+                'value' => [
+                    [
+                        [0, 0, 1, 5],
+                        [2, 0, 2, 4],
+                    ],
+                    [
+                        [1, 1, 3, 3],
+                        [2, 2, 4, 2],
+                    ],
+                ],
+                'dimension' => 'ZM',
+            ],
+        ];
+        yield 'xdrMultiLineStringZMValue' => [
+            'value' => '00c00000050000000200c000000200000002000000000000000000000000000000003ff00000000000004014000000000000400000000000000000000000000000004000000000000000401000000000000000c0000002000000023ff00000000000003ff0000000000000400800000000000040080000000000004000000000000000400000000000000040100000000000004000000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTILINESTRING',
+                'value' => [
+                    [
+                        [0, 0, 1, 5],
+                        [2, 0, 2, 4],
+                    ],
+                    [
+                        [1, 1, 3, 3],
+                        [2, 2, 4, 2],
+                    ],
+                ],
+                'dimension' => 'ZM',
+            ],
+        ];
+        yield 'ndrMultiLineStringValueWithSrid' => [
+            'value' => '0105000020E61000000200000001020000000400000000000000000000000000000000000000000000000000244000000000000000000000000000002440000000000000244000000000000000000000000000002440010200000004000000000000000000144000000000000014400000000000001C4000000000000014400000000000001C400000000000001C4000000000000014400000000000001C40',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'MULTILINESTRING',
+                'value' => [
+                    [
                         [0, 0],
                         [10, 0],
                         [10, 10],
                         [0, 10],
                     ],
-                    'dimension' => null,
+                    [
+                        [5, 5],
+                        [7, 5],
+                        [7, 7],
+                        [5, 7],
+                    ],
                 ],
+                'dimension' => null,
             ],
-            'xdrMultiPointValueWithSrid' => [
-                'value' => '0020000004000010E60000000400000000010000000000000000000000000000000000000000014024000000000'
-                    .'000000000000000000000000000014024000000000000402400000000000000000000010000000000000000402400000'
-                    .'0000000',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'MULTIPOINT',
-                    'value' => [
+        ];
+        yield 'xdrMultiLineStringValueWithSrid' => [
+            'value' => '0020000005000010E6000000020000000002000000040000000000000000000000000000000040240000000000000000000000000000402400000000000040240000000000000000000000000000402400000000000000000000020000000440140000000000004014000000000000401C0000000000004014000000000000401C000000000000401C0000000000004014000000000000401C000000000000',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'MULTILINESTRING',
+                'value' => [
+                    [
                         [0, 0],
                         [10, 0],
                         [10, 10],
                         [0, 10],
                     ],
-                    'dimension' => null,
-                ],
-            ],
-            'ndrMultiPointZValueWithSrid' => [
-                'value' => '0104000080020000000101000080000000000000000000000000000000000000000000000000010100008000000'
-                    .'000000000400000000000000000000000000000f03f',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTIPOINT',
-                    'value' => [
-                        [0, 0, 0],
-                        [2, 0, 1],
+                    [
+                        [5, 5],
+                        [7, 5],
+                        [7, 7],
+                        [5, 7],
                     ],
-                    'dimension' => 'Z',
                 ],
+                'dimension' => null,
             ],
-            'xdrMultiPointZValueWithSrid' => [
-                'value' => '0080000004000000020080000001000000000000000000000000000000000000000000000000008000000140000'
-                    .'0000000000000000000000000003ff0000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTIPOINT',
-                    'value' => [
-                        [0, 0, 0],
-                        [2, 0, 1],
+        ];
+        yield 'ndrMultiLineStringZValueWithSrid' => [
+            'value' => '01050000a0e61000000200000001020000800200000000000000000000000000000000000000000000000000f03f000000000000004000000000000000000000000000000040010200008002000000000000000000f03f000000000000f03f0000000000000840000000000000004000000000000000400000000000001040',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'MULTILINESTRING',
+                'value' => [
+                    [
+                        [0, 0, 1],
+                        [2, 0, 2],
                     ],
-                    'dimension' => 'Z',
-                ],
-            ],
-            'ndrMultiPointMValueWithSrid' => [
-                'value' => '0104000040020000000101000040000000000000000000000000000000000000000000000040010100004000000'
-                    .'000000000400000000000000000000000000000f03f',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTIPOINT',
-                    'value' => [
-                        [0, 0, 2],
-                        [2, 0, 1],
+                    [
+                        [1, 1, 3],
+                        [2, 2, 4],
                     ],
-                    'dimension' => 'M',
                 ],
+                'dimension' => 'Z',
             ],
-            'xdrMultiPointMValueWithSrid' => [
-                'value' => '0040000004000000020040000001000000000000000000000000000000004000000000000000004000000140000'
-                    .'0000000000000000000000000003ff0000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTIPOINT',
-                    'value' => [
-                        [0, 0, 2],
-                        [2, 0, 1],
+        ];
+        yield 'xdrMultiLineStringZValueWithSrid' => [
+            'value' => '008000000500000002008000000200000002000000000000000000000000000000003ff00000000000004000000000000000000000000000000040000000000000000080000002000000023ff00000000000003ff00000000000004008000000000000400000000000000040000000000000004010000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTILINESTRING',
+                'value' => [
+                    [
+                        [0, 0, 1],
+                        [2, 0, 2],
                     ],
-                    'dimension' => 'M',
-                ],
-            ],
-            'ndrMultiPointZMValueWithSrid' => [
-                'value' => '01040000c00200000001010000c00000000000000000000000000000f03f0000000000000040000000000000084'
-                    .'001010000c000000000000008400000000000000040000000000000f03f0000000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTIPOINT',
-                    'value' => [
-                        [0, 1, 2, 3],
-                        [3, 2, 1, 0],
+                    [
+                        [1, 1, 3],
+                        [2, 2, 4],
                     ],
-                    'dimension' => 'ZM',
                 ],
+                'dimension' => 'Z',
             ],
-            'xdrMultiPointZMValueWithSrid' => [
-                'value' => '00c00000040000000200c000000100000000000000003ff00000000000004000000000000000400800000000000'
-                    .'000c0000001400800000000000040000000000000003ff00000000000000000000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTIPOINT',
-                    'value' => [
-                        [0, 1, 2, 3],
-                        [3, 2, 1, 0],
+        ];
+        yield 'ndrMultiLineStringMValueWithSrid' => [
+            'value' => '0105000060e61000000200000001020000400200000000000000000000000000000000000000000000000000f03f000000000000004000000000000000000000000000000040010200004002000000000000000000f03f000000000000f03f0000000000000840000000000000004000000000000000400000000000001040',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'MULTILINESTRING',
+                'value' => [
+                    [
+                        [0, 0, 1],
+                        [2, 0, 2],
                     ],
-                    'dimension' => 'ZM',
+                    [
+                        [1, 1, 3],
+                        [2, 2, 4],
+                    ],
                 ],
+                'dimension' => 'M',
             ],
-            'ndrMultiLineStringValue' => [
-                'value' => '0105000000020000000102000000040000000000000000000000000000000000000000000000000024400000000'
-                    .'000000000000000000000244000000000000024400000000000000000000000000000244001020000000400000000000'
-                    .'0000000144000000000000014400000000000001C4000000000000014400000000000001C400000000000001C4000000'
-                    .'000000014400000000000001C40',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTILINESTRING',
-                    'value' => [
+        ];
+        yield 'xdrMultiLineStringMValueWithSrid' => [
+            'value' => '004000000500000002004000000200000002000000000000000000000000000000003ff00000000000004000000000000000000000000000000040000000000000000040000002000000023ff00000000000003ff00000000000004008000000000000400000000000000040000000000000004010000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTILINESTRING',
+                'value' => [
+                    [
+                        [0, 0, 1],
+                        [2, 0, 2],
+                    ],
+                    [
+                        [1, 1, 3],
+                        [2, 2, 4],
+                    ],
+                ],
+                'dimension' => 'M',
+            ],
+        ];
+        yield 'ndrMultiLineStringZMValueWithSrid' => [
+            'value' => '01050000e0e61000000200000001020000c00200000000000000000000000000000000000000000000000000f03f0000000000001440000000000000004000000000000000000000000000000040000000000000104001020000c002000000000000000000f03f000000000000f03f000000000000084000000000000008400000000000000040000000000000004000000000000010400000000000000040',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'MULTILINESTRING',
+                'value' => [
+                    [
+                        [0, 0, 1, 5],
+                        [2, 0, 2, 4],
+                    ],
+                    [
+                        [1, 1, 3, 3],
+                        [2, 2, 4, 2],
+                    ],
+                ],
+                'dimension' => 'ZM',
+            ],
+        ];
+        yield 'xdrMultiLineStringZMValueWithSrid' => [
+            'value' => '00c00000050000000200c000000200000002000000000000000000000000000000003ff00000000000004014000000000000400000000000000000000000000000004000000000000000401000000000000000c0000002000000023ff00000000000003ff0000000000000400800000000000040080000000000004000000000000000400000000000000040100000000000004000000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTILINESTRING',
+                'value' => [
+                    [
+                        [0, 0, 1, 5],
+                        [2, 0, 2, 4],
+                    ],
+                    [
+                        [1, 1, 3, 3],
+                        [2, 2, 4, 2],
+                    ],
+                ],
+                'dimension' => 'ZM',
+            ],
+        ];
+        yield 'ndrMultiPolygonValue' => [
+            'value' => '01060000000200000001030000000200000005000000000000000000000000000000000000000000000000002440000000000000000000000000000024400000000000002440000000000000000000000000000024400000000000000000000000000000000005000000000000000000144000000000000014400000000000001C4000000000000014400000000000001C400000000000001C4000000000000014400000000000001C400000000000001440000000000000144001030000000100000005000000000000000000F03F000000000000F03F0000000000000840000000000000F03F00000000000008400000000000000840000000000000F03F0000000000000840000000000000F03F000000000000F03F',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTIPOLYGON',
+                'value' => [
+                    [
                         [
                             [0, 0],
                             [10, 0],
                             [10, 10],
                             [0, 10],
+                            [0, 0],
                         ],
                         [
                             [5, 5],
                             [7, 5],
                             [7, 7],
                             [5, 7],
+                            [5, 5],
                         ],
                     ],
-                    'dimension' => null,
+                    [
+                        [
+                            [1, 1],
+                            [3, 1],
+                            [3, 3],
+                            [1, 3],
+                            [1, 1],
+                        ],
+                    ],
                 ],
+                'dimension' => null,
             ],
-            'xdrMultiLineStringValue' => [
-                'value' => '0000000005000000020000000002000000040000000000000000000000000000000040240000000000000000000'
-                    .'000000000402400000000000040240000000000000000000000000000402400000000000000000000020000000440140'
-                    .'000000000004014000000000000401C0000000000004014000000000000401C000000000000401C00000000000040140'
-                    .'00000000000401C000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTILINESTRING',
-                    'value' => [
+        ];
+        yield 'xdrMultiPolygonValue' => [
+            'value' => '0000000006000000020000000003000000020000000500000000000000000000000000000000402400000000000000000000000000004024000000000000402400000000000000000000000000004024000000000000000000000000000000000000000000000000000540140000000000004014000000000000401C0000000000004014000000000000401C000000000000401C0000000000004014000000000000401C00000000000040140000000000004014000000000000000000000300000001000000053FF00000000000003FF000000000000040080000000000003FF0000000000000400800000000000040080000000000003FF000000000000040080000000000003FF00000000000003FF0000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTIPOLYGON',
+                'value' => [
+                    [
                         [
                             [0, 0],
                             [10, 0],
                             [10, 10],
                             [0, 10],
+                            [0, 0],
                         ],
                         [
                             [5, 5],
                             [7, 5],
                             [7, 7],
                             [5, 7],
+                            [5, 5],
                         ],
                     ],
-                    'dimension' => null,
-                ],
-            ],
-            'ndrMultiLineStringZValue' => [
-                'value' => '01050000800200000001020000800200000000000000000000000000000000000000000000000000f03f0000000'
-                    .'00000004000000000000000000000000000000040010200008002000000000000000000f03f000000000000f03f00000'
-                    .'00000000840000000000000004000000000000000400000000000001040',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTILINESTRING',
-                    'value' => [
+                    [
                         [
-                            [0, 0, 1],
-                            [2, 0, 2],
-                        ],
-                        [
-                            [1, 1, 3],
-                            [2, 2, 4],
+                            [1, 1],
+                            [3, 1],
+                            [3, 3],
+                            [1, 3],
+                            [1, 1],
                         ],
                     ],
-                    'dimension' => 'Z',
                 ],
+                'dimension' => null,
             ],
-            'xdrMultiLineStringZValue' => [
-                'value' => '008000000500000002008000000200000002000000000000000000000000000000003ff00000000000004000000'
-                    .'000000000000000000000000040000000000000000080000002000000023ff00000000000003ff000000000000040080'
-                    .'00000000000400000000000000040000000000000004010000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTILINESTRING',
-                    'value' => [
+        ];
+        yield 'ndrMultiPolygonZValue' => [
+            'value' => '0106000080010000000103000080020000000500000000000000000000000000000000000000000000000000084000000000000024400000000000000000000000000000084000000000000024400000000000002440000000000000084000000000000000000000000000002440000000000000084000000000000000000000000000000000000000000000084005000000000000000000004000000000000000400000000000000840000000000000004000000000000014400000000000000840000000000000144000000000000014400000000000000840000000000000144000000000000000400000000000000840000000000000004000000000000000400000000000000840',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTIPOLYGON',
+                'value' => [
+                    [
                         [
-                            [0, 0, 1],
-                            [2, 0, 2],
+                            [0, 0, 3],
+                            [10, 0, 3],
+                            [10, 10, 3],
+                            [0, 10, 3],
+                            [0, 0, 3],
                         ],
                         [
-                            [1, 1, 3],
-                            [2, 2, 4],
+                            [2, 2, 3],
+                            [2, 5, 3],
+                            [5, 5, 3],
+                            [5, 2, 3],
+                            [2, 2, 3],
                         ],
                     ],
-                    'dimension' => 'Z',
                 ],
+                'dimension' => 'Z',
             ],
-            'ndrMultiLineStringMValue' => [
-                'value' => '01050000400200000001020000400200000000000000000000000000000000000000000000000000f03f0000000'
-                    .'00000004000000000000000000000000000000040010200004002000000000000000000f03f000000000000f03f00000'
-                    .'00000000840000000000000004000000000000000400000000000001040',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTILINESTRING',
-                    'value' => [
+        ];
+        yield 'xdrMultiPolygonZValue' => [
+            'value' => '0080000006000000010080000003000000020000000500000000000000000000000000000000400800000000000040240000000000000000000000000000400800000000000040240000000000004024000000000000400800000000000000000000000000004024000000000000400800000000000000000000000000000000000000000000400800000000000000000005400000000000000040000000000000004008000000000000400000000000000040140000000000004008000000000000401400000000000040140000000000004008000000000000401400000000000040000000000000004008000000000000400000000000000040000000000000004008000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTIPOLYGON',
+                'value' => [
+                    [
                         [
-                            [0, 0, 1],
-                            [2, 0, 2],
+                            [0, 0, 3],
+                            [10, 0, 3],
+                            [10, 10, 3],
+                            [0, 10, 3],
+                            [0, 0, 3],
                         ],
                         [
-                            [1, 1, 3],
-                            [2, 2, 4],
+                            [2, 2, 3],
+                            [2, 5, 3],
+                            [5, 5, 3],
+                            [5, 2, 3],
+                            [2, 2, 3],
                         ],
                     ],
-                    'dimension' => 'M',
                 ],
+                'dimension' => 'Z',
             ],
-            'xdrMultiLineStringMValue' => [
-                'value' => '004000000500000002004000000200000002000000000000000000000000000000003ff00000000000004000000'
-                    .'000000000000000000000000040000000000000000040000002000000023ff00000000000003ff000000000000040080'
-                    .'00000000000400000000000000040000000000000004010000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTILINESTRING',
-                    'value' => [
+        ];
+        yield 'ndrMultiPolygonMValue' => [
+            'value' => '0106000040010000000103000040020000000500000000000000000000000000000000000000000000000000084000000000000024400000000000000000000000000000084000000000000024400000000000002440000000000000084000000000000000000000000000002440000000000000084000000000000000000000000000000000000000000000084005000000000000000000004000000000000000400000000000000840000000000000004000000000000014400000000000000840000000000000144000000000000014400000000000000840000000000000144000000000000000400000000000000840000000000000004000000000000000400000000000000840',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTIPOLYGON',
+                'value' => [
+                    [
                         [
-                            [0, 0, 1],
-                            [2, 0, 2],
+                            [0, 0, 3],
+                            [10, 0, 3],
+                            [10, 10, 3],
+                            [0, 10, 3],
+                            [0, 0, 3],
                         ],
                         [
-                            [1, 1, 3],
-                            [2, 2, 4],
+                            [2, 2, 3],
+                            [2, 5, 3],
+                            [5, 5, 3],
+                            [5, 2, 3],
+                            [2, 2, 3],
                         ],
                     ],
-                    'dimension' => 'M',
                 ],
+                'dimension' => 'M',
             ],
-            'ndrMultiLineStringZMValue' => [
-                'value' => '01050000c00200000001020000c00200000000000000000000000000000000000000000000000000f03f0000000'
-                    .'000001440000000000000004000000000000000000000000000000040000000000000104001020000c00200000000000'
-                    .'0000000f03f000000000000f03f000000000000084000000000000008400000000000000040000000000000004000000'
-                    .'000000010400000000000000040',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTILINESTRING',
-                    'value' => [
+        ];
+        yield 'xdrMultiPolygonMValue' => [
+            'value' => '0040000006000000010040000003000000020000000500000000000000000000000000000000400800000000000040240000000000000000000000000000400800000000000040240000000000004024000000000000400800000000000000000000000000004024000000000000400800000000000000000000000000000000000000000000400800000000000000000005400000000000000040000000000000004008000000000000400000000000000040140000000000004008000000000000401400000000000040140000000000004008000000000000401400000000000040000000000000004008000000000000400000000000000040000000000000004008000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTIPOLYGON',
+                'value' => [
+                    [
                         [
-                            [0, 0, 1, 5],
-                            [2, 0, 2, 4],
+                            [0, 0, 3],
+                            [10, 0, 3],
+                            [10, 10, 3],
+                            [0, 10, 3],
+                            [0, 0, 3],
                         ],
                         [
-                            [1, 1, 3, 3],
-                            [2, 2, 4, 2],
+                            [2, 2, 3],
+                            [2, 5, 3],
+                            [5, 5, 3],
+                            [5, 2, 3],
+                            [2, 2, 3],
                         ],
                     ],
-                    'dimension' => 'ZM',
                 ],
+                'dimension' => 'M',
             ],
-            'xdrMultiLineStringZMValue' => [
-                'value' => '00c00000050000000200c000000200000002000000000000000000000000000000003ff00000000000004014000'
-                    .'000000000400000000000000000000000000000004000000000000000401000000000000000c0000002000000023ff00'
-                    .'000000000003ff0000000000000400800000000000040080000000000004000000000000000400000000000000040100'
-                    .'000000000004000000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTILINESTRING',
-                    'value' => [
+        ];
+        yield 'ndrMultiPolygonZMValue' => [
+            'value' => '01060000c00100000001030000c00200000005000000000000000000000000000000000000000000000000000840000000000000004000000000000024400000000000000000000000000000084000000000000000400000000000002440000000000000244000000000000008400000000000000040000000000000000000000000000024400000000000000840000000000000004000000000000000000000000000000000000000000000084000000000000000400500000000000000000000400000000000000040000000000000084000000000000000400000000000000040000000000000144000000000000008400000000000000040000000000000144000000000000014400000000000000840000000000000004000000000000014400000000000000040000000000000084000000000000000400000000000000040000000000000004000000000000008400000000000000040',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTIPOLYGON',
+                'value' => [
+                    [
                         [
-                            [0, 0, 1, 5],
-                            [2, 0, 2, 4],
+                            [0, 0, 3, 2],
+                            [10, 0, 3, 2],
+                            [10, 10, 3, 2],
+                            [0, 10, 3, 2],
+                            [0, 0, 3, 2],
                         ],
                         [
-                            [1, 1, 3, 3],
-                            [2, 2, 4, 2],
+                            [2, 2, 3, 2],
+                            [2, 5, 3, 2],
+                            [5, 5, 3, 2],
+                            [5, 2, 3, 2],
+                            [2, 2, 3, 2],
                         ],
                     ],
-                    'dimension' => 'ZM',
                 ],
+                'dimension' => 'ZM',
             ],
-            'ndrMultiLineStringValueWithSrid' => [
-                'value' => '0105000020E61000000200000001020000000400000000000000000000000000000000000000000000000000244'
-                    .'000000000000000000000000000002440000000000000244000000000000000000000000000002440010200000004000'
-                    .'000000000000000144000000000000014400000000000001C4000000000000014400000000000001C400000000000001'
-                    .'C4000000000000014400000000000001C40',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'MULTILINESTRING',
-                    'value' => [
+        ];
+        yield 'xdrMultiPolygonZMValue' => [
+            'value' => '00c00000060000000100c00000030000000200000005000000000000000000000000000000004008000000000000400000000000000040240000000000000000000000000000400800000000000040000000000000004024000000000000402400000000000040080000000000004000000000000000000000000000000040240000000000004008000000000000400000000000000000000000000000000000000000000000400800000000000040000000000000000000000540000000000000004000000000000000400800000000000040000000000000004000000000000000401400000000000040080000000000004000000000000000401400000000000040140000000000004008000000000000400000000000000040140000000000004000000000000000400800000000000040000000000000004000000000000000400000000000000040080000000000004000000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTIPOLYGON',
+                'value' => [
+                    [
+                        [
+                            [0, 0, 3, 2],
+                            [10, 0, 3, 2],
+                            [10, 10, 3, 2],
+                            [0, 10, 3, 2],
+                            [0, 0, 3, 2],
+                        ],
+                        [
+                            [2, 2, 3, 2],
+                            [2, 5, 3, 2],
+                            [5, 5, 3, 2],
+                            [5, 2, 3, 2],
+                            [2, 2, 3, 2],
+                        ],
+                    ],
+                ],
+                'dimension' => 'ZM',
+            ],
+        ];
+        yield 'ndrMultiPolygonValueWithSrid' => [
+            'value' => '0106000020E61000000200000001030000000200000005000000000000000000000000000000000000000000000000002440000000000000000000000000000024400000000000002440000000000000000000000000000024400000000000000000000000000000000005000000000000000000144000000000000014400000000000001C4000000000000014400000000000001C400000000000001C4000000000000014400000000000001C400000000000001440000000000000144001030000000100000005000000000000000000F03F000000000000F03F0000000000000840000000000000F03F00000000000008400000000000000840000000000000F03F0000000000000840000000000000F03F000000000000F03F',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'MULTIPOLYGON',
+                'value' => [
+                    [
                         [
                             [0, 0],
                             [10, 0],
                             [10, 10],
                             [0, 10],
+                            [0, 0],
                         ],
                         [
                             [5, 5],
                             [7, 5],
                             [7, 7],
                             [5, 7],
+                            [5, 5],
                         ],
                     ],
-                    'dimension' => null,
+                    [
+                        [
+                            [1, 1],
+                            [3, 1],
+                            [3, 3],
+                            [1, 3],
+                            [1, 1],
+                        ],
+                    ],
                 ],
+                'dimension' => null,
             ],
-            'xdrMultiLineStringValueWithSrid' => [
-                'value' => '0020000005000010E60000000200000000020000000400000000000000000000000000000000402400000000000'
-                    .'000000000000000004024000000000000402400000000000000000000000000004024000000000000000000000200000'
-                    .'00440140000000000004014000000000000401C0000000000004014000000000000401C000000000000401C000000000'
-                    .'0004014000000000000401C000000000000',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'MULTILINESTRING',
-                    'value' => [
+        ];
+        yield 'xdrMultiPolygonValueWithSrid' => [
+            'value' => '0020000006000010E6000000020000000003000000020000000500000000000000000000000000000000402400000000000000000000000000004024000000000000402400000000000000000000000000004024000000000000000000000000000000000000000000000000000540140000000000004014000000000000401C0000000000004014000000000000401C000000000000401C0000000000004014000000000000401C00000000000040140000000000004014000000000000000000000300000001000000053FF00000000000003FF000000000000040080000000000003FF0000000000000400800000000000040080000000000003FF000000000000040080000000000003FF00000000000003FF0000000000000',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'MULTIPOLYGON',
+                'value' => [
+                    [
                         [
                             [0, 0],
                             [10, 0],
                             [10, 10],
                             [0, 10],
+                            [0, 0],
                         ],
                         [
                             [5, 5],
                             [7, 5],
                             [7, 7],
                             [5, 7],
+                            [5, 5],
                         ],
                     ],
-                    'dimension' => null,
-                ],
-            ],
-            'ndrMultiLineStringZValueWithSrid' => [
-                'value' => '01050000a0e61000000200000001020000800200000000000000000000000000000000000000000000000000f03'
-                    .'f000000000000004000000000000000000000000000000040010200008002000000000000000000f03f000000000000f'
-                    .'03f0000000000000840000000000000004000000000000000400000000000001040',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'MULTILINESTRING',
-                    'value' => [
+                    [
                         [
+                            [1, 1],
+                            [3, 1],
+                            [3, 3],
+                            [1, 3],
+                            [1, 1],
+                        ],
+                    ],
+                ],
+                'dimension' => null,
+            ],
+        ];
+        yield 'ndrMultiPolygonZValueWithSrid' => [
+            'value' => '01060000a0e6100000010000000103000080020000000500000000000000000000000000000000000000000000000000084000000000000024400000000000000000000000000000084000000000000024400000000000002440000000000000084000000000000000000000000000002440000000000000084000000000000000000000000000000000000000000000084005000000000000000000004000000000000000400000000000000840000000000000004000000000000014400000000000000840000000000000144000000000000014400000000000000840000000000000144000000000000000400000000000000840000000000000004000000000000000400000000000000840',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'MULTIPOLYGON',
+                'value' => [
+                    [
+                        [
+                            [0, 0, 3],
+                            [10, 0, 3],
+                            [10, 10, 3],
+                            [0, 10, 3],
+                            [0, 0, 3],
+                        ],
+                        [
+                            [2, 2, 3],
+                            [2, 5, 3],
+                            [5, 5, 3],
+                            [5, 2, 3],
+                            [2, 2, 3],
+                        ],
+                    ],
+                ],
+                'dimension' => 'Z',
+            ],
+        ];
+        yield 'xdrMultiPolygonZValueWithSrid' => [
+            'value' => '00a0000006000010e6000000010080000003000000020000000500000000000000000000000000000000400800000000000040240000000000000000000000000000400800000000000040240000000000004024000000000000400800000000000000000000000000004024000000000000400800000000000000000000000000000000000000000000400800000000000000000005400000000000000040000000000000004008000000000000400000000000000040140000000000004008000000000000401400000000000040140000000000004008000000000000401400000000000040000000000000004008000000000000400000000000000040000000000000004008000000000000',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'MULTIPOLYGON',
+                'value' => [
+                    [
+                        [
+                            [0, 0, 3],
+                            [10, 0, 3],
+                            [10, 10, 3],
+                            [0, 10, 3],
+                            [0, 0, 3],
+                        ],
+                        [
+                            [2, 2, 3],
+                            [2, 5, 3],
+                            [5, 5, 3],
+                            [5, 2, 3],
+                            [2, 2, 3],
+                        ],
+                    ],
+                ],
+                'dimension' => 'Z',
+            ],
+        ];
+        yield 'ndrMultiPolygonMValueWithSrid' => [
+            'value' => '0106000060e6100000010000000103000040020000000500000000000000000000000000000000000000000000000000084000000000000024400000000000000000000000000000084000000000000024400000000000002440000000000000084000000000000000000000000000002440000000000000084000000000000000000000000000000000000000000000084005000000000000000000004000000000000000400000000000000840000000000000004000000000000014400000000000000840000000000000144000000000000014400000000000000840000000000000144000000000000000400000000000000840000000000000004000000000000000400000000000000840',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'MULTIPOLYGON',
+                'value' => [
+                    [
+                        [
+                            [0, 0, 3],
+                            [10, 0, 3],
+                            [10, 10, 3],
+                            [0, 10, 3],
+                            [0, 0, 3],
+                        ],
+                        [
+                            [2, 2, 3],
+                            [2, 5, 3],
+                            [5, 5, 3],
+                            [5, 2, 3],
+                            [2, 2, 3],
+                        ],
+                    ],
+                ],
+                'dimension' => 'M',
+            ],
+        ];
+        yield 'xdrMultiPolygonMValueWithSrid' => [
+            'value' => '0060000006000010e6000000010040000003000000020000000500000000000000000000000000000000400800000000000040240000000000000000000000000000400800000000000040240000000000004024000000000000400800000000000000000000000000004024000000000000400800000000000000000000000000000000000000000000400800000000000000000005400000000000000040000000000000004008000000000000400000000000000040140000000000004008000000000000401400000000000040140000000000004008000000000000401400000000000040000000000000004008000000000000400000000000000040000000000000004008000000000000',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'MULTIPOLYGON',
+                'value' => [
+                    [
+                        [
+                            [0, 0, 3],
+                            [10, 0, 3],
+                            [10, 10, 3],
+                            [0, 10, 3],
+                            [0, 0, 3],
+                        ],
+                        [
+                            [2, 2, 3],
+                            [2, 5, 3],
+                            [5, 5, 3],
+                            [5, 2, 3],
+                            [2, 2, 3],
+                        ],
+                    ],
+                ],
+                'dimension' => 'M',
+            ],
+        ];
+        yield 'ndrMultiPolygonZMValueWithSrid' => [
+            'value' => '01060000e0e61000000100000001030000c00200000005000000000000000000000000000000000000000000000000000840000000000000004000000000000024400000000000000000000000000000084000000000000000400000000000002440000000000000244000000000000008400000000000000040000000000000000000000000000024400000000000000840000000000000004000000000000000000000000000000000000000000000084000000000000000400500000000000000000000400000000000000040000000000000084000000000000000400000000000000040000000000000144000000000000008400000000000000040000000000000144000000000000014400000000000000840000000000000004000000000000014400000000000000040000000000000084000000000000000400000000000000040000000000000004000000000000008400000000000000040',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'MULTIPOLYGON',
+                'value' => [
+                    [
+                        [
+                            [0, 0, 3, 2],
+                            [10, 0, 3, 2],
+                            [10, 10, 3, 2],
+                            [0, 10, 3, 2],
+                            [0, 0, 3, 2],
+                        ],
+                        [
+                            [2, 2, 3, 2],
+                            [2, 5, 3, 2],
+                            [5, 5, 3, 2],
+                            [5, 2, 3, 2],
+                            [2, 2, 3, 2],
+                        ],
+                    ],
+                ],
+                'dimension' => 'ZM',
+            ],
+        ];
+        yield 'xdrMultiPolygonZMValueWithSrid' => [
+            'value' => '00e0000006000010e60000000100c00000030000000200000005000000000000000000000000000000004008000000000000400000000000000040240000000000000000000000000000400800000000000040000000000000004024000000000000402400000000000040080000000000004000000000000000000000000000000040240000000000004008000000000000400000000000000000000000000000000000000000000000400800000000000040000000000000000000000540000000000000004000000000000000400800000000000040000000000000004000000000000000401400000000000040080000000000004000000000000000401400000000000040140000000000004008000000000000400000000000000040140000000000004000000000000000400800000000000040000000000000004000000000000000400000000000000040080000000000004000000000000000',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'MULTIPOLYGON',
+                'value' => [
+                    [
+                        [
+                            [0, 0, 3, 2],
+                            [10, 0, 3, 2],
+                            [10, 10, 3, 2],
+                            [0, 10, 3, 2],
+                            [0, 0, 3, 2],
+                        ],
+                        [
+                            [2, 2, 3, 2],
+                            [2, 5, 3, 2],
+                            [5, 5, 3, 2],
+                            [5, 2, 3, 2],
+                            [2, 2, 3, 2],
+                        ],
+                    ],
+                ],
+                'dimension' => 'ZM',
+            ],
+        ];
+        yield 'ndrEmptyGeometryCollectionValue' => [
+            'value' => '010700000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'GEOMETRYCOLLECTION',
+                'value' => [],
+                'dimension' => null,
+            ],
+        ];
+        yield 'ndrGeometryCollectionValueWithEmptyPoint' => [
+            'value' => '0107000000010000000101000000000000000000F87F000000000000F87F',
+            'expected' => [
+                'srid' => null,
+                'type' => 'GEOMETRYCOLLECTION',
+                'value' => [
+                    [
+                        'type' => 'POINT',
+                        'value' => [],
+                    ],
+                ],
+                'dimension' => null,
+            ],
+        ];
+        yield 'ndrGeometryCollectionValue' => [
+            'value' => '01070000000300000001010000000000000000002440000000000000244001010000000000000000003E400000000000003E400102000000020000000000000000002E400000000000002E4000000000000034400000000000003440',
+            'expected' => [
+                'srid' => null,
+                'type' => 'GEOMETRYCOLLECTION',
+                'value' => [
+                    [
+                        'type' => 'POINT',
+                        'value' => [10, 10],
+                    ],
+                    [
+                        'type' => 'POINT',
+                        'value' => [30, 30],
+                    ],
+                    [
+                        'type' => 'LINESTRING',
+                        'value' => [
+                            [15, 15],
+                            [20, 20],
+                        ],
+                    ],
+                ],
+                'dimension' => null,
+            ],
+        ];
+        yield 'xdrGeometryCollectionValue' => [
+            'value' => '0000000007000000030000000001402400000000000040240000000000000000000001403E000000000000403E000000000000000000000200000002402E000000000000402E00000000000040340000000000004034000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'GEOMETRYCOLLECTION',
+                'value' => [
+                    [
+                        'type' => 'POINT',
+                        'value' => [10, 10],
+                    ],
+                    [
+                        'type' => 'POINT',
+                        'value' => [30, 30],
+                    ],
+                    [
+                        'type' => 'LINESTRING',
+                        'value' => [
+                            [15, 15],
+                            [20, 20],
+                        ],
+                    ],
+                ],
+                'dimension' => null,
+            ],
+        ];
+        yield 'ndrGeometryCollectionZValue' => [
+            'value' => '0107000080030000000101000080000000000000000000000000000000000000000000000000010200008002000000000000000000000000000000000000000000000000000000000000000000f03f000000000000f03f000000000000f03f0107000080020000000101000080000000000000000000000000000000000000000000000000010200008002000000000000000000000000000000000000000000000000000000000000000000f03f000000000000f03f000000000000f03f',
+            'expected' => [
+                'srid' => null,
+                'type' => 'GEOMETRYCOLLECTION',
+                'value' => [
+                    [
+                        'type' => 'POINT',
+                        'value' => [0, 0, 0],
+                    ],
+                    [
+                        'type' => 'LINESTRING',
+                        'value' => [
+                            [0, 0, 0],
+                            [1, 1, 1],
+                        ],
+                    ],
+                    [
+                        'type' => 'GEOMETRYCOLLECTION',
+                        'value' => [
+                            [
+                                'type' => 'POINT',
+                                'value' => [0, 0, 0],
+                            ],
+                            [
+                                'type' => 'LINESTRING',
+                                'value' => [
+                                    [0, 0, 0],
+                                    [1, 1, 1],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'Z',
+            ],
+        ];
+        yield 'xdrGeometryCollectionZValue' => [
+            'value' => '00800000070000000300800000010000000000000000000000000000000000000000000000000080000002000000020000000000000000000000000000000000000000000000003ff00000000000003ff00000000000003ff000000000000000800000070000000200800000010000000000000000000000000000000000000000000000000080000002000000020000000000000000000000000000000000000000000000003ff00000000000003ff00000000000003ff0000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'GEOMETRYCOLLECTION',
+                'value' => [
+                    [
+                        'type' => 'POINT',
+                        'value' => [0, 0, 0],
+                    ],
+                    [
+                        'type' => 'LINESTRING',
+                        'value' => [
+                            [0, 0, 0],
+                            [1, 1, 1],
+                        ],
+                    ],
+                    [
+                        'type' => 'GEOMETRYCOLLECTION',
+                        'value' => [
+                            [
+                                'type' => 'POINT',
+                                'value' => [0, 0, 0],
+                            ],
+                            [
+                                'type' => 'LINESTRING',
+                                'value' => [
+                                    [0, 0, 0],
+                                    [1, 1, 1],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'Z',
+            ],
+        ];
+        yield 'ndrGeometryCollectionMValue' => [
+            'value' => '0107000040030000000101000040000000000000000000000000000000000000000000000000010200004002000000000000000000000000000000000000000000000000000000000000000000f03f000000000000f03f000000000000f03f0107000040020000000101000040000000000000000000000000000000000000000000000000010200004002000000000000000000000000000000000000000000000000000000000000000000f03f000000000000f03f000000000000f03f',
+            'expected' => [
+                'srid' => null,
+                'type' => 'GEOMETRYCOLLECTION',
+                'value' => [
+                    [
+                        'type' => 'POINT',
+                        'value' => [0, 0, 0],
+                    ],
+                    [
+                        'type' => 'LINESTRING',
+                        'value' => [
+                            [0, 0, 0],
+                            [1, 1, 1],
+                        ],
+                    ],
+                    [
+                        'type' => 'GEOMETRYCOLLECTION',
+                        'value' => [
+                            [
+                                'type' => 'POINT',
+                                'value' => [0, 0, 0],
+                            ],
+                            [
+                                'type' => 'LINESTRING',
+                                'value' => [
+                                    [0, 0, 0],
+                                    [1, 1, 1],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'M',
+            ],
+        ];
+        yield 'xdrGeometryCollectionMValue' => [
+            'value' => '00400000070000000300400000010000000000000000000000000000000000000000000000000040000002000000020000000000000000000000000000000000000000000000003ff00000000000003ff00000000000003ff000000000000000400000070000000200400000010000000000000000000000000000000000000000000000000040000002000000020000000000000000000000000000000000000000000000003ff00000000000003ff00000000000003ff0000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'GEOMETRYCOLLECTION',
+                'value' => [
+                    [
+                        'type' => 'POINT',
+                        'value' => [0, 0, 0],
+                    ],
+                    [
+                        'type' => 'LINESTRING',
+                        'value' => [
+                            [0, 0, 0],
+                            [1, 1, 1],
+                        ],
+                    ],
+                    [
+                        'type' => 'GEOMETRYCOLLECTION',
+                        'value' => [
+                            [
+                                'type' => 'POINT',
+                                'value' => [0, 0, 0],
+                            ],
+                            [
+                                'type' => 'LINESTRING',
+                                'value' => [
+                                    [0, 0, 0],
+                                    [1, 1, 1],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'M',
+            ],
+        ];
+        yield 'ndrGeometryCollectionZMValue' => [
+            'value' => '01070000c00300000001010000c0000000000000000000000000000000000000000000000000000000000000f03f01020000c0020000000000000000000000000000000000000000000000000000000000000000000040000000000000f03f000000000000f03f000000000000f03f000000000000084001070000c00200000001010000c0000000000000000000000000000000000000000000000000000000000000104001020000c0020000000000000000000000000000000000000000000000000000000000000000001440000000000000f03f000000000000f03f000000000000f03f0000000000001840',
+            'expected' => [
+                'srid' => null,
+                'type' => 'GEOMETRYCOLLECTION',
+                'value' => [
+                    [
+                        'type' => 'POINT',
+                        'value' => [0, 0, 0, 1],
+                    ],
+                    [
+                        'type' => 'LINESTRING',
+                        'value' => [
+                            [0, 0, 0, 2],
+                            [1, 1, 1, 3],
+                        ],
+                    ],
+                    [
+                        'type' => 'GEOMETRYCOLLECTION',
+                        'value' => [
+                            [
+                                'type' => 'POINT',
+                                'value' => [0, 0, 0, 4],
+                            ],
+                            [
+                                'type' => 'LINESTRING',
+                                'value' => [
+                                    [0, 0, 0, 5],
+                                    [1, 1, 1, 6],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'ZM',
+            ],
+        ];
+        yield 'xdrGeometryCollectionZMValue' => [
+            'value' => '00c00000070000000300c00000010000000000000000000000000000000000000000000000003ff000000000000000c00000020000000200000000000000000000000000000000000000000000000040000000000000003ff00000000000003ff00000000000003ff0000000000000400800000000000000c00000070000000200c0000001000000000000000000000000000000000000000000000000401000000000000000c00000020000000200000000000000000000000000000000000000000000000040140000000000003ff00000000000003ff00000000000003ff00000000000004018000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'GEOMETRYCOLLECTION',
+                'value' => [
+                    [
+                        'type' => 'POINT',
+                        'value' => [0, 0, 0, 1],
+                    ],
+                    [
+                        'type' => 'LINESTRING',
+                        'value' => [
+                            [0, 0, 0, 2],
+                            [1, 1, 1, 3],
+                        ],
+                    ],
+                    [
+                        'type' => 'GEOMETRYCOLLECTION',
+                        'value' => [
+                            [
+                                'type' => 'POINT',
+                                'value' => [0, 0, 0, 4],
+                            ],
+                            [
+                                'type' => 'LINESTRING',
+                                'value' => [
+                                    [0, 0, 0, 5],
+                                    [1, 1, 1, 6],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'ZM',
+            ],
+        ];
+        yield 'ndrGeometryCollectionValueWithSrid' => [
+            'value' => '0107000020E61000000300000001010000000000000000002440000000000000244001010000000000000000003E400000000000003E400102000000020000000000000000002E400000000000002E4000000000000034400000000000003440',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'GEOMETRYCOLLECTION',
+                'value' => [
+                    [
+                        'type' => 'POINT',
+                        'value' => [10, 10],
+                    ],
+                    [
+                        'type' => 'POINT',
+                        'value' => [30, 30],
+                    ],
+                    [
+                        'type' => 'LINESTRING',
+                        'value' => [
+                            [15, 15],
+                            [20, 20],
+                        ],
+                    ],
+                ],
+                'dimension' => null,
+            ],
+        ];
+        yield 'xdrGeometryCollectionValueWithSrid' => [
+            'value' => '0020000007000010E6000000030000000001402400000000000040240000000000000000000001403E000000000000403E000000000000000000000200000002402E000000000000402E00000000000040340000000000004034000000000000',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'GEOMETRYCOLLECTION',
+                'value' => [
+                    [
+                        'type' => 'POINT',
+                        'value' => [10, 10],
+                    ],
+                    [
+                        'type' => 'POINT',
+                        'value' => [30, 30],
+                    ],
+                    [
+                        'type' => 'LINESTRING',
+                        'value' => [
+                            [15, 15],
+                            [20, 20],
+                        ],
+                    ],
+                ],
+                'dimension' => null,
+            ],
+        ];
+        yield 'ndrGeometryCollectionZValueWithSrid' => [
+            'value' => '01070000a0e6100000030000000101000080000000000000000000000000000000000000000000000000010200008002000000000000000000000000000000000000000000000000000000000000000000f03f000000000000f03f000000000000f03f0107000080020000000101000080000000000000000000000000000000000000000000000000010200008002000000000000000000000000000000000000000000000000000000000000000000f03f000000000000f03f000000000000f03f',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'GEOMETRYCOLLECTION',
+                'value' => [
+                    [
+                        'type' => 'POINT',
+                        'value' => [0, 0, 0],
+                    ],
+                    [
+                        'type' => 'LINESTRING',
+                        'value' => [
+                            [0, 0, 0],
+                            [1, 1, 1],
+                        ],
+                    ],
+                    [
+                        'type' => 'GEOMETRYCOLLECTION',
+                        'value' => [
+                            [
+                                'type' => 'POINT',
+                                'value' => [0, 0, 0],
+                            ],
+                            [
+                                'type' => 'LINESTRING',
+                                'value' => [
+                                    [0, 0, 0],
+                                    [1, 1, 1],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'Z',
+            ],
+        ];
+        yield 'xdrGeometryCollectionZValueWithSrid' => [
+            'value' => '00a0000007000010e60000000300800000010000000000000000000000000000000000000000000000000080000002000000020000000000000000000000000000000000000000000000003ff00000000000003ff00000000000003ff000000000000000800000070000000200800000010000000000000000000000000000000000000000000000000080000002000000020000000000000000000000000000000000000000000000003ff00000000000003ff00000000000003ff0000000000000',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'GEOMETRYCOLLECTION',
+                'value' => [
+                    [
+                        'type' => 'POINT',
+                        'value' => [0, 0, 0],
+                    ],
+                    [
+                        'type' => 'LINESTRING',
+                        'value' => [
+                            [0, 0, 0],
+                            [1, 1, 1],
+                        ],
+                    ],
+                    [
+                        'type' => 'GEOMETRYCOLLECTION',
+                        'value' => [
+                            [
+                                'type' => 'POINT',
+                                'value' => [0, 0, 0],
+                            ],
+                            [
+                                'type' => 'LINESTRING',
+                                'value' => [
+                                    [0, 0, 0],
+                                    [1, 1, 1],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'Z',
+            ],
+        ];
+        yield 'ndrGeometryCollectionMValueWithSrid' => [
+            'value' => '0107000060e6100000030000000101000040000000000000000000000000000000000000000000000000010200004002000000000000000000000000000000000000000000000000000000000000000000f03f000000000000f03f000000000000f03f0107000040020000000101000040000000000000000000000000000000000000000000000000010200004002000000000000000000000000000000000000000000000000000000000000000000f03f000000000000f03f000000000000f03f',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'GEOMETRYCOLLECTION',
+                'value' => [
+                    [
+                        'type' => 'POINT',
+                        'value' => [0, 0, 0],
+                    ],
+                    [
+                        'type' => 'LINESTRING',
+                        'value' => [
+                            [0, 0, 0],
+                            [1, 1, 1],
+                        ],
+                    ],
+                    [
+                        'type' => 'GEOMETRYCOLLECTION',
+                        'value' => [
+                            [
+                                'type' => 'POINT',
+                                'value' => [0, 0, 0],
+                            ],
+                            [
+                                'type' => 'LINESTRING',
+                                'value' => [
+                                    [0, 0, 0],
+                                    [1, 1, 1],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'M',
+            ],
+        ];
+        yield 'xdrGeometryCollectionMValueWithSrid' => [
+            'value' => '0060000007000010e60000000300400000010000000000000000000000000000000000000000000000000040000002000000020000000000000000000000000000000000000000000000003ff00000000000003ff00000000000003ff000000000000000400000070000000200400000010000000000000000000000000000000000000000000000000040000002000000020000000000000000000000000000000000000000000000003ff00000000000003ff00000000000003ff0000000000000',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'GEOMETRYCOLLECTION',
+                'value' => [
+                    [
+                        'type' => 'POINT',
+                        'value' => [0, 0, 0],
+                    ],
+                    [
+                        'type' => 'LINESTRING',
+                        'value' => [
+                            [0, 0, 0],
+                            [1, 1, 1],
+                        ],
+                    ],
+                    [
+                        'type' => 'GEOMETRYCOLLECTION',
+                        'value' => [
+                            [
+                                'type' => 'POINT',
+                                'value' => [0, 0, 0],
+                            ],
+                            [
+                                'type' => 'LINESTRING',
+                                'value' => [
+                                    [0, 0, 0],
+                                    [1, 1, 1],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'M',
+            ],
+        ];
+        yield 'ndrGeometryCollectionZMValueWithSrid' => [
+            'value' => '01070000e0e61000000300000001010000c0000000000000000000000000000000000000000000000000000000000000f03f01020000c0020000000000000000000000000000000000000000000000000000000000000000000040000000000000f03f000000000000f03f000000000000f03f000000000000084001070000c00200000001010000c0000000000000000000000000000000000000000000000000000000000000104001020000c0020000000000000000000000000000000000000000000000000000000000000000001440000000000000f03f000000000000f03f000000000000f03f0000000000001840',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'GEOMETRYCOLLECTION',
+                'value' => [
+                    [
+                        'type' => 'POINT',
+                        'value' => [0, 0, 0, 1],
+                    ],
+                    [
+                        'type' => 'LINESTRING',
+                        'value' => [
+                            [0, 0, 0, 2],
+                            [1, 1, 1, 3],
+                        ],
+                    ],
+                    [
+                        'type' => 'GEOMETRYCOLLECTION',
+                        'value' => [
+                            [
+                                'type' => 'POINT',
+                                'value' => [0, 0, 0, 4],
+                            ],
+                            [
+                                'type' => 'LINESTRING',
+                                'value' => [
+                                    [0, 0, 0, 5],
+                                    [1, 1, 1, 6],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'ZM',
+            ],
+        ];
+        yield 'xdrGeometryCollectionZMValueWithSrid' => [
+            'value' => '00e0000007000010e60000000300c00000010000000000000000000000000000000000000000000000003ff000000000000000c00000020000000200000000000000000000000000000000000000000000000040000000000000003ff00000000000003ff00000000000003ff0000000000000400800000000000000c00000070000000200c0000001000000000000000000000000000000000000000000000000401000000000000000c00000020000000200000000000000000000000000000000000000000000000040140000000000003ff00000000000003ff00000000000003ff00000000000004018000000000000',
+            'expected' => [
+                'srid' => 4326,
+                'type' => 'GEOMETRYCOLLECTION',
+                'value' => [
+                    [
+                        'type' => 'POINT',
+                        'value' => [0, 0, 0, 1],
+                    ],
+                    [
+                        'type' => 'LINESTRING',
+                        'value' => [
+                            [0, 0, 0, 2],
+                            [1, 1, 1, 3],
+                        ],
+                    ],
+                    [
+                        'type' => 'GEOMETRYCOLLECTION',
+                        'value' => [
+                            [
+                                'type' => 'POINT',
+                                'value' => [0, 0, 0, 4],
+                            ],
+                            [
+                                'type' => 'LINESTRING',
+                                'value' => [
+                                    [0, 0, 0, 5],
+                                    [1, 1, 1, 6],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'ZM',
+            ],
+        ];
+        yield 'ndrCircularStringValue' => [
+            'value' => '01080000000300000000000000000000000000000000000000000000000000f03f000000000000f03f00000000000000400000000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'CIRCULARSTRING',
+                'value' => [
+                    [0, 0],
+                    [1, 1],
+                    [2, 0],
+                ],
+                'dimension' => null,
+            ],
+        ];
+        yield 'xdrCircularStringValue' => [
+            'value' => '000000000800000003000000000000000000000000000000003ff00000000000003ff000000000000040000000000000000000000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'CIRCULARSTRING',
+                'value' => [
+                    [0, 0],
+                    [1, 1],
+                    [2, 0],
+                ],
+                'dimension' => null,
+            ],
+        ];
+        yield 'ndrCircularStringZValue' => [
+            'value' => '01080000800300000000000000000000000000000000000000000000000000f03f000000000000f03f000000000000f03f000000000000f03f00000000000000400000000000000000000000000000f03f',
+            'expected' => [
+                'srid' => null,
+                'type' => 'CIRCULARSTRING',
+                'value' => [
+                    [0, 0, 1],
+                    [1, 1, 1],
+                    [2, 0, 1],
+                ],
+                'dimension' => 'Z',
+            ],
+        ];
+        yield 'xdrCircularStringZValue' => [
+            'value' => '008000000800000003000000000000000000000000000000003ff00000000000003ff00000000000003ff00000000000003ff0000000000000400000000000000000000000000000003ff0000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'CIRCULARSTRING',
+                'value' => [
+                    [0, 0, 1],
+                    [1, 1, 1],
+                    [2, 0, 1],
+                ],
+                'dimension' => 'Z',
+            ],
+        ];
+        yield 'ndrCircularStringMValue' => [
+            'value' => '01080000400300000000000000000000000000000000000000000000000000f03f000000000000f03f000000000000f03f000000000000f03f00000000000000400000000000000000000000000000f03f',
+            'expected' => [
+                'srid' => null,
+                'type' => 'CIRCULARSTRING',
+                'value' => [
+                    [0, 0, 1],
+                    [1, 1, 1],
+                    [2, 0, 1],
+                ],
+                'dimension' => 'M',
+            ],
+        ];
+        yield 'xdrCircularStringMValue' => [
+            'value' => '004000000800000003000000000000000000000000000000003ff00000000000003ff00000000000003ff00000000000003ff0000000000000400000000000000000000000000000003ff0000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'CIRCULARSTRING',
+                'value' => [
+                    [0, 0, 1],
+                    [1, 1, 1],
+                    [2, 0, 1],
+                ],
+                'dimension' => 'M',
+            ],
+        ];
+        yield 'ndrCircularStringZMValue' => [
+            'value' => '01080000c00300000000000000000000000000000000000000000000000000f03f0000000000000040000000000000f03f000000000000f03f000000000000f03f000000000000004000000000000000400000000000000000000000000000f03f0000000000000040',
+            'expected' => [
+                'srid' => null,
+                'type' => 'CIRCULARSTRING',
+                'value' => [
+                    [0, 0, 1, 2],
+                    [1, 1, 1, 2],
+                    [2, 0, 1, 2],
+                ],
+                'dimension' => 'ZM',
+            ],
+        ];
+        yield 'xdrCircularStringZMValue' => [
+            'value' => '00c000000800000003000000000000000000000000000000003ff000000000000040000000000000003ff00000000000003ff00000000000003ff00000000000004000000000000000400000000000000000000000000000003ff00000000000004000000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'CIRCULARSTRING',
+                'value' => [
+                    [0, 0, 1, 2],
+                    [1, 1, 1, 2],
+                    [2, 0, 1, 2],
+                ],
+                'dimension' => 'ZM',
+            ],
+        ];
+        yield 'ndrCompoundCurveValue' => [
+            'value' => '01090000000200000001080000000300000000000000000000000000000000000000000000000000f03f000000000000f03f00000000000000400000000000000000010200000002000000000000000000004000000000000000000000000000001040000000000000f03f',
+            'expected' => [
+                'srid' => null,
+                'type' => 'COMPOUNDCURVE',
+                'value' => [
+                    [
+                        'type' => 'CIRCULARSTRING',
+                        'value' => [
+                            [0, 0],
+                            [1, 1],
+                            [2, 0],
+                        ],
+                    ],
+                    [
+                        'type' => 'LINESTRING',
+                        'value' => [
+                            [2, 0],
+                            [4, 1],
+                        ],
+                    ],
+                ],
+                'dimension' => null,
+            ],
+        ];
+        yield 'xdrCompoundCurveValue' => [
+            'value' => '000000000900000002000000000800000003000000000000000000000000000000003ff00000000000003ff0000000000000400000000000000000000000000000000000000002000000024000000000000000000000000000000040100000000000003ff0000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'COMPOUNDCURVE',
+                'value' => [
+                    [
+                        'type' => 'CIRCULARSTRING',
+                        'value' => [
+                            [0, 0],
+                            [1, 1],
+                            [2, 0],
+                        ],
+                    ],
+                    [
+                        'type' => 'LINESTRING',
+                        'value' => [
+                            [2, 0],
+                            [4, 1],
+                        ],
+                    ],
+                ],
+                'dimension' => null,
+            ],
+        ];
+        yield 'ndrCompoundCurveZValue' => [
+            'value' => '01090000800200000001080000800300000000000000000000000000000000000000000000000000f03f000000000000f03f000000000000f03f000000000000f03f00000000000000400000000000000000000000000000f03f0102000080020000000000000000000040000000000000000000000000000000000000000000001040000000000000f03f000000000000f03f',
+            'expected' => [
+                'srid' => null,
+                'type' => 'COMPOUNDCURVE',
+                'value' => [
+                    [
+                        'type' => 'CIRCULARSTRING',
+                        'value' => [
                             [0, 0, 1],
-                            [2, 0, 2],
-                        ],
-                        [
-                            [1, 1, 3],
-                            [2, 2, 4],
+                            [1, 1, 1],
+                            [2, 0, 1],
                         ],
                     ],
-                    'dimension' => 'Z',
+                    [
+                        'type' => 'LINESTRING',
+                        'value' => [
+                            [2, 0, 0],
+                            [4, 1, 1],
+                        ],
+                    ],
                 ],
+                'dimension' => 'Z',
             ],
-            'xdrMultiLineStringZValueWithSrid' => [
-                'value' => '008000000500000002008000000200000002000000000000000000000000000000003ff00000000000004000000'
-                    .'000000000000000000000000040000000000000000080000002000000023ff00000000000003ff000000000000040080'
-                    .'00000000000400000000000000040000000000000004010000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTILINESTRING',
-                    'value' => [
-                        [
+        ];
+        yield 'xdrCompoundCurveZValue' => [
+            'value' => '008000000900000002008000000800000003000000000000000000000000000000003ff00000000000003ff00000000000003ff00000000000003ff0000000000000400000000000000000000000000000003ff000000000000000800000020000000240000000000000000000000000000000000000000000000040100000000000003ff00000000000003ff0000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'COMPOUNDCURVE',
+                'value' => [
+                    [
+                        'type' => 'CIRCULARSTRING',
+                        'value' => [
                             [0, 0, 1],
-                            [2, 0, 2],
-                        ],
-                        [
-                            [1, 1, 3],
-                            [2, 2, 4],
+                            [1, 1, 1],
+                            [2, 0, 1],
                         ],
                     ],
-                    'dimension' => 'Z',
+                    [
+                        'type' => 'LINESTRING',
+                        'value' => [
+                            [2, 0, 0],
+                            [4, 1, 1],
+                        ],
+                    ],
                 ],
+                'dimension' => 'Z',
             ],
-            'ndrMultiLineStringMValueWithSrid' => [
-                'value' => '0105000060e61000000200000001020000400200000000000000000000000000000000000000000000000000f03'
-                    .'f000000000000004000000000000000000000000000000040010200004002000000000000000000f03f000000000000f'
-                    .'03f0000000000000840000000000000004000000000000000400000000000001040',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'MULTILINESTRING',
-                    'value' => [
-                        [
+        ];
+        yield 'ndrCompoundCurveMValue' => [
+            'value' => '01090000400200000001080000400300000000000000000000000000000000000000000000000000f03f000000000000f03f000000000000f03f000000000000f03f00000000000000400000000000000000000000000000f03f0102000040020000000000000000000040000000000000000000000000000000000000000000001040000000000000f03f000000000000f03f',
+            'expected' => [
+                'srid' => null,
+                'type' => 'COMPOUNDCURVE',
+                'value' => [
+                    [
+                        'type' => 'CIRCULARSTRING',
+                        'value' => [
                             [0, 0, 1],
-                            [2, 0, 2],
-                        ],
-                        [
-                            [1, 1, 3],
-                            [2, 2, 4],
+                            [1, 1, 1],
+                            [2, 0, 1],
                         ],
                     ],
-                    'dimension' => 'M',
+                    [
+                        'type' => 'LINESTRING',
+                        'value' => [
+                            [2, 0, 0],
+                            [4, 1, 1],
+                        ],
+                    ],
                 ],
+                'dimension' => 'M',
             ],
-            'xdrMultiLineStringMValueWithSrid' => [
-                'value' => '004000000500000002004000000200000002000000000000000000000000000000003ff00000000000004000000'
-                    .'000000000000000000000000040000000000000000040000002000000023ff00000000000003ff000000000000040080'
-                    .'00000000000400000000000000040000000000000004010000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTILINESTRING',
-                    'value' => [
-                        [
+        ];
+        yield 'xdrCompoundCurveMValue' => [
+            'value' => '004000000900000002004000000800000003000000000000000000000000000000003ff00000000000003ff00000000000003ff00000000000003ff0000000000000400000000000000000000000000000003ff000000000000000400000020000000240000000000000000000000000000000000000000000000040100000000000003ff00000000000003ff0000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'COMPOUNDCURVE',
+                'value' => [
+                    [
+                        'type' => 'CIRCULARSTRING',
+                        'value' => [
                             [0, 0, 1],
-                            [2, 0, 2],
-                        ],
-                        [
-                            [1, 1, 3],
-                            [2, 2, 4],
+                            [1, 1, 1],
+                            [2, 0, 1],
                         ],
                     ],
-                    'dimension' => 'M',
-                ],
-            ],
-            'ndrMultiLineStringZMValueWithSrid' => [
-                'value' => '01050000e0e61000000200000001020000c00200000000000000000000000000000000000000000000000000f03'
-                    .'f0000000000001440000000000000004000000000000000000000000000000040000000000000104001020000c002000'
-                    .'000000000000000f03f000000000000f03f0000000000000840000000000000084000000000000000400000000000000'
-                    .'04000000000000010400000000000000040',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'MULTILINESTRING',
-                    'value' => [
-                        [
-                            [0, 0, 1, 5],
-                            [2, 0, 2, 4],
-                        ],
-                        [
-                            [1, 1, 3, 3],
-                            [2, 2, 4, 2],
+                    [
+                        'type' => 'LINESTRING',
+                        'value' => [
+                            [2, 0, 0],
+                            [4, 1, 1],
                         ],
                     ],
-                    'dimension' => 'ZM',
                 ],
+                'dimension' => 'M',
             ],
-            'xdrMultiLineStringZMValueWithSrid' => [
-                'value' => '00c00000050000000200c000000200000002000000000000000000000000000000003ff00000000000004014000'
-                    .'000000000400000000000000000000000000000004000000000000000401000000000000000c0000002000000023ff00'
-                    .'000000000003ff0000000000000400800000000000040080000000000004000000000000000400000000000000040100'
-                    .'000000000004000000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTILINESTRING',
-                    'value' => [
-                        [
-                            [0, 0, 1, 5],
-                            [2, 0, 2, 4],
-                        ],
-                        [
-                            [1, 1, 3, 3],
-                            [2, 2, 4, 2],
+        ];
+        yield 'ndrCompoundCurveZMValue' => [
+            'value' => '01090000c00200000001080000c00300000000000000000000000000000000000000000000000000f03f0000000000000040000000000000f03f000000000000f03f000000000000f03f000000000000004000000000000000400000000000000000000000000000f03f000000000000004001020000c00200000000000000000000400000000000000000000000000000000000000000000000000000000000001040000000000000f03f000000000000f03f000000000000f03f',
+            'expected' => [
+                'srid' => null,
+                'type' => 'COMPOUNDCURVE',
+                'value' => [
+                    [
+                        'type' => 'CIRCULARSTRING',
+                        'value' => [
+                            [0, 0, 1, 2],
+                            [1, 1, 1, 2],
+                            [2, 0, 1, 2],
                         ],
                     ],
-                    'dimension' => 'ZM',
+                    [
+                        'type' => 'LINESTRING',
+                        'value' => [
+                            [2, 0, 0, 0],
+                            [4, 1, 1, 1],
+                        ],
+                    ],
                 ],
+                'dimension' => 'ZM',
             ],
-            'ndrMultiPolygonValue' => [
-                'value' => '0106000000020000000103000000020000000500000000000000000000000000000000000000000000000000244'
-                    .'000000000000000000000000000002440000000000000244000000000000000000000000000002440000000000000000'
-                    .'0000000000000000005000000000000000000144000000000000014400000000000001C4000000000000014400000000'
-                    .'000001C400000000000001C4000000000000014400000000000001C40000000000000144000000000000014400103000'
-                    .'0000100000005000000000000000000F03F000000000000F03F0000000000000840000000000000F03F0000000000000'
-                    .'8400000000000000840000000000000F03F0000000000000840000000000000F03F000000000000F03F',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTIPOLYGON',
-                    'value' => [
-                        [
+        ];
+        yield 'xdrCompoundCurveZMValue' => [
+            'value' => '00c00000090000000200c000000800000003000000000000000000000000000000003ff000000000000040000000000000003ff00000000000003ff00000000000003ff00000000000004000000000000000400000000000000000000000000000003ff0000000000000400000000000000000c000000200000002400000000000000000000000000000000000000000000000000000000000000040100000000000003ff00000000000003ff00000000000003ff0000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'COMPOUNDCURVE',
+                'value' => [
+                    [
+                        'type' => 'CIRCULARSTRING',
+                        'value' => [
+                            [0, 0, 1, 2],
+                            [1, 1, 1, 2],
+                            [2, 0, 1, 2],
+                        ],
+                    ],
+                    [
+                        'type' => 'LINESTRING',
+                        'value' => [
+                            [2, 0, 0, 0],
+                            [4, 1, 1, 1],
+                        ],
+                    ],
+                ],
+                'dimension' => 'ZM',
+            ],
+        ];
+        yield 'ndrCurvePolygonValue' => [
+            'value' => '010A0000000200000001080000000300000000000000000000000000000000000000000000000000084000000000000008400000000000001C400000000000001C400102000000030000000000000000001C400000000000001C400000000000002040000000000000204000000000000022400000000000002240',
+            'expected' => [
+                'srid' => null,
+                'type' => 'CURVEPOLYGON',
+                'value' => [
+                    [
+                        'type' => 'CIRCULARSTRING',
+                        'value' => [
+                            [0, 0],
+                            [3, 3],
+                            [7, 7],
+                        ],
+                    ],
+                    [
+                        'type' => 'LINESTRING',
+                        'value' => [
+                            [7, 7],
+                            [8, 8],
+                            [9, 9],
+                        ],
+                    ],
+                ],
+                'dimension' => null,
+            ],
+        ];
+        yield 'ndrCurvePolygonCompoundCurveValue' => [
+            'value' => '010a0000000100000001090000000200000001080000000300000000000000000000000000000000000000000000000000f03f000000000000f03f0000000000000040000000000000000001020000000300000000000000000000400000000000000000000000000000f03f000000000000f0bf00000000000000000000000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'CURVEPOLYGON',
+                'value' => [
+                    [
+                        'type' => 'COMPOUNDCURVE',
+                        'value' => [
                             [
-                                [0, 0],
-                                [10, 0],
+                                'type' => 'CIRCULARSTRING',
+                                'value' => [
+                                    [0, 0],
+                                    [1, 1],
+                                    [2, 0],
+                                ],
+                            ],
+                            [
+                                'type' => 'LINESTRING',
+                                'value' => [
+                                    [2, 0],
+                                    [1, -1],
+                                    [0, 0],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => null,
+            ],
+        ];
+        yield 'xdrCurvePolygonCompoundCurveValue' => [
+            'value' => '000000000a00000001000000000900000002000000000800000003000000000000000000000000000000003ff00000000000003ff000000000000040000000000000000000000000000000000000000200000003400000000000000000000000000000003ff0000000000000bff000000000000000000000000000000000000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'CURVEPOLYGON',
+                'value' => [
+                    [
+                        'type' => 'COMPOUNDCURVE',
+                        'value' => [
+                            [
+                                'type' => 'CIRCULARSTRING',
+                                'value' => [
+                                    [0, 0],
+                                    [1, 1],
+                                    [2, 0],
+                                ],
+                            ],
+                            [
+                                'type' => 'LINESTRING',
+                                'value' => [
+                                    [2, 0],
+                                    [1, -1],
+                                    [0, 0],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => null,
+            ],
+        ];
+        yield 'ndrCurvePolygonZCompoundCurveValue' => [
+            'value' => '010a0000800100000001090000800200000001080000800300000000000000000000000000000000000000000000000000f03f000000000000f03f000000000000f03f000000000000f03f00000000000000400000000000000000000000000000f03f01020000800300000000000000000000400000000000000000000000000000f03f000000000000f03f000000000000f0bf000000000000f03f00000000000000000000000000000000000000000000f03f',
+            'expected' => [
+                'srid' => null,
+                'type' => 'CURVEPOLYGON',
+                'value' => [
+                    [
+                        'type' => 'COMPOUNDCURVE',
+                        'value' => [
+                            [
+                                'type' => 'CIRCULARSTRING',
+                                'value' => [
+                                    [0, 0, 1],
+                                    [1, 1, 1],
+                                    [2, 0, 1],
+                                ],
+                            ],
+                            [
+                                'type' => 'LINESTRING',
+                                'value' => [
+                                    [2, 0, 1],
+                                    [1, -1, 1],
+                                    [0, 0, 1],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'Z',
+            ],
+        ];
+        yield 'xdrCurvePolygonZCompoundCurveValue' => [
+            'value' => '008000000a00000001008000000900000002008000000800000003000000000000000000000000000000003ff00000000000003ff00000000000003ff00000000000003ff0000000000000400000000000000000000000000000003ff0000000000000008000000200000003400000000000000000000000000000003ff00000000000003ff0000000000000bff00000000000003ff0000000000000000000000000000000000000000000003ff0000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'CURVEPOLYGON',
+                'value' => [
+                    [
+                        'type' => 'COMPOUNDCURVE',
+                        'value' => [
+                            [
+                                'type' => 'CIRCULARSTRING',
+                                'value' => [
+                                    [0, 0, 1],
+                                    [1, 1, 1],
+                                    [2, 0, 1],
+                                ],
+                            ],
+                            [
+                                'type' => 'LINESTRING',
+                                'value' => [
+                                    [2, 0, 1],
+                                    [1, -1, 1],
+                                    [0, 0, 1],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'Z',
+            ],
+        ];
+        yield 'ndrCurvePolygonMCompoundCurveValue' => [
+            'value' => '010a0000400100000001090000400200000001080000400300000000000000000000000000000000000000000000000000f03f000000000000f03f000000000000f03f000000000000f03f00000000000000400000000000000000000000000000f03f01020000400300000000000000000000400000000000000000000000000000f03f000000000000f03f000000000000f0bf000000000000f03f00000000000000000000000000000000000000000000f03f',
+            'expected' => [
+                'srid' => null,
+                'type' => 'CURVEPOLYGON',
+                'value' => [
+                    [
+                        'type' => 'COMPOUNDCURVE',
+                        'value' => [
+                            [
+                                'type' => 'CIRCULARSTRING',
+                                'value' => [
+                                    [0, 0, 1],
+                                    [1, 1, 1],
+                                    [2, 0, 1],
+                                ],
+                            ],
+                            [
+                                'type' => 'LINESTRING',
+                                'value' => [
+                                    [2, 0, 1],
+                                    [1, -1, 1],
+                                    [0, 0, 1],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'M',
+            ],
+        ];
+        yield 'xdrCurvePolygonMCompoundCurveValue' => [
+            'value' => '004000000a00000001004000000900000002004000000800000003000000000000000000000000000000003ff00000000000003ff00000000000003ff00000000000003ff0000000000000400000000000000000000000000000003ff0000000000000004000000200000003400000000000000000000000000000003ff00000000000003ff0000000000000bff00000000000003ff0000000000000000000000000000000000000000000003ff0000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'CURVEPOLYGON',
+                'value' => [
+                    [
+                        'type' => 'COMPOUNDCURVE',
+                        'value' => [
+                            [
+                                'type' => 'CIRCULARSTRING',
+                                'value' => [
+                                    [0, 0, 1],
+                                    [1, 1, 1],
+                                    [2, 0, 1],
+                                ],
+                            ],
+                            [
+                                'type' => 'LINESTRING',
+                                'value' => [
+                                    [2, 0, 1],
+                                    [1, -1, 1],
+                                    [0, 0, 1],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'M',
+            ],
+        ];
+        yield 'ndrCurvePolygonZMCompoundCurveValue' => [
+            'value' => '010a0000c00100000001090000c00200000001080000c00300000000000000000000000000000000000000000000000000f03f0000000000000040000000000000f03f000000000000f03f000000000000f03f000000000000004000000000000000400000000000000000000000000000f03f000000000000004001020000c00300000000000000000000400000000000000000000000000000f03f0000000000000040000000000000f03f000000000000f0bf000000000000f03f000000000000f03f00000000000000000000000000000000000000000000f03f0000000000000040',
+            'expected' => [
+                'srid' => null,
+                'type' => 'CURVEPOLYGON',
+                'value' => [
+                    [
+                        'type' => 'COMPOUNDCURVE',
+                        'value' => [
+                            [
+                                'type' => 'CIRCULARSTRING',
+                                'value' => [
+                                    [0, 0, 1, 2],
+                                    [1, 1, 1, 2],
+                                    [2, 0, 1, 2],
+                                ],
+                            ],
+                            [
+                                'type' => 'LINESTRING',
+                                'value' => [
+                                    [2, 0, 1, 2],
+                                    [1, -1, 1, 1],
+                                    [0, 0, 1, 2],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'ZM',
+            ],
+        ];
+        yield 'xdrCurvePolygonZMVCompoundCurvealue' => [
+            'value' => '00c000000a0000000100c00000090000000200c000000800000003000000000000000000000000000000003ff000000000000040000000000000003ff00000000000003ff00000000000003ff00000000000004000000000000000400000000000000000000000000000003ff0000000000000400000000000000000c000000200000003400000000000000000000000000000003ff000000000000040000000000000003ff0000000000000bff00000000000003ff00000000000003ff0000000000000000000000000000000000000000000003ff00000000000004000000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'CURVEPOLYGON',
+                'value' => [
+                    [
+                        'type' => 'COMPOUNDCURVE',
+                        'value' => [
+                            [
+                                'type' => 'CIRCULARSTRING',
+                                'value' => [
+                                    [0, 0, 1, 2],
+                                    [1, 1, 1, 2],
+                                    [2, 0, 1, 2],
+                                ],
+                            ],
+                            [
+                                'type' => 'LINESTRING',
+                                'value' => [
+                                    [2, 0, 1, 2],
+                                    [1, -1, 1, 1],
+                                    [0, 0, 1, 2],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'ZM',
+            ],
+        ];
+        yield 'ndrMultiCurveValue' => [
+            'value' => '010B0000000200000001080000000300000000000000000000000000000000000000000000000000084000000000000008400000000000001C400000000000001C400102000000030000000000000000001C400000000000001C400000000000002040000000000000204000000000000022400000000000002240',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTICURVE',
+                'value' => [
+                    [
+                        'type' => 'CIRCULARSTRING',
+                        'value' => [
+                            [0, 0],
+                            [3, 3],
+                            [7, 7],
+                        ],
+                    ],
+                    [
+                        'type' => 'LINESTRING',
+                        'value' => [
+                            [7, 7],
+                            [8, 8],
+                            [9, 9],
+                        ],
+                    ],
+                ],
+                'dimension' => null,
+            ],
+        ];
+        yield 'ndrMultiCurveCompoundCurveValue' => [
+            'value' => '010b0000000100000001090000000200000001080000000300000000000000000000000000000000000000000000000000f03f000000000000f03f0000000000000040000000000000000001020000000300000000000000000000400000000000000000000000000000f03f000000000000f0bf00000000000000000000000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTICURVE',
+                'value' => [
+                    [
+                        'type' => 'COMPOUNDCURVE',
+                        'value' => [
+                            [
+                                'type' => 'CIRCULARSTRING',
+                                'value' => [
+                                    [0, 0],
+                                    [1, 1],
+                                    [2, 0],
+                                ],
+                            ],
+                            [
+                                'type' => 'LINESTRING',
+                                'value' => [
+                                    [2, 0],
+                                    [1, -1],
+                                    [0, 0],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => null,
+            ],
+        ];
+        yield 'xdrMultiCurveCompoundCurveValue' => [
+            'value' => '000000000b00000001000000000900000002000000000800000003000000000000000000000000000000003ff00000000000003ff000000000000040000000000000000000000000000000000000000200000003400000000000000000000000000000003ff0000000000000bff000000000000000000000000000000000000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTICURVE',
+                'value' => [
+                    [
+                        'type' => 'COMPOUNDCURVE',
+                        'value' => [
+                            [
+                                'type' => 'CIRCULARSTRING',
+                                'value' => [
+                                    [0, 0],
+                                    [1, 1],
+                                    [2, 0],
+                                ],
+                            ],
+                            [
+                                'type' => 'LINESTRING',
+                                'value' => [
+                                    [2, 0],
+                                    [1, -1],
+                                    [0, 0],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => null,
+            ],
+        ];
+        yield 'ndrMultiCurveZCompoundCurveValue' => [
+            'value' => '010b0000800100000001090000800200000001080000800300000000000000000000000000000000000000000000000000f03f000000000000f03f000000000000f03f000000000000f03f00000000000000400000000000000000000000000000f03f01020000800300000000000000000000400000000000000000000000000000f03f000000000000f03f000000000000f0bf000000000000f03f00000000000000000000000000000000000000000000f03f',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTICURVE',
+                'value' => [
+                    [
+                        'type' => 'COMPOUNDCURVE',
+                        'value' => [
+                            [
+                                'type' => 'CIRCULARSTRING',
+                                'value' => [
+                                    [0, 0, 1],
+                                    [1, 1, 1],
+                                    [2, 0, 1],
+                                ],
+                            ],
+                            [
+                                'type' => 'LINESTRING',
+                                'value' => [
+                                    [2, 0, 1],
+                                    [1, -1, 1],
+                                    [0, 0, 1],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'Z',
+            ],
+        ];
+        yield 'xdrMultiCurveZCompoundCurveValue' => [
+            'value' => '008000000b00000001008000000900000002008000000800000003000000000000000000000000000000003ff00000000000003ff00000000000003ff00000000000003ff0000000000000400000000000000000000000000000003ff0000000000000008000000200000003400000000000000000000000000000003ff00000000000003ff0000000000000bff00000000000003ff0000000000000000000000000000000000000000000003ff0000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTICURVE',
+                'value' => [
+                    [
+                        'type' => 'COMPOUNDCURVE',
+                        'value' => [
+                            [
+                                'type' => 'CIRCULARSTRING',
+                                'value' => [
+                                    [0, 0, 1],
+                                    [1, 1, 1],
+                                    [2, 0, 1],
+                                ],
+                            ],
+                            [
+                                'type' => 'LINESTRING',
+                                'value' => [
+                                    [2, 0, 1],
+                                    [1, -1, 1],
+                                    [0, 0, 1],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'Z',
+            ],
+        ];
+        yield 'ndrMultiCurveMCompoundCurveValue' => [
+            'value' => '010b0000400100000001090000400200000001080000400300000000000000000000000000000000000000000000000000f03f000000000000f03f000000000000f03f000000000000f03f00000000000000400000000000000000000000000000f03f01020000400300000000000000000000400000000000000000000000000000f03f000000000000f03f000000000000f0bf000000000000f03f00000000000000000000000000000000000000000000f03f',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTICURVE',
+                'value' => [
+                    [
+                        'type' => 'COMPOUNDCURVE',
+                        'value' => [
+                            [
+                                'type' => 'CIRCULARSTRING',
+                                'value' => [
+                                    [0, 0, 1],
+                                    [1, 1, 1],
+                                    [2, 0, 1],
+                                ],
+                            ],
+                            [
+                                'type' => 'LINESTRING',
+                                'value' => [
+                                    [2, 0, 1],
+                                    [1, -1, 1],
+                                    [0, 0, 1],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'M',
+            ],
+        ];
+        yield 'xdrMultiCurveMCompoundCurveValue' => [
+            'value' => '004000000b00000001004000000900000002004000000800000003000000000000000000000000000000003ff00000000000003ff00000000000003ff00000000000003ff0000000000000400000000000000000000000000000003ff0000000000000004000000200000003400000000000000000000000000000003ff00000000000003ff0000000000000bff00000000000003ff0000000000000000000000000000000000000000000003ff0000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTICURVE',
+                'value' => [
+                    [
+                        'type' => 'COMPOUNDCURVE',
+                        'value' => [
+                            [
+                                'type' => 'CIRCULARSTRING',
+                                'value' => [
+                                    [0, 0, 1],
+                                    [1, 1, 1],
+                                    [2, 0, 1],
+                                ],
+                            ],
+                            [
+                                'type' => 'LINESTRING',
+                                'value' => [
+                                    [2, 0, 1],
+                                    [1, -1, 1],
+                                    [0, 0, 1],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'M',
+            ],
+        ];
+        yield 'ndrMultiCurveZMCompoundCurveValue' => [
+            'value' => '010b0000c00100000001090000c00200000001080000c00300000000000000000000000000000000000000000000000000f03f0000000000000040000000000000f03f000000000000f03f000000000000f03f000000000000004000000000000000400000000000000000000000000000f03f000000000000004001020000c00300000000000000000000400000000000000000000000000000f03f0000000000000040000000000000f03f000000000000f0bf000000000000f03f000000000000f03f00000000000000000000000000000000000000000000f03f0000000000000040',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTICURVE',
+                'value' => [
+                    [
+                        'type' => 'COMPOUNDCURVE',
+                        'value' => [
+                            [
+                                'type' => 'CIRCULARSTRING',
+                                'value' => [
+                                    [0, 0, 1, 2],
+                                    [1, 1, 1, 2],
+                                    [2, 0, 1, 2],
+                                ],
+                            ],
+                            [
+                                'type' => 'LINESTRING',
+                                'value' => [
+                                    [2, 0, 1, 2],
+                                    [1, -1, 1, 1],
+                                    [0, 0, 1, 2],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'ZM',
+            ],
+        ];
+        yield 'xdrMultiCurveZMCompoundCurveValue' => [
+            'value' => '00c000000b0000000100c00000090000000200c000000800000003000000000000000000000000000000003ff000000000000040000000000000003ff00000000000003ff00000000000003ff00000000000004000000000000000400000000000000000000000000000003ff0000000000000400000000000000000c000000200000003400000000000000000000000000000003ff000000000000040000000000000003ff0000000000000bff00000000000003ff00000000000003ff0000000000000000000000000000000000000000000003ff00000000000004000000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTICURVE',
+                'value' => [
+                    [
+                        'type' => 'COMPOUNDCURVE',
+                        'value' => [
+                            [
+                                'type' => 'CIRCULARSTRING',
+                                'value' => [
+                                    [0, 0, 1, 2],
+                                    [1, 1, 1, 2],
+                                    [2, 0, 1, 2],
+                                ],
+                            ],
+                            [
+                                'type' => 'LINESTRING',
+                                'value' => [
+                                    [2, 0, 1, 2],
+                                    [1, -1, 1, 1],
+                                    [0, 0, 1, 2],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'ZM',
+            ],
+        ];
+        yield 'ndrMultiSurfaceValue' => [
+            'value' => '010c00000002000000010a0000000100000001090000000200000001080000000300000000000000000000000000000000000000000000000000f03f000000000000f03f0000000000000040000000000000000001020000000300000000000000000000400000000000000000000000000000f03f000000000000f0bf00000000000000000000000000000000010300000001000000050000000000000000002440000000000000244000000000000024400000000000002840000000000000284000000000000028400000000000002840000000000000244000000000000024400000000000002440',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTISURFACE',
+                'value' => [
+                    [
+                        'type' => 'CURVEPOLYGON',
+                        'value' => [
+                            [
+                                'type' => 'COMPOUNDCURVE',
+                                'value' => [
+                                    [
+                                        'type' => 'CIRCULARSTRING',
+                                        'value' => [
+                                            [0, 0],
+                                            [1, 1],
+                                            [2, 0],
+                                        ],
+                                    ],
+                                    [
+                                        'type' => 'LINESTRING',
+                                        'value' => [
+                                            [2, 0],
+                                            [1, -1],
+                                            [0, 0],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    [
+                        'type' => 'POLYGON',
+                        'value' => [
+                            [
                                 [10, 10],
-                                [0, 10],
-                                [0, 0],
-                            ],
-                            [
-                                [5, 5],
-                                [7, 5],
-                                [7, 7],
-                                [5, 7],
-                                [5, 5],
-                            ],
-                        ],
-                        [
-                            [
-                                [1, 1],
-                                [3, 1],
-                                [3, 3],
-                                [1, 3],
-                                [1, 1],
-                            ],
-                        ],
-                    ],
-                    'dimension' => null,
-                ],
-            ],
-            'xdrMultiPolygonValue' => [
-                'value' => '0000000006000000020000000003000000020000000500000000000000000000000000000000402400000000000'
-                    .'000000000000000004024000000000000402400000000000000000000000000004024000000000000000000000000000'
-                    .'000000000000000000000000540140000000000004014000000000000401C0000000000004014000000000000401C000'
-                    .'000000000401C0000000000004014000000000000401C000000000000401400000000000040140000000000000000000'
-                    .'00300000001000000053FF00000000000003FF000000000000040080000000000003FF00000000000004008000000000'
-                    .'00040080000000000003FF000000000000040080000000000003FF00000000000003FF0000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTIPOLYGON',
-                    'value' => [
-                        [
-                            [
-                                [0, 0],
-                                [10, 0],
+                                [10, 12],
+                                [12, 12],
+                                [12, 10],
                                 [10, 10],
-                                [0, 10],
-                                [0, 0],
-                            ],
-                            [
-                                [5, 5],
-                                [7, 5],
-                                [7, 7],
-                                [5, 7],
-                                [5, 5],
-                            ],
-                        ],
-                        [
-                            [
-                                [1, 1],
-                                [3, 1],
-                                [3, 3],
-                                [1, 3],
-                                [1, 1],
                             ],
                         ],
                     ],
-                    'dimension' => null,
                 ],
+                'dimension' => null,
             ],
-            'ndrMultiPolygonZValue' => [
-                'value' => '0106000080010000000103000080020000000500000000000000000000000000000000000000000000000000084'
-                    .'000000000000024400000000000000000000000000000084000000000000024400000000000002440000000000000084'
-                    .'000000000000000000000000000002440000000000000084000000000000000000000000000000000000000000000084'
-                    .'005000000000000000000004000000000000000400000000000000840000000000000004000000000000014400000000'
-                    .'000000840000000000000144000000000000014400000000000000840000000000000144000000000000000400000000'
-                    .'000000840000000000000004000000000000000400000000000000840',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTIPOLYGON',
-                    'value' => [
-                        [
+        ];
+        yield 'xdrMultiSurfaceValue' => [
+            'value' => '000000000c00000002000000000a00000001000000000900000002000000000800000003000000000000000000000000000000003ff00000000000003ff000000000000040000000000000000000000000000000000000000200000003400000000000000000000000000000003ff0000000000000bff000000000000000000000000000000000000000000000000000000300000001000000054024000000000000402400000000000040240000000000004028000000000000402800000000000040280000000000004028000000000000402400000000000040240000000000004024000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTISURFACE',
+                'value' => [
+                    [
+                        'type' => 'CURVEPOLYGON',
+                        'value' => [
                             [
-                                [0, 0, 3],
-                                [10, 0, 3],
-                                [10, 10, 3],
-                                [0, 10, 3],
-                                [0, 0, 3],
-                            ],
-                            [
-                                [2, 2, 3],
-                                [2, 5, 3],
-                                [5, 5, 3],
-                                [5, 2, 3],
-                                [2, 2, 3],
+                                'type' => 'COMPOUNDCURVE',
+                                'value' => [
+                                    [
+                                        'type' => 'CIRCULARSTRING',
+                                        'value' => [
+                                            [0, 0],
+                                            [1, 1],
+                                            [2, 0],
+                                        ],
+                                    ],
+                                    [
+                                        'type' => 'LINESTRING',
+                                        'value' => [
+                                            [2, 0],
+                                            [1, -1],
+                                            [0, 0],
+                                        ],
+                                    ],
+                                ],
                             ],
                         ],
                     ],
-                    'dimension' => 'Z',
-                ],
-            ],
-            'xdrMultiPolygonZValue' => [
-                'value' => '0080000006000000010080000003000000020000000500000000000000000000000000000000400800000000000'
-                    .'040240000000000000000000000000000400800000000000040240000000000004024000000000000400800000000000'
-                    .'000000000000000004024000000000000400800000000000000000000000000000000000000000000400800000000000'
-                    .'000000005400000000000000040000000000000004008000000000000400000000000000040140000000000004008000'
-                    .'000000000401400000000000040140000000000004008000000000000401400000000000040000000000000004008000'
-                    .'000000000400000000000000040000000000000004008000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTIPOLYGON',
-                    'value' => [
-                        [
+                    [
+                        'type' => 'POLYGON',
+                        'value' => [
                             [
-                                [0, 0, 3],
-                                [10, 0, 3],
-                                [10, 10, 3],
-                                [0, 10, 3],
-                                [0, 0, 3],
-                            ],
-                            [
-                                [2, 2, 3],
-                                [2, 5, 3],
-                                [5, 5, 3],
-                                [5, 2, 3],
-                                [2, 2, 3],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'Z',
-                ],
-            ],
-            'ndrMultiPolygonMValue' => [
-                'value' => '0106000040010000000103000040020000000500000000000000000000000000000000000000000000000000084'
-                    .'000000000000024400000000000000000000000000000084000000000000024400000000000002440000000000000084'
-                    .'000000000000000000000000000002440000000000000084000000000000000000000000000000000000000000000084'
-                    .'005000000000000000000004000000000000000400000000000000840000000000000004000000000000014400000000'
-                    .'000000840000000000000144000000000000014400000000000000840000000000000144000000000000000400000000'
-                    .'000000840000000000000004000000000000000400000000000000840',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTIPOLYGON',
-                    'value' => [
-                        [
-                            [
-                                [0, 0, 3],
-                                [10, 0, 3],
-                                [10, 10, 3],
-                                [0, 10, 3],
-                                [0, 0, 3],
-                            ],
-                            [
-                                [2, 2, 3],
-                                [2, 5, 3],
-                                [5, 5, 3],
-                                [5, 2, 3],
-                                [2, 2, 3],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'M',
-                ],
-            ],
-            'xdrMultiPolygonMValue' => [
-                'value' => '0040000006000000010040000003000000020000000500000000000000000000000000000000400800000000000'
-                    .'040240000000000000000000000000000400800000000000040240000000000004024000000000000400800000000000'
-                    .'000000000000000004024000000000000400800000000000000000000000000000000000000000000400800000000000'
-                    .'000000005400000000000000040000000000000004008000000000000400000000000000040140000000000004008000'
-                    .'000000000401400000000000040140000000000004008000000000000401400000000000040000000000000004008000'
-                    .'000000000400000000000000040000000000000004008000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTIPOLYGON',
-                    'value' => [
-                        [
-                            [
-                                [0, 0, 3],
-                                [10, 0, 3],
-                                [10, 10, 3],
-                                [0, 10, 3],
-                                [0, 0, 3],
-                            ],
-                            [
-                                [2, 2, 3],
-                                [2, 5, 3],
-                                [5, 5, 3],
-                                [5, 2, 3],
-                                [2, 2, 3],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'M',
-                ],
-            ],
-            'ndrMultiPolygonZMValue' => [
-                'value' => '01060000c00100000001030000c0020000000500000000000000000000000000000000000000000000000000084'
-                    .'000000000000000400000000000002440000000000000000000000000000008400000000000000040000000000000244'
-                    .'000000000000024400000000000000840000000000000004000000000000000000000000000002440000000000000084'
-                    .'000000000000000400000000000000000000000000000000000000000000008400000000000000040050000000000000'
-                    .'000000040000000000000004000000000000008400000000000000040000000000000004000000000000014400000000'
-                    .'000000840000000000000004000000000000014400000000000001440000000000000084000000000000000400000000'
-                    .'000001440000000000000004000000000000008400000000000000040000000000000004000000000000000400000000'
-                    .'0000008400000000000000040',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTIPOLYGON',
-                    'value' => [
-                        [
-                            [
-                                [0, 0, 3, 2],
-                                [10, 0, 3, 2],
-                                [10, 10, 3, 2],
-                                [0, 10, 3, 2],
-                                [0, 0, 3, 2],
-                            ],
-                            [
-                                [2, 2, 3, 2],
-                                [2, 5, 3, 2],
-                                [5, 5, 3, 2],
-                                [5, 2, 3, 2],
-                                [2, 2, 3, 2],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'ZM',
-                ],
-            ],
-            'xdrMultiPolygonZMValue' => [
-                'value' => '00c00000060000000100c0000003000000020000000500000000000000000000000000000000400800000000000'
-                    .'040000000000000004024000000000000000000000000000040080000000000004000000000000000402400000000000'
-                    .'040240000000000004008000000000000400000000000000000000000000000004024000000000000400800000000000'
-                    .'040000000000000000000000000000000000000000000000040080000000000004000000000000000000000054000000'
-                    .'000000000400000000000000040080000000000004000000000000000400000000000000040140000000000004008000'
-                    .'000000000400000000000000040140000000000004014000000000000400800000000000040000000000000004014000'
-                    .'000000000400000000000000040080000000000004000000000000000400000000000000040000000000000004008000'
-                    .'0000000004000000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTIPOLYGON',
-                    'value' => [
-                        [
-                            [
-                                [0, 0, 3, 2],
-                                [10, 0, 3, 2],
-                                [10, 10, 3, 2],
-                                [0, 10, 3, 2],
-                                [0, 0, 3, 2],
-                            ],
-                            [
-                                [2, 2, 3, 2],
-                                [2, 5, 3, 2],
-                                [5, 5, 3, 2],
-                                [5, 2, 3, 2],
-                                [2, 2, 3, 2],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'ZM',
-                ],
-            ],
-            'ndrMultiPolygonValueWithSrid' => [
-                'value' => '0106000020E61000000200000001030000000200000005000000000000000000000000000000000000000000000'
-                    .'000002440000000000000000000000000000024400000000000002440000000000000000000000000000024400000000'
-                    .'000000000000000000000000005000000000000000000144000000000000014400000000000001C40000000000000144'
-                    .'00000000000001C400000000000001C4000000000000014400000000000001C400000000000001440000000000000144'
-                    .'001030000000100000005000000000000000000F03F000000000000F03F0000000000000840000000000000F03F00000'
-                    .'000000008400000000000000840000000000000F03F0000000000000840000000000000F03F000000000000F03F',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'MULTIPOLYGON',
-                    'value' => [
-                        [
-                            [
-                                [0, 0],
-                                [10, 0],
                                 [10, 10],
-                                [0, 10],
-                                [0, 0],
-                            ],
-                            [
-                                [5, 5],
-                                [7, 5],
-                                [7, 7],
-                                [5, 7],
-                                [5, 5],
-                            ],
-                        ],
-                        [
-                            [
-                                [1, 1],
-                                [3, 1],
-                                [3, 3],
-                                [1, 3],
-                                [1, 1],
-                            ],
-                        ],
-                    ],
-                    'dimension' => null,
-                ],
-            ],
-            'xdrMultiPolygonValueWithSrid' => [
-                'value' => '0020000006000010E60000000200000000030000000200000005000000000000000000000000000000004024000'
-                    .'000000000000000000000000040240000000000004024000000000000000000000000000040240000000000000000000'
-                    .'00000000000000000000000000000000540140000000000004014000000000000401C000000000000401400000000000'
-                    .'0401C000000000000401C0000000000004014000000000000401C0000000000004014000000000000401400000000000'
-                    .'0000000000300000001000000053FF00000000000003FF000000000000040080000000000003FF000000000000040080'
-                    .'0000000000040080000000000003FF000000000000040080000000000003FF00000000000003FF0000000000000',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'MULTIPOLYGON',
-                    'value' => [
-                        [
-                            [
-                                [0, 0],
-                                [10, 0],
+                                [10, 12],
+                                [12, 12],
+                                [12, 10],
                                 [10, 10],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => null,
+            ],
+        ];
+        yield 'ndrMultiSurfaceZValue' => [
+            'value' => '010c00008002000000010a0000800100000001090000800200000001080000800300000000000000000000000000000000000000000000000000f03f000000000000f03f000000000000f03f000000000000f03f00000000000000400000000000000000000000000000f03f01020000800300000000000000000000400000000000000000000000000000f03f000000000000f03f000000000000f0bf000000000000f03f00000000000000000000000000000000000000000000f03f01030000800100000005000000000000000000244000000000000024400000000000002440000000000000244000000000000028400000000000002440000000000000284000000000000028400000000000002440000000000000284000000000000024400000000000002440000000000000244000000000000024400000000000002440',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTISURFACE',
+                'value' => [
+                    [
+                        'type' => 'CURVEPOLYGON',
+                        'value' => [
+                            [
+                                'type' => 'COMPOUNDCURVE',
+                                'value' => [
+                                    [
+                                        'type' => 'CIRCULARSTRING',
+                                        'value' => [
+                                            [0, 0, 1],
+                                            [1, 1, 1],
+                                            [2, 0, 1],
+                                        ],
+                                    ],
+                                    [
+                                        'type' => 'LINESTRING',
+                                        'value' => [
+                                            [2, 0, 1],
+                                            [1, -1, 1],
+                                            [0, 0, 1],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    [
+                        'type' => 'POLYGON',
+                        'value' => [
+                            [
+                                [10, 10, 10],
+                                [10, 12, 10],
+                                [12, 12, 10],
+                                [12, 10, 10],
+                                [10, 10, 10],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'Z',
+            ],
+        ];
+        yield 'xdrMultiSurfaceZValue' => [
+            'value' => '008000000c00000002008000000a00000001008000000900000002008000000800000003000000000000000000000000000000003ff00000000000003ff00000000000003ff00000000000003ff0000000000000400000000000000000000000000000003ff0000000000000008000000200000003400000000000000000000000000000003ff00000000000003ff0000000000000bff00000000000003ff0000000000000000000000000000000000000000000003ff000000000000000800000030000000100000005402400000000000040240000000000004024000000000000402400000000000040280000000000004024000000000000402800000000000040280000000000004024000000000000402800000000000040240000000000004024000000000000402400000000000040240000000000004024000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTISURFACE',
+                'value' => [
+                    [
+                        'type' => 'CURVEPOLYGON',
+                        'value' => [
+                            [
+                                'type' => 'COMPOUNDCURVE',
+                                'value' => [
+                                    [
+                                        'type' => 'CIRCULARSTRING',
+                                        'value' => [
+                                            [0, 0, 1],
+                                            [1, 1, 1],
+                                            [2, 0, 1],
+                                        ],
+                                    ],
+                                    [
+                                        'type' => 'LINESTRING',
+                                        'value' => [
+                                            [2, 0, 1],
+                                            [1, -1, 1],
+                                            [0, 0, 1],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    [
+                        'type' => 'POLYGON',
+                        'value' => [
+                            [
+                                [10, 10, 10],
+                                [10, 12, 10],
+                                [12, 12, 10],
+                                [12, 10, 10],
+                                [10, 10, 10],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'Z',
+            ],
+        ];
+        yield 'ndrMultiSurfaceMValue' => [
+            'value' => '010c00004002000000010a0000400100000001090000400200000001080000400300000000000000000000000000000000000000000000000000f03f000000000000f03f000000000000f03f000000000000f03f00000000000000400000000000000000000000000000f03f01020000400300000000000000000000400000000000000000000000000000f03f000000000000f03f000000000000f0bf000000000000f03f00000000000000000000000000000000000000000000f03f01030000400100000005000000000000000000244000000000000024400000000000002440000000000000244000000000000028400000000000002440000000000000284000000000000028400000000000002440000000000000284000000000000024400000000000002440000000000000244000000000000024400000000000002440',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTISURFACE',
+                'value' => [
+                    [
+                        'type' => 'CURVEPOLYGON',
+                        'value' => [
+                            [
+                                'type' => 'COMPOUNDCURVE',
+                                'value' => [
+                                    [
+                                        'type' => 'CIRCULARSTRING',
+                                        'value' => [
+                                            [0, 0, 1],
+                                            [1, 1, 1],
+                                            [2, 0, 1],
+                                        ],
+                                    ],
+                                    [
+                                        'type' => 'LINESTRING',
+                                        'value' => [
+                                            [2, 0, 1],
+                                            [1, -1, 1],
+                                            [0, 0, 1],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    [
+                        'type' => 'POLYGON',
+                        'value' => [
+                            [
+                                [10, 10, 10],
+                                [10, 12, 10],
+                                [12, 12, 10],
+                                [12, 10, 10],
+                                [10, 10, 10],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'M',
+            ],
+        ];
+        yield 'xdrMultiSurfaceMValue' => [
+            'value' => '004000000c00000002004000000a00000001004000000900000002004000000800000003000000000000000000000000000000003ff00000000000003ff00000000000003ff00000000000003ff0000000000000400000000000000000000000000000003ff0000000000000004000000200000003400000000000000000000000000000003ff00000000000003ff0000000000000bff00000000000003ff0000000000000000000000000000000000000000000003ff000000000000000400000030000000100000005402400000000000040240000000000004024000000000000402400000000000040280000000000004024000000000000402800000000000040280000000000004024000000000000402800000000000040240000000000004024000000000000402400000000000040240000000000004024000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTISURFACE',
+                'value' => [
+                    [
+                        'type' => 'CURVEPOLYGON',
+                        'value' => [
+                            [
+                                'type' => 'COMPOUNDCURVE',
+                                'value' => [
+                                    [
+                                        'type' => 'CIRCULARSTRING',
+                                        'value' => [
+                                            [0, 0, 1],
+                                            [1, 1, 1],
+                                            [2, 0, 1],
+                                        ],
+                                    ],
+                                    [
+                                        'type' => 'LINESTRING',
+                                        'value' => [
+                                            [2, 0, 1],
+                                            [1, -1, 1],
+                                            [0, 0, 1],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    [
+                        'type' => 'POLYGON',
+                        'value' => [
+                            [
+                                [10, 10, 10],
+                                [10, 12, 10],
+                                [12, 12, 10],
+                                [12, 10, 10],
+                                [10, 10, 10],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'M',
+            ],
+        ];
+        yield 'ndrMultiSurfaceZMValue' => [
+            'value' => '010c0000c002000000010a0000c00100000001090000c00200000001080000c00300000000000000000000000000000000000000000000000000f03f0000000000000040000000000000f03f000000000000f03f000000000000f03f000000000000004000000000000000400000000000000000000000000000f03f000000000000004001020000c00300000000000000000000400000000000000000000000000000f03f0000000000000040000000000000f03f000000000000f0bf000000000000f03f000000000000f03f00000000000000000000000000000000000000000000f03f000000000000004001030000c0010000000500000000000000000024400000000000002440000000000000244000000000000024400000000000002440000000000000284000000000000024400000000000002440000000000000284000000000000028400000000000002440000000000000244000000000000028400000000000002440000000000000244000000000000024400000000000002440000000000000244000000000000024400000000000002440',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTISURFACE',
+                'value' => [
+                    [
+                        'type' => 'CURVEPOLYGON',
+                        'value' => [
+                            [
+                                'type' => 'COMPOUNDCURVE',
+                                'value' => [
+                                    [
+                                        'type' => 'CIRCULARSTRING',
+                                        'value' => [
+                                            [0, 0, 1, 2],
+                                            [1, 1, 1, 2],
+                                            [2, 0, 1, 2],
+                                        ],
+                                    ],
+                                    [
+                                        'type' => 'LINESTRING',
+                                        'value' => [
+                                            [2, 0, 1, 2],
+                                            [1, -1, 1, 1],
+                                            [0, 0, 1, 2],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    [
+                        'type' => 'POLYGON',
+                        'value' => [
+                            [
+                                [10, 10, 10, 10],
+                                [10, 12, 10, 10],
+                                [12, 12, 10, 10],
+                                [12, 10, 10, 10],
+                                [10, 10, 10, 10],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'ZM',
+            ],
+        ];
+        yield 'xdrMultiSurfaceZMValue' => [
+            'value' => '00c000000c0000000200c000000a0000000100c00000090000000200c000000800000003000000000000000000000000000000003ff000000000000040000000000000003ff00000000000003ff00000000000003ff00000000000004000000000000000400000000000000000000000000000003ff0000000000000400000000000000000c000000200000003400000000000000000000000000000003ff000000000000040000000000000003ff0000000000000bff00000000000003ff00000000000003ff0000000000000000000000000000000000000000000003ff0000000000000400000000000000000c0000003000000010000000540240000000000004024000000000000402400000000000040240000000000004024000000000000402800000000000040240000000000004024000000000000402800000000000040280000000000004024000000000000402400000000000040280000000000004024000000000000402400000000000040240000000000004024000000000000402400000000000040240000000000004024000000000000',
+            'expected' => [
+                'srid' => null,
+                'type' => 'MULTISURFACE',
+                'value' => [
+                    [
+                        'type' => 'CURVEPOLYGON',
+                        'value' => [
+                            [
+                                'type' => 'COMPOUNDCURVE',
+                                'value' => [
+                                    [
+                                        'type' => 'CIRCULARSTRING',
+                                        'value' => [
+                                            [0, 0, 1, 2],
+                                            [1, 1, 1, 2],
+                                            [2, 0, 1, 2],
+                                        ],
+                                    ],
+                                    [
+                                        'type' => 'LINESTRING',
+                                        'value' => [
+                                            [2, 0, 1, 2],
+                                            [1, -1, 1, 1],
+                                            [0, 0, 1, 2],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    [
+                        'type' => 'POLYGON',
+                        'value' => [
+                            [
+                                [10, 10, 10, 10],
+                                [10, 12, 10, 10],
+                                [12, 12, 10, 10],
+                                [12, 10, 10, 10],
+                                [10, 10, 10, 10],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'ZM',
+            ],
+        ];
+        yield 'ndrPolyhedralSurfaceZValue' => [
+            'value' => '010f000080050000000103000080010000000500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000144000000000000000000000000000002e40000000000000144000000000000000000000000000002e4000000000000000000000000000000000000000000000000000000000000000000103000080010000000500000000000000000000000000000000000000000000000000000000000000000000000000000000002e40000000000000000000000000000024400000000000002e400000000000000000000000000000244000000000000000000000000000000000000000000000000000000000000000000000000000000000010300008001000000050000000000000000000000000000000000000000000000000000000000000000002440000000000000000000000000000000000000000000002440000000000000000000000000000014400000000000000000000000000000000000000000000014400000000000000000000000000000000000000000000000000103000080010000000500000000000000000024400000000000000000000000000000000000000000000024400000000000002e40000000000000000000000000000024400000000000002e4000000000000014400000000000002440000000000000000000000000000014400000000000002440000000000000000000000000000000000103000080010000000500000000000000000000000000000000002e40000000000000000000000000000000000000000000002e40000000000000144000000000000024400000000000002e40000000000000144000000000000024400000000000002e40000000000000000000000000000000000000000000002e400000000000000000',
+            'expected' => [
+                'type' => 'POLYHEDRALSURFACE',
+                'srid' => null,
+                'value' => [
+                    [
+                        'type' => 'POLYGON',
+                        'value' => [
+                            [
+                                [0, 0, 0],
+                                [0, 0, 5],
+                                [0, 15, 5],
+                                [0, 15, 0],
+                                [0, 0, 0],
+                            ],
+                        ],
+                    ],
+                    [
+                        'type' => 'POLYGON',
+                        'value' => [
+                            [
+                                [0, 0, 0],
+                                [0, 15, 0],
+                                [10, 15, 0],
+                                [10, 0, 0],
+                                [0, 0, 0],
+                            ],
+                        ],
+                    ],
+                    [
+                        'type' => 'POLYGON',
+                        'value' => [
+                            [
+                                [0, 0, 0],
+                                [10, 0, 0],
+                                [10, 0, 5],
+                                [0, 0, 5],
+                                [0, 0, 0],
+                            ],
+                        ],
+                    ],
+                    [
+                        'type' => 'POLYGON',
+                        'value' => [
+                            [
+                                [10, 0, 0],
+                                [10, 15, 0],
+                                [10, 15, 5],
+                                [10, 0, 5],
+                                [10, 0, 0],
+                            ],
+                        ],
+                    ],
+                    [
+                        'type' => 'POLYGON',
+                        'value' => [
+                            [
+                                [0, 15, 0],
+                                [0, 15, 5],
+                                [10, 15, 5],
+                                [10, 15, 0],
+                                [0, 15, 0],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'Z',
+            ],
+        ];
+        yield 'ndrPolyhedralSurfaceMValue' => [
+            'value' => '010f000040050000000103000040010000000500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000144000000000000000000000000000002e40000000000000144000000000000000000000000000002e4000000000000000000000000000000000000000000000000000000000000000000103000040010000000500000000000000000000000000000000000000000000000000000000000000000000000000000000002e40000000000000000000000000000024400000000000002e400000000000000000000000000000244000000000000000000000000000000000000000000000000000000000000000000000000000000000010300004001000000050000000000000000000000000000000000000000000000000000000000000000002440000000000000000000000000000000000000000000002440000000000000000000000000000014400000000000000000000000000000000000000000000014400000000000000000000000000000000000000000000000000103000040010000000500000000000000000024400000000000000000000000000000000000000000000024400000000000002e40000000000000000000000000000024400000000000002e4000000000000014400000000000002440000000000000000000000000000014400000000000002440000000000000000000000000000000000103000040010000000500000000000000000000000000000000002e40000000000000000000000000000000000000000000002e40000000000000144000000000000024400000000000002e40000000000000144000000000000024400000000000002e40000000000000000000000000000000000000000000002e400000000000000000',
+            'expected' => [
+                'type' => 'POLYHEDRALSURFACE',
+                'srid' => null,
+                'value' => [
+                    [
+                        'type' => 'POLYGON',
+                        'value' => [
+                            [
+                                [0, 0, 0],
+                                [0, 0, 5],
+                                [0, 15, 5],
+                                [0, 15, 0],
+                                [0, 0, 0],
+                            ],
+                        ],
+                    ],
+                    [
+                        'type' => 'POLYGON',
+                        'value' => [
+                            [
+                                [0, 0, 0],
+                                [0, 15, 0],
+                                [10, 15, 0],
+                                [10, 0, 0],
+                                [0, 0, 0],
+                            ],
+                        ],
+                    ],
+                    [
+                        'type' => 'POLYGON',
+                        'value' => [
+                            [
+                                [0, 0, 0],
+                                [10, 0, 0],
+                                [10, 0, 5],
+                                [0, 0, 5],
+                                [0, 0, 0],
+                            ],
+                        ],
+                    ],
+                    [
+                        'type' => 'POLYGON',
+                        'value' => [
+                            [
+                                [10, 0, 0],
+                                [10, 15, 0],
+                                [10, 15, 5],
+                                [10, 0, 5],
+                                [10, 0, 0],
+                            ],
+                        ],
+                    ],
+                    [
+                        'type' => 'POLYGON',
+                        'value' => [
+                            [
+                                [0, 15, 0],
+                                [0, 15, 5],
+                                [10, 15, 5],
+                                [10, 15, 0],
+                                [0, 15, 0],
+                            ],
+                        ],
+                    ],
+                ],
+                'dimension' => 'M',
+            ],
+        ];
+        yield 'xdrGeometryCollectionValue2' => [
+            'value' => '01070000000600000001010000000000000000000000000000000000f03f010200000002000000000000000000004000000000000008400000000000001040000000000000144001030000000200000005000000000000000000000000000000000000000000000000000000000000000000244000000000000024400000000000002440000000000000244000000000000000000000000000000000000000000000000005000000000000000000f03f000000000000f03f000000000000f03f0000000000002240000000000000224000000000000022400000000000002240000000000000f03f000000000000f03f000000000000f03f01040000000200000001010000000000000000000000000000000000f03f0101000000000000000000004000000000000008400105000000020000000102000000020000000000000000000000000000000000f03f000000000000004000000000000008400102000000020000000000000000001040000000000000144000000000000018400000000000001c4001060000000200000001030000000200000005000000000000000000000000000000000000000000000000000000000000000000244000000000000024400000000000002440000000000000244000000000000000000000000000000000000000000000000005000000000000000000f03f000000000000f03f000000000000f03f0000000000002240000000000000224000000000000022400000000000002240000000000000f03f000000000000f03f000000000000f03f0103000000010000000500000000000000000022c0000000000000000000000000000022c00000000000002440000000000000f0bf0000000000002440000000000000f0bf000000000000000000000000000022c00000000000000000',
+            'expected' => [
+                'type' => 'GEOMETRYCOLLECTION',
+                'srid' => null,
+                'value' => [
+                    [
+                        'type' => 'POINT',
+                        'value' => [0, 1],
+                    ],
+                    [
+                        'type' => 'LINESTRING',
+                        'value' => [
+                            [2, 3],
+                            [4, 5],
+                        ],
+                    ],
+                    [
+                        'type' => 'POLYGON',
+                        'value' => [
+                            [
+                                [0, 0],
                                 [0, 10],
+                                [10, 10],
+                                [10, 0],
                                 [0, 0],
                             ],
                             [
-                                [5, 5],
-                                [7, 5],
-                                [7, 7],
-                                [5, 7],
-                                [5, 5],
-                            ],
-                        ],
-                        [
-                            [
                                 [1, 1],
-                                [3, 1],
-                                [3, 3],
-                                [1, 3],
-                                [1, 1],
-                            ],
-                        ],
-                    ],
-                    'dimension' => null,
-                ],
-            ],
-            'ndrMultiPolygonZValueWithSrid' => [
-                'value' => '01060000a0e61000000100000001030000800200000005000000000000000000000000000000000000000000000'
-                    .'000000840000000000000244000000000000000000000000000000840000000000000244000000000000024400000000'
-                    .'000000840000000000000000000000000000024400000000000000840000000000000000000000000000000000000000'
-                    .'000000840050000000000000000000040000000000000004000000000000008400000000000000040000000000000144'
-                    .'000000000000008400000000000001440000000000000144000000000000008400000000000001440000000000000004'
-                    .'00000000000000840000000000000004000000000000000400000000000000840',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'MULTIPOLYGON',
-                    'value' => [
-                        [
-                            [
-                                [0, 0, 3],
-                                [10, 0, 3],
-                                [10, 10, 3],
-                                [0, 10, 3],
-                                [0, 0, 3],
-                            ],
-                            [
-                                [2, 2, 3],
-                                [2, 5, 3],
-                                [5, 5, 3],
-                                [5, 2, 3],
-                                [2, 2, 3],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'Z',
-                ],
-            ],
-            'xdrMultiPolygonZValueWithSrid' => [
-                'value' => '00a0000006000010e60000000100800000030000000200000005000000000000000000000000000000004008000'
-                    .'000000000402400000000000000000000000000004008000000000000402400000000000040240000000000004008000'
-                    .'000000000000000000000000040240000000000004008000000000000000000000000000000000000000000004008000'
-                    .'000000000000000054000000000000000400000000000000040080000000000004000000000000000401400000000000'
-                    .'040080000000000004014000000000000401400000000000040080000000000004014000000000000400000000000000'
-                    .'04008000000000000400000000000000040000000000000004008000000000000',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'MULTIPOLYGON',
-                    'value' => [
-                        [
-                            [
-                                [0, 0, 3],
-                                [10, 0, 3],
-                                [10, 10, 3],
-                                [0, 10, 3],
-                                [0, 0, 3],
-                            ],
-                            [
-                                [2, 2, 3],
-                                [2, 5, 3],
-                                [5, 5, 3],
-                                [5, 2, 3],
-                                [2, 2, 3],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'Z',
-                ],
-            ],
-            'ndrMultiPolygonMValueWithSrid' => [
-                'value' => '0106000060e61000000100000001030000400200000005000000000000000000000000000000000000000000000'
-                    .'000000840000000000000244000000000000000000000000000000840000000000000244000000000000024400000000'
-                    .'000000840000000000000000000000000000024400000000000000840000000000000000000000000000000000000000'
-                    .'000000840050000000000000000000040000000000000004000000000000008400000000000000040000000000000144'
-                    .'000000000000008400000000000001440000000000000144000000000000008400000000000001440000000000000004'
-                    .'00000000000000840000000000000004000000000000000400000000000000840',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'MULTIPOLYGON',
-                    'value' => [
-                        [
-                            [
-                                [0, 0, 3],
-                                [10, 0, 3],
-                                [10, 10, 3],
-                                [0, 10, 3],
-                                [0, 0, 3],
-                            ],
-                            [
-                                [2, 2, 3],
-                                [2, 5, 3],
-                                [5, 5, 3],
-                                [5, 2, 3],
-                                [2, 2, 3],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'M',
-                ],
-            ],
-            'xdrMultiPolygonMValueWithSrid' => [
-                'value' => '0060000006000010e60000000100400000030000000200000005000000000000000000000000000000004008000'
-                    .'000000000402400000000000000000000000000004008000000000000402400000000000040240000000000004008000'
-                    .'000000000000000000000000040240000000000004008000000000000000000000000000000000000000000004008000'
-                    .'000000000000000054000000000000000400000000000000040080000000000004000000000000000401400000000000'
-                    .'040080000000000004014000000000000401400000000000040080000000000004014000000000000400000000000000'
-                    .'04008000000000000400000000000000040000000000000004008000000000000',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'MULTIPOLYGON',
-                    'value' => [
-                        [
-                            [
-                                [0, 0, 3],
-                                [10, 0, 3],
-                                [10, 10, 3],
-                                [0, 10, 3],
-                                [0, 0, 3],
-                            ],
-                            [
-                                [2, 2, 3],
-                                [2, 5, 3],
-                                [5, 5, 3],
-                                [5, 2, 3],
-                                [2, 2, 3],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'M',
-                ],
-            ],
-            'ndrMultiPolygonZMValueWithSrid' => [
-                'value' => '01060000e0e61000000100000001030000c00200000005000000000000000000000000000000000000000000000'
-                    .'000000840000000000000004000000000000024400000000000000000000000000000084000000000000000400000000'
-                    .'000002440000000000000244000000000000008400000000000000040000000000000000000000000000024400000000'
-                    .'000000840000000000000004000000000000000000000000000000000000000000000084000000000000000400500000'
-                    .'000000000000000400000000000000040000000000000084000000000000000400000000000000040000000000000144'
-                    .'000000000000008400000000000000040000000000000144000000000000014400000000000000840000000000000004'
-                    .'000000000000014400000000000000040000000000000084000000000000000400000000000000040000000000000004'
-                    .'000000000000008400000000000000040',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'MULTIPOLYGON',
-                    'value' => [
-                        [
-                            [
-                                [0, 0, 3, 2],
-                                [10, 0, 3, 2],
-                                [10, 10, 3, 2],
-                                [0, 10, 3, 2],
-                                [0, 0, 3, 2],
-                            ],
-                            [
-                                [2, 2, 3, 2],
-                                [2, 5, 3, 2],
-                                [5, 5, 3, 2],
-                                [5, 2, 3, 2],
-                                [2, 2, 3, 2],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'ZM',
-                ],
-            ],
-            'xdrMultiPolygonZMValueWithSrid' => [
-                'value' => '00e0000006000010e60000000100c00000030000000200000005000000000000000000000000000000004008000'
-                    .'000000000400000000000000040240000000000000000000000000000400800000000000040000000000000004024000'
-                    .'000000000402400000000000040080000000000004000000000000000000000000000000040240000000000004008000'
-                    .'000000000400000000000000000000000000000000000000000000000400800000000000040000000000000000000000'
-                    .'540000000000000004000000000000000400800000000000040000000000000004000000000000000401400000000000'
-                    .'040080000000000004000000000000000401400000000000040140000000000004008000000000000400000000000000'
-                    .'040140000000000004000000000000000400800000000000040000000000000004000000000000000400000000000000'
-                    .'040080000000000004000000000000000',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'MULTIPOLYGON',
-                    'value' => [
-                        [
-                            [
-                                [0, 0, 3, 2],
-                                [10, 0, 3, 2],
-                                [10, 10, 3, 2],
-                                [0, 10, 3, 2],
-                                [0, 0, 3, 2],
-                            ],
-                            [
-                                [2, 2, 3, 2],
-                                [2, 5, 3, 2],
-                                [5, 5, 3, 2],
-                                [5, 2, 3, 2],
-                                [2, 2, 3, 2],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'ZM',
-                ],
-            ],
-            'ndrEmptyGeometryCollectionValue' => [
-                'value' => '010700000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'GEOMETRYCOLLECTION',
-                    'value' => [],
-                    'dimension' => null,
-                ],
-            ],
-            'ndrGeometryCollectionValueWithEmptyPoint' => [
-                'value' => '0107000000010000000101000000000000000000F87F000000000000F87F',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'GEOMETRYCOLLECTION',
-                    'value' => [
-                        [
-                            'type' => 'POINT',
-                            'value' => [],
-                        ],
-                    ],
-                    'dimension' => null,
-                ],
-            ],
-            'ndrGeometryCollectionValue' => [
-                'value' => '01070000000300000001010000000000000000002440000000000000244001010000000000000000003E4000000'
-                    .'00000003E400102000000020000000000000000002E400000000000002E4000000000000034400000000000003440',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'GEOMETRYCOLLECTION',
-                    'value' => [
-                        [
-                            'type' => 'POINT',
-                            'value' => [10, 10],
-                        ],
-                        [
-                            'type' => 'POINT',
-                            'value' => [30, 30],
-                        ],
-                        [
-                            'type' => 'LINESTRING',
-                            'value' => [
-                                [15, 15],
-                                [20, 20],
-                            ],
-                        ],
-                    ],
-                    'dimension' => null,
-                ],
-            ],
-            'xdrGeometryCollectionValue' => [
-                'value' => '0000000007000000030000000001402400000000000040240000000000000000000001403E000000000000403E0'
-                    .'00000000000000000000200000002402E000000000000402E00000000000040340000000000004034000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'GEOMETRYCOLLECTION',
-                    'value' => [
-                        [
-                            'type' => 'POINT',
-                            'value' => [10, 10],
-                        ],
-                        [
-                            'type' => 'POINT',
-                            'value' => [30, 30],
-                        ],
-                        [
-                            'type' => 'LINESTRING',
-                            'value' => [
-                                [15, 15],
-                                [20, 20],
-                            ],
-                        ],
-                    ],
-                    'dimension' => null,
-                ],
-            ],
-            'ndrGeometryCollectionZValue' => [
-                'value' => '0107000080030000000101000080000000000000000000000000000000000000000000000000010200008002000'
-                    .'000000000000000000000000000000000000000000000000000000000000000f03f000000000000f03f000000000000f'
-                    .'03f010700008002000000010100008000000000000000000000000000000000000000000000000001020000800200000'
-                    .'0000000000000000000000000000000000000000000000000000000000000f03f000000000000f03f000000000000f03'
-                    .'f',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'GEOMETRYCOLLECTION',
-                    'value' => [
-                        [
-                            'type' => 'POINT',
-                            'value' => [0, 0, 0],
-                        ],
-                        [
-                            'type' => 'LINESTRING',
-                            'value' => [
-                                [0, 0, 0],
-                                [1, 1, 1],
-                            ],
-                        ],
-                        [
-                            'type' => 'GEOMETRYCOLLECTION',
-                            'value' => [
-                                [
-                                    'type' => 'POINT',
-                                    'value' => [0, 0, 0],
-                                ],
-                                [
-                                    'type' => 'LINESTRING',
-                                    'value' => [
-                                        [0, 0, 0],
-                                        [1, 1, 1],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'Z',
-                ],
-            ],
-            'xdrGeometryCollectionZValue' => [
-                'value' => '0080000007000000030080000001000000000000000000000000000000000000000000000000008000000200000'
-                    .'0020000000000000000000000000000000000000000000000003ff00000000000003ff00000000000003ff0000000000'
-                    .'000008000000700000002008000000100000000000000000000000000000000000000000000000000800000020000000'
-                    .'20000000000000000000000000000000000000000000000003ff00000000000003ff00000000000003ff000000000000'
-                    .'0',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'GEOMETRYCOLLECTION',
-                    'value' => [
-                        [
-                            'type' => 'POINT',
-                            'value' => [0, 0, 0],
-                        ],
-                        [
-                            'type' => 'LINESTRING',
-                            'value' => [
-                                [0, 0, 0],
-                                [1, 1, 1],
-                            ],
-                        ],
-                        [
-                            'type' => 'GEOMETRYCOLLECTION',
-                            'value' => [
-                                [
-                                    'type' => 'POINT',
-                                    'value' => [0, 0, 0],
-                                ],
-                                [
-                                    'type' => 'LINESTRING',
-                                    'value' => [
-                                        [0, 0, 0],
-                                        [1, 1, 1],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'Z',
-                ],
-            ],
-            'ndrGeometryCollectionMValue' => [
-                'value' => '0107000040030000000101000040000000000000000000000000000000000000000000000000010200004002000'
-                    .'000000000000000000000000000000000000000000000000000000000000000f03f000000000000f03f000000000000f'
-                    .'03f010700004002000000010100004000000000000000000000000000000000000000000000000001020000400200000'
-                    .'0000000000000000000000000000000000000000000000000000000000000f03f000000000000f03f000000000000f03'
-                    .'f',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'GEOMETRYCOLLECTION',
-                    'value' => [
-                        [
-                            'type' => 'POINT',
-                            'value' => [0, 0, 0],
-                        ],
-                        [
-                            'type' => 'LINESTRING',
-                            'value' => [
-                                [0, 0, 0],
-                                [1, 1, 1],
-                            ],
-                        ],
-                        [
-                            'type' => 'GEOMETRYCOLLECTION',
-                            'value' => [
-                                [
-                                    'type' => 'POINT',
-                                    'value' => [0, 0, 0],
-                                ],
-                                [
-                                    'type' => 'LINESTRING',
-                                    'value' => [
-                                        [0, 0, 0],
-                                        [1, 1, 1],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'M',
-                ],
-            ],
-            'xdrGeometryCollectionMValue' => [
-                'value' => '0040000007000000030040000001000000000000000000000000000000000000000000000000004000000200000'
-                    .'0020000000000000000000000000000000000000000000000003ff00000000000003ff00000000000003ff0000000000'
-                    .'000004000000700000002004000000100000000000000000000000000000000000000000000000000400000020000000'
-                    .'20000000000000000000000000000000000000000000000003ff00000000000003ff00000000000003ff000000000000'
-                    .'0',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'GEOMETRYCOLLECTION',
-                    'value' => [
-                        [
-                            'type' => 'POINT',
-                            'value' => [0, 0, 0],
-                        ],
-                        [
-                            'type' => 'LINESTRING',
-                            'value' => [
-                                [0, 0, 0],
-                                [1, 1, 1],
-                            ],
-                        ],
-                        [
-                            'type' => 'GEOMETRYCOLLECTION',
-                            'value' => [
-                                [
-                                    'type' => 'POINT',
-                                    'value' => [0, 0, 0],
-                                ],
-                                [
-                                    'type' => 'LINESTRING',
-                                    'value' => [
-                                        [0, 0, 0],
-                                        [1, 1, 1],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'M',
-                ],
-            ],
-            'ndrGeometryCollectionZMValue' => [
-                'value' => '01070000c00300000001010000c0000000000000000000000000000000000000000000000000000000000000f03'
-                    .'f01020000c0020000000000000000000000000000000000000000000000000000000000000000000040000000000000f'
-                    .'03f000000000000f03f000000000000f03f000000000000084001070000c00200000001010000c000000000000000000'
-                    .'0000000000000000000000000000000000000000000104001020000c0020000000000000000000000000000000000000'
-                    .'000000000000000000000000000001440000000000000f03f000000000000f03f000000000000f03f000000000000184'
-                    .'0',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'GEOMETRYCOLLECTION',
-                    'value' => [
-                        [
-                            'type' => 'POINT',
-                            'value' => [0, 0, 0, 1],
-                        ],
-                        [
-                            'type' => 'LINESTRING',
-                            'value' => [
-                                [0, 0, 0, 2],
-                                [1, 1, 1, 3],
-                            ],
-                        ],
-                        [
-                            'type' => 'GEOMETRYCOLLECTION',
-                            'value' => [
-                                [
-                                    'type' => 'POINT',
-                                    'value' => [0, 0, 0, 4],
-                                ],
-                                [
-                                    'type' => 'LINESTRING',
-                                    'value' => [
-                                        [0, 0, 0, 5],
-                                        [1, 1, 1, 6],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'ZM',
-                ],
-            ],
-            'xdrGeometryCollectionZMValue' => [
-                'value' => '00c00000070000000300c00000010000000000000000000000000000000000000000000000003ff000000000000'
-                    .'000c00000020000000200000000000000000000000000000000000000000000000040000000000000003ff0000000000'
-                    .'0003ff00000000000003ff0000000000000400800000000000000c00000070000000200c000000100000000000000000'
-                    .'0000000000000000000000000000000401000000000000000c0000002000000020000000000000000000000000000000'
-                    .'0000000000000000040140000000000003ff00000000000003ff00000000000003ff0000000000000401800000000000'
-                    .'0',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'GEOMETRYCOLLECTION',
-                    'value' => [
-                        [
-                            'type' => 'POINT',
-                            'value' => [0, 0, 0, 1],
-                        ],
-                        [
-                            'type' => 'LINESTRING',
-                            'value' => [
-                                [0, 0, 0, 2],
-                                [1, 1, 1, 3],
-                            ],
-                        ],
-                        [
-                            'type' => 'GEOMETRYCOLLECTION',
-                            'value' => [
-                                [
-                                    'type' => 'POINT',
-                                    'value' => [0, 0, 0, 4],
-                                ],
-                                [
-                                    'type' => 'LINESTRING',
-                                    'value' => [
-                                        [0, 0, 0, 5],
-                                        [1, 1, 1, 6],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'ZM',
-                ],
-            ],
-            'ndrGeometryCollectionValueWithSrid' => [
-                'value' => '0107000020E61000000300000001010000000000000000002440000000000000244001010000000000000000003'
-                    .'E400000000000003E400102000000020000000000000000002E400000000000002E40000000000000344000000000000'
-                    .'03440',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'GEOMETRYCOLLECTION',
-                    'value' => [
-                        [
-                            'type' => 'POINT',
-                            'value' => [10, 10],
-                        ],
-                        [
-                            'type' => 'POINT',
-                            'value' => [30, 30],
-                        ],
-                        [
-                            'type' => 'LINESTRING',
-                            'value' => [
-                                [15, 15],
-                                [20, 20],
-                            ],
-                        ],
-                    ],
-                    'dimension' => null,
-                ],
-            ],
-            'xdrGeometryCollectionValueWithSrid' => [
-                'value' => '0020000007000010E6000000030000000001402400000000000040240000000000000000000001403E000000000'
-                    .'000403E000000000000000000000200000002402E000000000000402E000000000000403400000000000040340000000'
-                    .'00000',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'GEOMETRYCOLLECTION',
-                    'value' => [
-                        [
-                            'type' => 'POINT',
-                            'value' => [10, 10],
-                        ],
-                        [
-                            'type' => 'POINT',
-                            'value' => [30, 30],
-                        ],
-                        [
-                            'type' => 'LINESTRING',
-                            'value' => [
-                                [15, 15],
-                                [20, 20],
-                            ],
-                        ],
-                    ],
-                    'dimension' => null,
-                ],
-            ],
-            'ndrGeometryCollectionZValueWithSrid' => [
-                'value' => '01070000a0e61000000300000001010000800000000000000000000000000000000000000000000000000102000'
-                    .'08002000000000000000000000000000000000000000000000000000000000000000000f03f000000000000f03f00000'
-                    .'0000000f03f0107000080020000000101000080000000000000000000000000000000000000000000000000010200008'
-                    .'002000000000000000000000000000000000000000000000000000000000000000000f03f000000000000f03f0000000'
-                    .'00000f03f',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'GEOMETRYCOLLECTION',
-                    'value' => [
-                        [
-                            'type' => 'POINT',
-                            'value' => [0, 0, 0],
-                        ],
-                        [
-                            'type' => 'LINESTRING',
-                            'value' => [
-                                [0, 0, 0],
-                                [1, 1, 1],
-                            ],
-                        ],
-                        [
-                            'type' => 'GEOMETRYCOLLECTION',
-                            'value' => [
-                                [
-                                    'type' => 'POINT',
-                                    'value' => [0, 0, 0],
-                                ],
-                                [
-                                    'type' => 'LINESTRING',
-                                    'value' => [
-                                        [0, 0, 0],
-                                        [1, 1, 1],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'Z',
-                ],
-            ],
-            'xdrGeometryCollectionZValueWithSrid' => [
-                'value' => '00a0000007000010e60000000300800000010000000000000000000000000000000000000000000000000080000'
-                    .'002000000020000000000000000000000000000000000000000000000003ff00000000000003ff00000000000003ff00'
-                    .'000000000000080000007000000020080000001000000000000000000000000000000000000000000000000008000000'
-                    .'2000000020000000000000000000000000000000000000000000000003ff00000000000003ff00000000000003ff0000'
-                    .'000000000',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'GEOMETRYCOLLECTION',
-                    'value' => [
-                        [
-                            'type' => 'POINT',
-                            'value' => [0, 0, 0],
-                        ],
-                        [
-                            'type' => 'LINESTRING',
-                            'value' => [
-                                [0, 0, 0],
-                                [1, 1, 1],
-                            ],
-                        ],
-                        [
-                            'type' => 'GEOMETRYCOLLECTION',
-                            'value' => [
-                                [
-                                    'type' => 'POINT',
-                                    'value' => [0, 0, 0],
-                                ],
-                                [
-                                    'type' => 'LINESTRING',
-                                    'value' => [
-                                        [0, 0, 0],
-                                        [1, 1, 1],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'Z',
-                ],
-            ],
-            'ndrGeometryCollectionMValueWithSrid' => [
-                'value' => '0107000060e61000000300000001010000400000000000000000000000000000000000000000000000000102000'
-                    .'04002000000000000000000000000000000000000000000000000000000000000000000f03f000000000000f03f00000'
-                    .'0000000f03f0107000040020000000101000040000000000000000000000000000000000000000000000000010200004'
-                    .'002000000000000000000000000000000000000000000000000000000000000000000f03f000000000000f03f0000000'
-                    .'00000f03f',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'GEOMETRYCOLLECTION',
-                    'value' => [
-                        [
-                            'type' => 'POINT',
-                            'value' => [0, 0, 0],
-                        ],
-                        [
-                            'type' => 'LINESTRING',
-                            'value' => [
-                                [0, 0, 0],
-                                [1, 1, 1],
-                            ],
-                        ],
-                        [
-                            'type' => 'GEOMETRYCOLLECTION',
-                            'value' => [
-                                [
-                                    'type' => 'POINT',
-                                    'value' => [0, 0, 0],
-                                ],
-                                [
-                                    'type' => 'LINESTRING',
-                                    'value' => [
-                                        [0, 0, 0],
-                                        [1, 1, 1],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'M',
-                ],
-            ],
-            'xdrGeometryCollectionMValueWithSrid' => [
-                'value' => '0060000007000010e60000000300400000010000000000000000000000000000000000000000000000000040000'
-                    .'002000000020000000000000000000000000000000000000000000000003ff00000000000003ff00000000000003ff00'
-                    .'000000000000040000007000000020040000001000000000000000000000000000000000000000000000000004000000'
-                    .'2000000020000000000000000000000000000000000000000000000003ff00000000000003ff00000000000003ff0000'
-                    .'000000000',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'GEOMETRYCOLLECTION',
-                    'value' => [
-                        [
-                            'type' => 'POINT',
-                            'value' => [0, 0, 0],
-                        ],
-                        [
-                            'type' => 'LINESTRING',
-                            'value' => [
-                                [0, 0, 0],
-                                [1, 1, 1],
-                            ],
-                        ],
-                        [
-                            'type' => 'GEOMETRYCOLLECTION',
-                            'value' => [
-                                [
-                                    'type' => 'POINT',
-                                    'value' => [0, 0, 0],
-                                ],
-                                [
-                                    'type' => 'LINESTRING',
-                                    'value' => [
-                                        [0, 0, 0],
-                                        [1, 1, 1],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'M',
-                ],
-            ],
-            'ndrGeometryCollectionZMValueWithSrid' => [
-                'value' => '01070000e0e61000000300000001010000c00000000000000000000000000000000000000000000000000000000'
-                    .'00000f03f01020000c002000000000000000000000000000000000000000000000000000000000000000000004000000'
-                    .'0000000f03f000000000000f03f000000000000f03f000000000000084001070000c00200000001010000c0000000000'
-                    .'000000000000000000000000000000000000000000000000000104001020000c00200000000000000000000000000000'
-                    .'00000000000000000000000000000000000001440000000000000f03f000000000000f03f000000000000f03f0000000'
-                    .'000001840',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'GEOMETRYCOLLECTION',
-                    'value' => [
-                        [
-                            'type' => 'POINT',
-                            'value' => [0, 0, 0, 1],
-                        ],
-                        [
-                            'type' => 'LINESTRING',
-                            'value' => [
-                                [0, 0, 0, 2],
-                                [1, 1, 1, 3],
-                            ],
-                        ],
-                        [
-                            'type' => 'GEOMETRYCOLLECTION',
-                            'value' => [
-                                [
-                                    'type' => 'POINT',
-                                    'value' => [0, 0, 0, 4],
-                                ],
-                                [
-                                    'type' => 'LINESTRING',
-                                    'value' => [
-                                        [0, 0, 0, 5],
-                                        [1, 1, 1, 6],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'ZM',
-                ],
-            ],
-            'xdrGeometryCollectionZMValueWithSrid' => [
-                'value' => '00e0000007000010e60000000300c00000010000000000000000000000000000000000000000000000003ff0000'
-                    .'00000000000c00000020000000200000000000000000000000000000000000000000000000040000000000000003ff00'
-                    .'000000000003ff00000000000003ff0000000000000400800000000000000c00000070000000200c0000001000000000'
-                    .'000000000000000000000000000000000000000401000000000000000c00000020000000200000000000000000000000'
-                    .'000000000000000000000000040140000000000003ff00000000000003ff00000000000003ff00000000000004018000'
-                    .'000000000',
-                'expected' => [
-                    'srid' => 4326,
-                    'type' => 'GEOMETRYCOLLECTION',
-                    'value' => [
-                        [
-                            'type' => 'POINT',
-                            'value' => [0, 0, 0, 1],
-                        ],
-                        [
-                            'type' => 'LINESTRING',
-                            'value' => [
-                                [0, 0, 0, 2],
-                                [1, 1, 1, 3],
-                            ],
-                        ],
-                        [
-                            'type' => 'GEOMETRYCOLLECTION',
-                            'value' => [
-                                [
-                                    'type' => 'POINT',
-                                    'value' => [0, 0, 0, 4],
-                                ],
-                                [
-                                    'type' => 'LINESTRING',
-                                    'value' => [
-                                        [0, 0, 0, 5],
-                                        [1, 1, 1, 6],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'ZM',
-                ],
-            ],
-            'ndrCircularStringValue' => [
-                'value' => '01080000000300000000000000000000000000000000000000000000000000f03f000000000000f03f000000000'
-                    .'00000400000000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'CIRCULARSTRING',
-                    'value' => [
-                        [0, 0],
-                        [1, 1],
-                        [2, 0],
-                    ],
-                    'dimension' => null,
-                ],
-            ],
-            'xdrCircularStringValue' => [
-                'value' => '000000000800000003000000000000000000000000000000003ff00000000000003ff0000000000000400000000'
-                    .'00000000000000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'CIRCULARSTRING',
-                    'value' => [
-                        [0, 0],
-                        [1, 1],
-                        [2, 0],
-                    ],
-                    'dimension' => null,
-                ],
-            ],
-            'ndrCircularStringZValue' => [
-                'value' => '01080000800300000000000000000000000000000000000000000000000000f03f000000000000f03f000000000'
-                    .'000f03f000000000000f03f00000000000000400000000000000000000000000000f03f',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'CIRCULARSTRING',
-                    'value' => [
-                        [0, 0, 1],
-                        [1, 1, 1],
-                        [2, 0, 1],
-                    ],
-                    'dimension' => 'Z',
-                ],
-            ],
-            'xdrCircularStringZValue' => [
-                'value' => '008000000800000003000000000000000000000000000000003ff00000000000003ff00000000000003ff000000'
-                    .'00000003ff0000000000000400000000000000000000000000000003ff0000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'CIRCULARSTRING',
-                    'value' => [
-                        [0, 0, 1],
-                        [1, 1, 1],
-                        [2, 0, 1],
-                    ],
-                    'dimension' => 'Z',
-                ],
-            ],
-            'ndrCircularStringMValue' => [
-                'value' => '01080000400300000000000000000000000000000000000000000000000000f03f000000000000f03f000000000'
-                    .'000f03f000000000000f03f00000000000000400000000000000000000000000000f03f',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'CIRCULARSTRING',
-                    'value' => [
-                        [0, 0, 1],
-                        [1, 1, 1],
-                        [2, 0, 1],
-                    ],
-                    'dimension' => 'M',
-                ],
-            ],
-            'xdrCircularStringMValue' => [
-                'value' => '004000000800000003000000000000000000000000000000003ff00000000000003ff00000000000003ff000000'
-                    .'00000003ff0000000000000400000000000000000000000000000003ff0000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'CIRCULARSTRING',
-                    'value' => [
-                        [0, 0, 1],
-                        [1, 1, 1],
-                        [2, 0, 1],
-                    ],
-                    'dimension' => 'M',
-                ],
-            ],
-            'ndrCircularStringZMValue' => [
-                'value' => '01080000c00300000000000000000000000000000000000000000000000000f03f0000000000000040000000000'
-                    .'000f03f000000000000f03f000000000000f03f000000000000004000000000000000400000000000000000000000000'
-                    .'000f03f0000000000000040',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'CIRCULARSTRING',
-                    'value' => [
-                        [0, 0, 1, 2],
-                        [1, 1, 1, 2],
-                        [2, 0, 1, 2],
-                    ],
-                    'dimension' => 'ZM',
-                ],
-            ],
-            'xdrCircularStringZMValue' => [
-                'value' => '00c000000800000003000000000000000000000000000000003ff000000000000040000000000000003ff000000'
-                    .'00000003ff00000000000003ff00000000000004000000000000000400000000000000000000000000000003ff000000'
-                    .'00000004000000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'CIRCULARSTRING',
-                    'value' => [
-                        [0, 0, 1, 2],
-                        [1, 1, 1, 2],
-                        [2, 0, 1, 2],
-                    ],
-                    'dimension' => 'ZM',
-                ],
-            ],
-            'ndrCompoundCurveValue' => [
-                'value' => '01090000000200000001080000000300000000000000000000000000000000000000000000000000f03f0000000'
-                    .'00000f03f000000000000004000000000000000000102000000020000000000000000000040000000000000000000000'
-                    .'00000001040000000000000f03f',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'COMPOUNDCURVE',
-                    'value' => [
-                        [
-                            'type' => 'CIRCULARSTRING',
-                            'value' => [
-                                [0, 0],
-                                [1, 1],
-                                [2, 0],
-                            ],
-                        ],
-                        [
-                            'type' => 'LINESTRING',
-                            'value' => [
-                                [2, 0],
-                                [4, 1],
-                            ],
-                        ],
-                    ],
-                    'dimension' => null,
-                ],
-            ],
-            'xdrCompoundCurveValue' => [
-                'value' => '000000000900000002000000000800000003000000000000000000000000000000003ff00000000000003ff0000'
-                    .'000000000400000000000000000000000000000000000000002000000024000000000000000000000000000000040100'
-                    .'000000000003ff0000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'COMPOUNDCURVE',
-                    'value' => [
-                        [
-                            'type' => 'CIRCULARSTRING',
-                            'value' => [
-                                [0, 0],
-                                [1, 1],
-                                [2, 0],
-                            ],
-                        ],
-                        [
-                            'type' => 'LINESTRING',
-                            'value' => [
-                                [2, 0],
-                                [4, 1],
-                            ],
-                        ],
-                    ],
-                    'dimension' => null,
-                ],
-            ],
-            'ndrCompoundCurveZValue' => [
-                'value' => '01090000800200000001080000800300000000000000000000000000000000000000000000000000f03f0000000'
-                    .'00000f03f000000000000f03f000000000000f03f00000000000000400000000000000000000000000000f03f0102000'
-                    .'080020000000000000000000040000000000000000000000000000000000000000000001040000000000000f03f00000'
-                    .'0000000f03f',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'COMPOUNDCURVE',
-                    'value' => [
-                        [
-                            'type' => 'CIRCULARSTRING',
-                            'value' => [
-                                [0, 0, 1],
-                                [1, 1, 1],
-                                [2, 0, 1],
-                            ],
-                        ],
-                        [
-                            'type' => 'LINESTRING',
-                            'value' => [
-                                [2, 0, 0],
-                                [4, 1, 1],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'Z',
-                ],
-            ],
-            'xdrCompoundCurveZValue' => [
-                'value' => '008000000900000002008000000800000003000000000000000000000000000000003ff00000000000003ff0000'
-                    .'0000000003ff00000000000003ff0000000000000400000000000000000000000000000003ff00000000000000080000'
-                    .'0020000000240000000000000000000000000000000000000000000000040100000000000003ff00000000000003ff00'
-                    .'00000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'COMPOUNDCURVE',
-                    'value' => [
-                        [
-                            'type' => 'CIRCULARSTRING',
-                            'value' => [
-                                [0, 0, 1],
-                                [1, 1, 1],
-                                [2, 0, 1],
-                            ],
-                        ],
-                        [
-                            'type' => 'LINESTRING',
-                            'value' => [
-                                [2, 0, 0],
-                                [4, 1, 1],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'Z',
-                ],
-            ],
-            'ndrCompoundCurveMValue' => [
-                'value' => '01090000400200000001080000400300000000000000000000000000000000000000000000000000f03f0000000'
-                    .'00000f03f000000000000f03f000000000000f03f00000000000000400000000000000000000000000000f03f0102000'
-                    .'040020000000000000000000040000000000000000000000000000000000000000000001040000000000000f03f00000'
-                    .'0000000f03f',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'COMPOUNDCURVE',
-                    'value' => [
-                        [
-                            'type' => 'CIRCULARSTRING',
-                            'value' => [
-                                [0, 0, 1],
-                                [1, 1, 1],
-                                [2, 0, 1],
-                            ],
-                        ],
-                        [
-                            'type' => 'LINESTRING',
-                            'value' => [
-                                [2, 0, 0],
-                                [4, 1, 1],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'M',
-                ],
-            ],
-            'xdrCompoundCurveMValue' => [
-                'value' => '004000000900000002004000000800000003000000000000000000000000000000003ff00000000000003ff0000'
-                    .'0000000003ff00000000000003ff0000000000000400000000000000000000000000000003ff00000000000000040000'
-                    .'0020000000240000000000000000000000000000000000000000000000040100000000000003ff00000000000003ff00'
-                    .'00000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'COMPOUNDCURVE',
-                    'value' => [
-                        [
-                            'type' => 'CIRCULARSTRING',
-                            'value' => [
-                                [0, 0, 1],
-                                [1, 1, 1],
-                                [2, 0, 1],
-                            ],
-                        ],
-                        [
-                            'type' => 'LINESTRING',
-                            'value' => [
-                                [2, 0, 0],
-                                [4, 1, 1],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'M',
-                ],
-            ],
-            'ndrCompoundCurveZMValue' => [
-                'value' => '01090000c00200000001080000c00300000000000000000000000000000000000000000000000000f03f0000000'
-                    .'000000040000000000000f03f000000000000f03f000000000000f03f000000000000004000000000000000400000000'
-                    .'000000000000000000000f03f000000000000004001020000c0020000000000000000000040000000000000000000000'
-                    .'0000000000000000000000000000000000000001040000000000000f03f000000000000f03f000000000000f03f',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'COMPOUNDCURVE',
-                    'value' => [
-                        [
-                            'type' => 'CIRCULARSTRING',
-                            'value' => [
-                                [0, 0, 1, 2],
-                                [1, 1, 1, 2],
-                                [2, 0, 1, 2],
-                            ],
-                        ],
-                        [
-                            'type' => 'LINESTRING',
-                            'value' => [
-                                [2, 0, 0, 0],
-                                [4, 1, 1, 1],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'ZM',
-                ],
-            ],
-            'xdrCompoundCurveZMValue' => [
-                'value' => '00c00000090000000200c000000800000003000000000000000000000000000000003ff00000000000004000000'
-                    .'0000000003ff00000000000003ff00000000000003ff0000000000000400000000000000040000000000000000000000'
-                    .'0000000003ff0000000000000400000000000000000c0000002000000024000000000000000000000000000000000000'
-                    .'00000000000000000000000000040100000000000003ff00000000000003ff00000000000003ff0000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'COMPOUNDCURVE',
-                    'value' => [
-                        [
-                            'type' => 'CIRCULARSTRING',
-                            'value' => [
-                                [0, 0, 1, 2],
-                                [1, 1, 1, 2],
-                                [2, 0, 1, 2],
-                            ],
-                        ],
-                        [
-                            'type' => 'LINESTRING',
-                            'value' => [
-                                [2, 0, 0, 0],
-                                [4, 1, 1, 1],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'ZM',
-                ],
-            ],
-            'ndrCurvePolygonValue' => [
-                'value' => '010A000000020000000108000000030000000000000000000000000000000000000000000000000008400000000'
-                    .'0000008400000000000001C400000000000001C400102000000030000000000000000001C400000000000001C4000000'
-                    .'00000002040000000000000204000000000000022400000000000002240',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'CURVEPOLYGON',
-                    'value' => [
-                        [
-                            'type' => 'CIRCULARSTRING',
-                            'value' => [
-                                [0, 0],
-                                [3, 3],
-                                [7, 7],
-                            ],
-                        ],
-                        [
-                            'type' => 'LINESTRING',
-                            'value' => [
-                                [7, 7],
-                                [8, 8],
+                                [1, 9],
                                 [9, 9],
+                                [9, 1],
+                                [1, 1],
                             ],
                         ],
                     ],
-                    'dimension' => null,
-                ],
-            ],
-            'ndrCurvePolygonCompoundCurveValue' => [
-                'value' => '010a000000010000000109000000020000000108000000030000000000000000000000000000000000000000000'
-                    .'0000000f03f000000000000f03f000000000000004000000000000000000102000000030000000000000000000040000'
-                    .'0000000000000000000000000f03f000000000000f0bf00000000000000000000000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'CURVEPOLYGON',
-                    'value' => [
-                        [
-                            'type' => 'COMPOUNDCURVE',
-                            'value' => [
-                                [
-                                    'type' => 'CIRCULARSTRING',
-                                    'value' => [
-                                        [0, 0],
-                                        [1, 1],
-                                        [2, 0],
-                                    ],
-                                ],
-                                [
-                                    'type' => 'LINESTRING',
-                                    'value' => [
-                                        [2, 0],
-                                        [1, -1],
-                                        [0, 0],
-                                    ],
-                                ],
-                            ],
+                    [
+                        'type' => 'MULTIPOINT',
+                        'value' => [
+                            [0, 1],
+                            [2, 3],
                         ],
                     ],
-                    'dimension' => null,
-                ],
-            ],
-            'xdrCurvePolygonCompoundCurveValue' => [
-                'value' => '000000000a00000001000000000900000002000000000800000003000000000000000000000000000000003ff00'
-                    .'000000000003ff0000000000000400000000000000000000000000000000000000002000000034000000000000000000'
-                    .'00000000000003ff0000000000000bff000000000000000000000000000000000000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'CURVEPOLYGON',
-                    'value' => [
-                        [
-                            'type' => 'COMPOUNDCURVE',
-                            'value' => [
-                                [
-                                    'type' => 'CIRCULARSTRING',
-                                    'value' => [
-                                        [0, 0],
-                                        [1, 1],
-                                        [2, 0],
-                                    ],
-                                ],
-                                [
-                                    'type' => 'LINESTRING',
-                                    'value' => [
-                                        [2, 0],
-                                        [1, -1],
-                                        [0, 0],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => null,
-                ],
-            ],
-            'ndrCurvePolygonZCompoundCurveValue' => [
-                'value' => '010a000080010000000109000080020000000108000080030000000000000000000000000000000000000000000'
-                    .'0000000f03f000000000000f03f000000000000f03f000000000000f03f0000000000000040000000000000000000000'
-                    .'0000000f03f01020000800300000000000000000000400000000000000000000000000000f03f000000000000f03f000'
-                    .'000000000f0bf000000000000f03f00000000000000000000000000000000000000000000f03f',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'CURVEPOLYGON',
-                    'value' => [
-                        [
-                            'type' => 'COMPOUNDCURVE',
-                            'value' => [
-                                [
-                                    'type' => 'CIRCULARSTRING',
-                                    'value' => [
-                                        [0, 0, 1],
-                                        [1, 1, 1],
-                                        [2, 0, 1],
-                                    ],
-                                ],
-                                [
-                                    'type' => 'LINESTRING',
-                                    'value' => [
-                                        [2, 0, 1],
-                                        [1, -1, 1],
-                                        [0, 0, 1],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'Z',
-                ],
-            ],
-            'xdrCurvePolygonZCompoundCurveValue' => [
-                'value' => '008000000a00000001008000000900000002008000000800000003000000000000000000000000000000003ff00'
-                    .'000000000003ff00000000000003ff00000000000003ff0000000000000400000000000000000000000000000003ff00'
-                    .'00000000000008000000200000003400000000000000000000000000000003ff00000000000003ff0000000000000bff'
-                    .'00000000000003ff0000000000000000000000000000000000000000000003ff0000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'CURVEPOLYGON',
-                    'value' => [
-                        [
-                            'type' => 'COMPOUNDCURVE',
-                            'value' => [
-                                [
-                                    'type' => 'CIRCULARSTRING',
-                                    'value' => [
-                                        [0, 0, 1],
-                                        [1, 1, 1],
-                                        [2, 0, 1],
-                                    ],
-                                ],
-                                [
-                                    'type' => 'LINESTRING',
-                                    'value' => [
-                                        [2, 0, 1],
-                                        [1, -1, 1],
-                                        [0, 0, 1],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'Z',
-                ],
-            ],
-            'ndrCurvePolygonMCompoundCurveValue' => [
-                'value' => '010a000040010000000109000040020000000108000040030000000000000000000000000000000000000000000'
-                    .'0000000f03f000000000000f03f000000000000f03f000000000000f03f0000000000000040000000000000000000000'
-                    .'0000000f03f01020000400300000000000000000000400000000000000000000000000000f03f000000000000f03f000'
-                    .'000000000f0bf000000000000f03f00000000000000000000000000000000000000000000f03f',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'CURVEPOLYGON',
-                    'value' => [
-                        [
-                            'type' => 'COMPOUNDCURVE',
-                            'value' => [
-                                [
-                                    'type' => 'CIRCULARSTRING',
-                                    'value' => [
-                                        [0, 0, 1],
-                                        [1, 1, 1],
-                                        [2, 0, 1],
-                                    ],
-                                ],
-                                [
-                                    'type' => 'LINESTRING',
-                                    'value' => [
-                                        [2, 0, 1],
-                                        [1, -1, 1],
-                                        [0, 0, 1],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'M',
-                ],
-            ],
-            'xdrCurvePolygonMCompoundCurveValue' => [
-                'value' => '004000000a00000001004000000900000002004000000800000003000000000000000000000000000000003ff00'
-                    .'000000000003ff00000000000003ff00000000000003ff0000000000000400000000000000000000000000000003ff00'
-                    .'00000000000004000000200000003400000000000000000000000000000003ff00000000000003ff0000000000000bff'
-                    .'00000000000003ff0000000000000000000000000000000000000000000003ff0000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'CURVEPOLYGON',
-                    'value' => [
-                        [
-                            'type' => 'COMPOUNDCURVE',
-                            'value' => [
-                                [
-                                    'type' => 'CIRCULARSTRING',
-                                    'value' => [
-                                        [0, 0, 1],
-                                        [1, 1, 1],
-                                        [2, 0, 1],
-                                    ],
-                                ],
-                                [
-                                    'type' => 'LINESTRING',
-                                    'value' => [
-                                        [2, 0, 1],
-                                        [1, -1, 1],
-                                        [0, 0, 1],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'M',
-                ],
-            ],
-            'ndrCurvePolygonZMCompoundCurveValue' => [
-                'value' => '010a0000c00100000001090000c00200000001080000c0030000000000000000000000000000000000000000000'
-                    .'0000000f03f0000000000000040000000000000f03f000000000000f03f000000000000f03f000000000000004000000'
-                    .'000000000400000000000000000000000000000f03f000000000000004001020000c0030000000000000000000040000'
-                    .'0000000000000000000000000f03f0000000000000040000000000000f03f000000000000f0bf000000000000f03f000'
-                    .'000000000f03f00000000000000000000000000000000000000000000f03f0000000000000040',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'CURVEPOLYGON',
-                    'value' => [
-                        [
-                            'type' => 'COMPOUNDCURVE',
-                            'value' => [
-                                [
-                                    'type' => 'CIRCULARSTRING',
-                                    'value' => [
-                                        [0, 0, 1, 2],
-                                        [1, 1, 1, 2],
-                                        [2, 0, 1, 2],
-                                    ],
-                                ],
-                                [
-                                    'type' => 'LINESTRING',
-                                    'value' => [
-                                        [2, 0, 1, 2],
-                                        [1, -1, 1, 1],
-                                        [0, 0, 1, 2],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'ZM',
-                ],
-            ],
-            'xdrCurvePolygonZMVCompoundCurvealue' => [
-                'value' => '00c000000a0000000100c00000090000000200c000000800000003000000000000000000000000000000003ff00'
-                    .'0000000000040000000000000003ff00000000000003ff00000000000003ff0000000000000400000000000000040000'
-                    .'0000000000000000000000000003ff0000000000000400000000000000000c0000002000000034000000000000000000'
-                    .'00000000000003ff000000000000040000000000000003ff0000000000000bff00000000000003ff00000000000003ff'
-                    .'0000000000000000000000000000000000000000000003ff00000000000004000000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'CURVEPOLYGON',
-                    'value' => [
-                        [
-                            'type' => 'COMPOUNDCURVE',
-                            'value' => [
-                                [
-                                    'type' => 'CIRCULARSTRING',
-                                    'value' => [
-                                        [0, 0, 1, 2],
-                                        [1, 1, 1, 2],
-                                        [2, 0, 1, 2],
-                                    ],
-                                ],
-                                [
-                                    'type' => 'LINESTRING',
-                                    'value' => [
-                                        [2, 0, 1, 2],
-                                        [1, -1, 1, 1],
-                                        [0, 0, 1, 2],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'ZM',
-                ],
-            ],
-            'ndrMultiCurveValue' => [
-                'value' => '010B000000020000000108000000030000000000000000000000000000000000000000000000000008400000000'
-                    .'0000008400000000000001C400000000000001C400102000000030000000000000000001C400000000000001C4000000'
-                    .'00000002040000000000000204000000000000022400000000000002240',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTICURVE',
-                    'value' => [
-                        [
-                            'type' => 'CIRCULARSTRING',
-                            'value' => [
-                                [0, 0],
-                                [3, 3],
-                                [7, 7],
-                            ],
-                        ],
-                        [
-                            'type' => 'LINESTRING',
-                            'value' => [
-                                [7, 7],
-                                [8, 8],
-                                [9, 9],
-                            ],
-                        ],
-                    ],
-                    'dimension' => null,
-                ],
-            ],
-            'ndrMultiCurveCompoundCurveValue' => [
-                'value' => '010b000000010000000109000000020000000108000000030000000000000000000000000000000000000000000'
-                    .'0000000f03f000000000000f03f000000000000004000000000000000000102000000030000000000000000000040000'
-                    .'0000000000000000000000000f03f000000000000f0bf00000000000000000000000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTICURVE',
-                    'value' => [
-                        [
-                            'type' => 'COMPOUNDCURVE',
-                            'value' => [
-                                [
-                                    'type' => 'CIRCULARSTRING',
-                                    'value' => [
-                                        [0, 0],
-                                        [1, 1],
-                                        [2, 0],
-                                    ],
-                                ],
-                                [
-                                    'type' => 'LINESTRING',
-                                    'value' => [
-                                        [2, 0],
-                                        [1, -1],
-                                        [0, 0],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => null,
-                ],
-            ],
-            'xdrMultiCurveCompoundCurveValue' => [
-                'value' => '000000000b00000001000000000900000002000000000800000003000000000000000000000000000000003ff00'
-                    .'000000000003ff0000000000000400000000000000000000000000000000000000002000000034000000000000000000'
-                    .'00000000000003ff0000000000000bff000000000000000000000000000000000000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTICURVE',
-                    'value' => [
-                        [
-                            'type' => 'COMPOUNDCURVE',
-                            'value' => [
-                                [
-                                    'type' => 'CIRCULARSTRING',
-                                    'value' => [
-                                        [0, 0],
-                                        [1, 1],
-                                        [2, 0],
-                                    ],
-                                ],
-                                [
-                                    'type' => 'LINESTRING',
-                                    'value' => [
-                                        [2, 0],
-                                        [1, -1],
-                                        [0, 0],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => null,
-                ],
-            ],
-            'ndrMultiCurveZCompoundCurveValue' => [
-                'value' => '010b000080010000000109000080020000000108000080030000000000000000000000000000000000000000000'
-                    .'0000000f03f000000000000f03f000000000000f03f000000000000f03f0000000000000040000000000000000000000'
-                    .'0000000f03f01020000800300000000000000000000400000000000000000000000000000f03f000000000000f03f000'
-                    .'000000000f0bf000000000000f03f00000000000000000000000000000000000000000000f03f',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTICURVE',
-                    'value' => [
-                        [
-                            'type' => 'COMPOUNDCURVE',
-                            'value' => [
-                                [
-                                    'type' => 'CIRCULARSTRING',
-                                    'value' => [
-                                        [0, 0, 1],
-                                        [1, 1, 1],
-                                        [2, 0, 1],
-                                    ],
-                                ],
-                                [
-                                    'type' => 'LINESTRING',
-                                    'value' => [
-                                        [2, 0, 1],
-                                        [1, -1, 1],
-                                        [0, 0, 1],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'Z',
-                ],
-            ],
-            'xdrMultiCurveZCompoundCurveValue' => [
-                'value' => '008000000b00000001008000000900000002008000000800000003000000000000000000000000000000003ff00'
-                    .'000000000003ff00000000000003ff00000000000003ff0000000000000400000000000000000000000000000003ff00'
-                    .'00000000000008000000200000003400000000000000000000000000000003ff00000000000003ff0000000000000bff'
-                    .'00000000000003ff0000000000000000000000000000000000000000000003ff0000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTICURVE',
-                    'value' => [
-                        [
-                            'type' => 'COMPOUNDCURVE',
-                            'value' => [
-                                [
-                                    'type' => 'CIRCULARSTRING',
-                                    'value' => [
-                                        [0, 0, 1],
-                                        [1, 1, 1],
-                                        [2, 0, 1],
-                                    ],
-                                ],
-                                [
-                                    'type' => 'LINESTRING',
-                                    'value' => [
-                                        [2, 0, 1],
-                                        [1, -1, 1],
-                                        [0, 0, 1],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'Z',
-                ],
-            ],
-            'ndrMultiCurveMCompoundCurveValue' => [
-                'value' => '010b000040010000000109000040020000000108000040030000000000000000000000000000000000000000000'
-                    .'0000000f03f000000000000f03f000000000000f03f000000000000f03f0000000000000040000000000000000000000'
-                    .'0000000f03f01020000400300000000000000000000400000000000000000000000000000f03f000000000000f03f000'
-                    .'000000000f0bf000000000000f03f00000000000000000000000000000000000000000000f03f',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTICURVE',
-                    'value' => [
-                        [
-                            'type' => 'COMPOUNDCURVE',
-                            'value' => [
-                                [
-                                    'type' => 'CIRCULARSTRING',
-                                    'value' => [
-                                        [0, 0, 1],
-                                        [1, 1, 1],
-                                        [2, 0, 1],
-                                    ],
-                                ],
-                                [
-                                    'type' => 'LINESTRING',
-                                    'value' => [
-                                        [2, 0, 1],
-                                        [1, -1, 1],
-                                        [0, 0, 1],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'M',
-                ],
-            ],
-            'xdrMultiCurveMCompoundCurveValue' => [
-                'value' => '004000000b00000001004000000900000002004000000800000003000000000000000000000000000000003ff00'
-                    .'000000000003ff00000000000003ff00000000000003ff0000000000000400000000000000000000000000000003ff00'
-                    .'00000000000004000000200000003400000000000000000000000000000003ff00000000000003ff0000000000000bff'
-                    .'00000000000003ff0000000000000000000000000000000000000000000003ff0000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTICURVE',
-                    'value' => [
-                        [
-                            'type' => 'COMPOUNDCURVE',
-                            'value' => [
-                                [
-                                    'type' => 'CIRCULARSTRING',
-                                    'value' => [
-                                        [0, 0, 1],
-                                        [1, 1, 1],
-                                        [2, 0, 1],
-                                    ],
-                                ],
-                                [
-                                    'type' => 'LINESTRING',
-                                    'value' => [
-                                        [2, 0, 1],
-                                        [1, -1, 1],
-                                        [0, 0, 1],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'M',
-                ],
-            ],
-            'ndrMultiCurveZMCompoundCurveValue' => [
-                'value' => '010b0000c00100000001090000c00200000001080000c0030000000000000000000000000000000000000000000'
-                    .'0000000f03f0000000000000040000000000000f03f000000000000f03f000000000000f03f000000000000004000000'
-                    .'000000000400000000000000000000000000000f03f000000000000004001020000c0030000000000000000000040000'
-                    .'0000000000000000000000000f03f0000000000000040000000000000f03f000000000000f0bf000000000000f03f000'
-                    .'000000000f03f00000000000000000000000000000000000000000000f03f0000000000000040',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTICURVE',
-                    'value' => [
-                        [
-                            'type' => 'COMPOUNDCURVE',
-                            'value' => [
-                                [
-                                    'type' => 'CIRCULARSTRING',
-                                    'value' => [
-                                        [0, 0, 1, 2],
-                                        [1, 1, 1, 2],
-                                        [2, 0, 1, 2],
-                                    ],
-                                ],
-                                [
-                                    'type' => 'LINESTRING',
-                                    'value' => [
-                                        [2, 0, 1, 2],
-                                        [1, -1, 1, 1],
-                                        [0, 0, 1, 2],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'ZM',
-                ],
-            ],
-            'xdrMultiCurveZMCompoundCurveValue' => [
-                'value' => '00c000000b0000000100c00000090000000200c000000800000003000000000000000000000000000000003ff00'
-                    .'0000000000040000000000000003ff00000000000003ff00000000000003ff0000000000000400000000000000040000'
-                    .'0000000000000000000000000003ff0000000000000400000000000000000c0000002000000034000000000000000000'
-                    .'00000000000003ff000000000000040000000000000003ff0000000000000bff00000000000003ff00000000000003ff'
-                    .'0000000000000000000000000000000000000000000003ff00000000000004000000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTICURVE',
-                    'value' => [
-                        [
-                            'type' => 'COMPOUNDCURVE',
-                            'value' => [
-                                [
-                                    'type' => 'CIRCULARSTRING',
-                                    'value' => [
-                                        [0, 0, 1, 2],
-                                        [1, 1, 1, 2],
-                                        [2, 0, 1, 2],
-                                    ],
-                                ],
-                                [
-                                    'type' => 'LINESTRING',
-                                    'value' => [
-                                        [2, 0, 1, 2],
-                                        [1, -1, 1, 1],
-                                        [0, 0, 1, 2],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'ZM',
-                ],
-            ],
-            'ndrMultiSurfaceValue' => [
-                'value' => '010c00000002000000010a000000010000000109000000020000000108000000030000000000000000000000000'
-                    .'0000000000000000000000000f03f000000000000f03f000000000000004000000000000000000102000000030000000'
-                    .'0000000000000400000000000000000000000000000f03f000000000000f0bf000000000000000000000000000000000'
-                    .'103000000010000000500000000000000000024400000000000002440000000000000244000000000000028400000000'
-                    .'00000284000000000000028400000000000002840000000000000244000000000000024400000000000002440',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTISURFACE',
-                    'value' => [
-                        [
-                            'type' => 'CURVEPOLYGON',
-                            'value' => [
-                                [
-                                    'type' => 'COMPOUNDCURVE',
-                                    'value' => [
-                                        [
-                                            'type' => 'CIRCULARSTRING',
-                                            'value' => [
-                                                [0, 0],
-                                                [1, 1],
-                                                [2, 0],
-                                            ],
-                                        ],
-                                        [
-                                            'type' => 'LINESTRING',
-                                            'value' => [
-                                                [2, 0],
-                                                [1, -1],
-                                                [0, 0],
-                                            ],
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                        [
-                            'type' => 'POLYGON',
-                            'value' => [
-                                [
-                                    [10, 10],
-                                    [10, 12],
-                                    [12, 12],
-                                    [12, 10],
-                                    [10, 10],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => null,
-                ],
-            ],
-            'xdrMultiSurfaceValue' => [
-                'value' => '000000000c00000002000000000a000000010000000009000000020000000008000000030000000000000000000'
-                    .'00000000000003ff00000000000003ff0000000000000400000000000000000000000000000000000000002000000034'
-                    .'00000000000000000000000000000003ff0000000000000bff0000000000000000000000000000000000000000000000'
-                    .'000000003000000010000000540240000000000004024000000000000402400000000000040280000000000004028000'
-                    .'00000000040280000000000004028000000000000402400000000000040240000000000004024000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTISURFACE',
-                    'value' => [
-                        [
-                            'type' => 'CURVEPOLYGON',
-                            'value' => [
-                                [
-                                    'type' => 'COMPOUNDCURVE',
-                                    'value' => [
-                                        [
-                                            'type' => 'CIRCULARSTRING',
-                                            'value' => [
-                                                [0, 0],
-                                                [1, 1],
-                                                [2, 0],
-                                            ],
-                                        ],
-                                        [
-                                            'type' => 'LINESTRING',
-                                            'value' => [
-                                                [2, 0],
-                                                [1, -1],
-                                                [0, 0],
-                                            ],
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                        [
-                            'type' => 'POLYGON',
-                            'value' => [
-                                [
-                                    [10, 10],
-                                    [10, 12],
-                                    [12, 12],
-                                    [12, 10],
-                                    [10, 10],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => null,
-                ],
-            ],
-            'ndrMultiSurfaceZValue' => [
-                'value' => '010c00008002000000010a000080010000000109000080020000000108000080030000000000000000000000000'
-                    .'0000000000000000000000000f03f000000000000f03f000000000000f03f000000000000f03f0000000000000040000'
-                    .'0000000000000000000000000f03f01020000800300000000000000000000400000000000000000000000000000f03f0'
-                    .'00000000000f03f000000000000f0bf000000000000f03f00000000000000000000000000000000000000000000f03f0'
-                    .'103000080010000000500000000000000000024400000000000002440000000000000244000000000000024400000000'
-                    .'000002840000000000000244000000000000028400000000000002840000000000000244000000000000028400000000'
-                    .'0000024400000000000002440000000000000244000000000000024400000000000002440',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTISURFACE',
-                    'value' => [
-                        [
-                            'type' => 'CURVEPOLYGON',
-                            'value' => [
-                                [
-                                    'type' => 'COMPOUNDCURVE',
-                                    'value' => [
-                                        [
-                                            'type' => 'CIRCULARSTRING',
-                                            'value' => [
-                                                [0, 0, 1],
-                                                [1, 1, 1],
-                                                [2, 0, 1],
-                                            ],
-                                        ],
-                                        [
-                                            'type' => 'LINESTRING',
-                                            'value' => [
-                                                [2, 0, 1],
-                                                [1, -1, 1],
-                                                [0, 0, 1],
-                                            ],
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                        [
-                            'type' => 'POLYGON',
-                            'value' => [
-                                [
-                                    [10, 10, 10],
-                                    [10, 12, 10],
-                                    [12, 12, 10],
-                                    [12, 10, 10],
-                                    [10, 10, 10],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'Z',
-                ],
-            ],
-            'xdrMultiSurfaceZValue' => [
-                'value' => '008000000c00000002008000000a000000010080000009000000020080000008000000030000000000000000000'
-                    .'00000000000003ff00000000000003ff00000000000003ff00000000000003ff00000000000004000000000000000000'
-                    .'00000000000003ff0000000000000008000000200000003400000000000000000000000000000003ff00000000000003'
-                    .'ff0000000000000bff00000000000003ff0000000000000000000000000000000000000000000003ff00000000000000'
-                    .'080000003000000010000000540240000000000004024000000000000402400000000000040240000000000004028000'
-                    .'000000000402400000000000040280000000000004028000000000000402400000000000040280000000000004024000'
-                    .'0000000004024000000000000402400000000000040240000000000004024000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTISURFACE',
-                    'value' => [
-                        [
-                            'type' => 'CURVEPOLYGON',
-                            'value' => [
-                                [
-                                    'type' => 'COMPOUNDCURVE',
-                                    'value' => [
-                                        [
-                                            'type' => 'CIRCULARSTRING',
-                                            'value' => [
-                                                [0, 0, 1],
-                                                [1, 1, 1],
-                                                [2, 0, 1],
-                                            ],
-                                        ],
-                                        [
-                                            'type' => 'LINESTRING',
-                                            'value' => [
-                                                [2, 0, 1],
-                                                [1, -1, 1],
-                                                [0, 0, 1],
-                                            ],
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                        [
-                            'type' => 'POLYGON',
-                            'value' => [
-                                [
-                                    [10, 10, 10],
-                                    [10, 12, 10],
-                                    [12, 12, 10],
-                                    [12, 10, 10],
-                                    [10, 10, 10],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'Z',
-                ],
-            ],
-            'ndrMultiSurfaceMValue' => [
-                'value' => '010c00004002000000010a000040010000000109000040020000000108000040030000000000000000000000000'
-                    .'0000000000000000000000000f03f000000000000f03f000000000000f03f000000000000f03f0000000000000040000'
-                    .'0000000000000000000000000f03f01020000400300000000000000000000400000000000000000000000000000f03f0'
-                    .'00000000000f03f000000000000f0bf000000000000f03f00000000000000000000000000000000000000000000f03f0'
-                    .'103000040010000000500000000000000000024400000000000002440000000000000244000000000000024400000000'
-                    .'000002840000000000000244000000000000028400000000000002840000000000000244000000000000028400000000'
-                    .'0000024400000000000002440000000000000244000000000000024400000000000002440',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTISURFACE',
-                    'value' => [
-                        [
-                            'type' => 'CURVEPOLYGON',
-                            'value' => [
-                                [
-                                    'type' => 'COMPOUNDCURVE',
-                                    'value' => [
-                                        [
-                                            'type' => 'CIRCULARSTRING',
-                                            'value' => [
-                                                [0, 0, 1],
-                                                [1, 1, 1],
-                                                [2, 0, 1],
-                                            ],
-                                        ],
-                                        [
-                                            'type' => 'LINESTRING',
-                                            'value' => [
-                                                [2, 0, 1],
-                                                [1, -1, 1],
-                                                [0, 0, 1],
-                                            ],
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                        [
-                            'type' => 'POLYGON',
-                            'value' => [
-                                [
-                                    [10, 10, 10],
-                                    [10, 12, 10],
-                                    [12, 12, 10],
-                                    [12, 10, 10],
-                                    [10, 10, 10],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'M',
-                ],
-            ],
-            'xdrMultiSurfaceMValue' => [
-                'value' => '004000000c00000002004000000a000000010040000009000000020040000008000000030000000000000000000'
-                    .'00000000000003ff00000000000003ff00000000000003ff00000000000003ff00000000000004000000000000000000'
-                    .'00000000000003ff0000000000000004000000200000003400000000000000000000000000000003ff00000000000003'
-                    .'ff0000000000000bff00000000000003ff0000000000000000000000000000000000000000000003ff00000000000000'
-                    .'040000003000000010000000540240000000000004024000000000000402400000000000040240000000000004028000'
-                    .'000000000402400000000000040280000000000004028000000000000402400000000000040280000000000004024000'
-                    .'0000000004024000000000000402400000000000040240000000000004024000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTISURFACE',
-                    'value' => [
-                        [
-                            'type' => 'CURVEPOLYGON',
-                            'value' => [
-                                [
-                                    'type' => 'COMPOUNDCURVE',
-                                    'value' => [
-                                        [
-                                            'type' => 'CIRCULARSTRING',
-                                            'value' => [
-                                                [0, 0, 1],
-                                                [1, 1, 1],
-                                                [2, 0, 1],
-                                            ],
-                                        ],
-                                        [
-                                            'type' => 'LINESTRING',
-                                            'value' => [
-                                                [2, 0, 1],
-                                                [1, -1, 1],
-                                                [0, 0, 1],
-                                            ],
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                        [
-                            'type' => 'POLYGON',
-                            'value' => [
-                                [
-                                    [10, 10, 10],
-                                    [10, 12, 10],
-                                    [12, 12, 10],
-                                    [12, 10, 10],
-                                    [10, 10, 10],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'M',
-                ],
-            ],
-            'ndrMultiSurfaceZMValue' => [
-                'value' => '010c0000c002000000010a0000c00100000001090000c00200000001080000c0030000000000000000000000000'
-                    .'0000000000000000000000000f03f0000000000000040000000000000f03f000000000000f03f000000000000f03f000'
-                    .'000000000004000000000000000400000000000000000000000000000f03f000000000000004001020000c0030000000'
-                    .'0000000000000400000000000000000000000000000f03f0000000000000040000000000000f03f000000000000f0bf0'
-                    .'00000000000f03f000000000000f03f00000000000000000000000000000000000000000000f03f00000000000000400'
-                    .'1030000c0010000000500000000000000000024400000000000002440000000000000244000000000000024400000000'
-                    .'000002440000000000000284000000000000024400000000000002440000000000000284000000000000028400000000'
-                    .'000002440000000000000244000000000000028400000000000002440000000000000244000000000000024400000000'
-                    .'000002440000000000000244000000000000024400000000000002440',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTISURFACE',
-                    'value' => [
-                        [
-                            'type' => 'CURVEPOLYGON',
-                            'value' => [
-                                [
-                                    'type' => 'COMPOUNDCURVE',
-                                    'value' => [
-                                        [
-                                            'type' => 'CIRCULARSTRING',
-                                            'value' => [
-                                                [0, 0, 1, 2],
-                                                [1, 1, 1, 2],
-                                                [2, 0, 1, 2],
-                                            ],
-                                        ],
-                                        [
-                                            'type' => 'LINESTRING',
-                                            'value' => [
-                                                [2, 0, 1, 2],
-                                                [1, -1, 1, 1],
-                                                [0, 0, 1, 2],
-                                            ],
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                        [
-                            'type' => 'POLYGON',
-                            'value' => [
-                                [
-                                    [10, 10, 10, 10],
-                                    [10, 12, 10, 10],
-                                    [12, 12, 10, 10],
-                                    [12, 10, 10, 10],
-                                    [10, 10, 10, 10],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'ZM',
-                ],
-            ],
-            'xdrMultiSurfaceZMValue' => [
-                'value' => '00c000000c0000000200c000000a0000000100c00000090000000200c0000008000000030000000000000000000'
-                    .'00000000000003ff000000000000040000000000000003ff00000000000003ff00000000000003ff0000000000000400'
-                    .'0000000000000400000000000000000000000000000003ff0000000000000400000000000000000c0000002000000034'
-                    .'00000000000000000000000000000003ff000000000000040000000000000003ff0000000000000bff00000000000003'
-                    .'ff00000000000003ff0000000000000000000000000000000000000000000003ff000000000000040000000000000000'
-                    .'0c0000003000000010000000540240000000000004024000000000000402400000000000040240000000000004024000'
-                    .'000000000402800000000000040240000000000004024000000000000402800000000000040280000000000004024000'
-                    .'000000000402400000000000040280000000000004024000000000000402400000000000040240000000000004024000'
-                    .'000000000402400000000000040240000000000004024000000000000',
-                'expected' => [
-                    'srid' => null,
-                    'type' => 'MULTISURFACE',
-                    'value' => [
-                        [
-                            'type' => 'CURVEPOLYGON',
-                            'value' => [
-                                [
-                                    'type' => 'COMPOUNDCURVE',
-                                    'value' => [
-                                        [
-                                            'type' => 'CIRCULARSTRING',
-                                            'value' => [
-                                                [0, 0, 1, 2],
-                                                [1, 1, 1, 2],
-                                                [2, 0, 1, 2],
-                                            ],
-                                        ],
-                                        [
-                                            'type' => 'LINESTRING',
-                                            'value' => [
-                                                [2, 0, 1, 2],
-                                                [1, -1, 1, 1],
-                                                [0, 0, 1, 2],
-                                            ],
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                        [
-                            'type' => 'POLYGON',
-                            'value' => [
-                                [
-                                    [10, 10, 10, 10],
-                                    [10, 12, 10, 10],
-                                    [12, 12, 10, 10],
-                                    [12, 10, 10, 10],
-                                    [10, 10, 10, 10],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'ZM',
-                ],
-            ],
-            'ndrPolyhedralSurfaceZValue' => [
-                'value' => '010f000080050000000103000080010000000500000000000000000000000000000000000000000000000000000'
-                    .'000000000000000000000000000000000000000000000144000000000000000000000000000002e40000000000000144'
-                    .'000000000000000000000000000002e40000000000000000000000000000000000000000000000000000000000000000'
-                    .'001030000800100000005000000000000000000000000000000000000000000000000000000000000000000000000000'
-                    .'00000002e40000000000000000000000000000024400000000000002e400000000000000000000000000000244000000'
-                    .'000000000000000000000000000000000000000000000000000000000000000000000000000010300008001000000050'
-                    .'000000000000000000000000000000000000000000000000000000000000000002440000000000000000000000000000'
-                    .'000000000000000002440000000000000000000000000000014400000000000000000000000000000000000000000000'
-                    .'014400000000000000000000000000000000000000000000000000103000080010000000500000000000000000024400'
-                    .'000000000000000000000000000000000000000000024400000000000002e40000000000000000000000000000024400'
-                    .'000000000002e40000000000000144000000000000024400000000000000000000000000000144000000000000024400'
-                    .'00000000000000000000000000000000103000080010000000500000000000000000000000000000000002e400000000'
-                    .'00000000000000000000000000000000000002e40000000000000144000000000000024400000000000002e400000000'
-                    .'00000144000000000000024400000000000002e40000000000000000000000000000000000000000000002e400000000'
-                    .'000000000',
-                'expected' => [
-                    'type' => 'POLYHEDRALSURFACE',
-                    'srid' => null,
-                    'value' => [
-                        [
-                            'type' => 'POLYGON',
-                            'value' => [
-                                [
-                                    [0, 0, 0],
-                                    [0, 0, 5],
-                                    [0, 15, 5],
-                                    [0, 15, 0],
-                                    [0, 0, 0],
-                                ],
-                            ],
-                        ],
-                        [
-                            'type' => 'POLYGON',
-                            'value' => [
-                                [
-                                    [0, 0, 0],
-                                    [0, 15, 0],
-                                    [10, 15, 0],
-                                    [10, 0, 0],
-                                    [0, 0, 0],
-                                ],
-                            ],
-                        ],
-                        [
-                            'type' => 'POLYGON',
-                            'value' => [
-                                [
-                                    [0, 0, 0],
-                                    [10, 0, 0],
-                                    [10, 0, 5],
-                                    [0, 0, 5],
-                                    [0, 0, 0],
-                                ],
-                            ],
-                        ],
-                        [
-                            'type' => 'POLYGON',
-                            'value' => [
-                                [
-                                    [10, 0, 0],
-                                    [10, 15, 0],
-                                    [10, 15, 5],
-                                    [10, 0, 5],
-                                    [10, 0, 0],
-                                ],
-                            ],
-                        ],
-                        [
-                            'type' => 'POLYGON',
-                            'value' => [
-                                [
-                                    [0, 15, 0],
-                                    [0, 15, 5],
-                                    [10, 15, 5],
-                                    [10, 15, 0],
-                                    [0, 15, 0],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'Z',
-                ],
-            ],
-            'ndrPolyhedralSurfaceMValue' => [
-                'value' => '010f000040050000000103000040010000000500000000000000000000000000000000000000000000000000000'
-                    .'000000000000000000000000000000000000000000000144000000000000000000000000000002e40000000000000144'
-                    .'000000000000000000000000000002e40000000000000000000000000000000000000000000000000000000000000000'
-                    .'001030000400100000005000000000000000000000000000000000000000000000000000000000000000000000000000'
-                    .'00000002e40000000000000000000000000000024400000000000002e400000000000000000000000000000244000000'
-                    .'000000000000000000000000000000000000000000000000000000000000000000000000000010300004001000000050'
-                    .'000000000000000000000000000000000000000000000000000000000000000002440000000000000000000000000000'
-                    .'000000000000000002440000000000000000000000000000014400000000000000000000000000000000000000000000'
-                    .'014400000000000000000000000000000000000000000000000000103000040010000000500000000000000000024400'
-                    .'000000000000000000000000000000000000000000024400000000000002e40000000000000000000000000000024400'
-                    .'000000000002e40000000000000144000000000000024400000000000000000000000000000144000000000000024400'
-                    .'00000000000000000000000000000000103000040010000000500000000000000000000000000000000002e400000000'
-                    .'00000000000000000000000000000000000002e40000000000000144000000000000024400000000000002e400000000'
-                    .'00000144000000000000024400000000000002e40000000000000000000000000000000000000000000002e400000000'
-                    .'000000000',
-                'expected' => [
-                    'type' => 'POLYHEDRALSURFACE',
-                    'srid' => null,
-                    'value' => [
-                        [
-                            'type' => 'POLYGON',
-                            'value' => [
-                                [
-                                    [0, 0, 0],
-                                    [0, 0, 5],
-                                    [0, 15, 5],
-                                    [0, 15, 0],
-                                    [0, 0, 0],
-                                ],
-                            ],
-                        ],
-                        [
-                            'type' => 'POLYGON',
-                            'value' => [
-                                [
-                                    [0, 0, 0],
-                                    [0, 15, 0],
-                                    [10, 15, 0],
-                                    [10, 0, 0],
-                                    [0, 0, 0],
-                                ],
-                            ],
-                        ],
-                        [
-                            'type' => 'POLYGON',
-                            'value' => [
-                                [
-                                    [0, 0, 0],
-                                    [10, 0, 0],
-                                    [10, 0, 5],
-                                    [0, 0, 5],
-                                    [0, 0, 0],
-                                ],
-                            ],
-                        ],
-                        [
-                            'type' => 'POLYGON',
-                            'value' => [
-                                [
-                                    [10, 0, 0],
-                                    [10, 15, 0],
-                                    [10, 15, 5],
-                                    [10, 0, 5],
-                                    [10, 0, 0],
-                                ],
-                            ],
-                        ],
-                        [
-                            'type' => 'POLYGON',
-                            'value' => [
-                                [
-                                    [0, 15, 0],
-                                    [0, 15, 5],
-                                    [10, 15, 5],
-                                    [10, 15, 0],
-                                    [0, 15, 0],
-                                ],
-                            ],
-                        ],
-                    ],
-                    'dimension' => 'M',
-                ],
-            ],
-            'xdrGeometryCollectionValue2' => [
-                'value' => '01070000000600000001010000000000000000000000000000000000f03f010200000002000000000000000000004000000000000008400000000000001040000000000000144001030000000200000005000000000000000000000000000000000000000000000000000000000000000000244000000000000024400000000000002440000000000000244000000000000000000000000000000000000000000000000005000000000000000000f03f000000000000f03f000000000000f03f0000000000002240000000000000224000000000000022400000000000002240000000000000f03f000000000000f03f000000000000f03f01040000000200000001010000000000000000000000000000000000f03f0101000000000000000000004000000000000008400105000000020000000102000000020000000000000000000000000000000000f03f000000000000004000000000000008400102000000020000000000000000001040000000000000144000000000000018400000000000001c4001060000000200000001030000000200000005000000000000000000000000000000000000000000000000000000000000000000244000000000000024400000000000002440000000000000244000000000000000000000000000000000000000000000000005000000000000000000f03f000000000000f03f000000000000f03f0000000000002240000000000000224000000000000022400000000000002240000000000000f03f000000000000f03f000000000000f03f0103000000010000000500000000000000000022c0000000000000000000000000000022c00000000000002440000000000000f0bf0000000000002440000000000000f0bf000000000000000000000000000022c00000000000000000',
-                'expected' => [
-                    'type' => 'GEOMETRYCOLLECTION',
-                    'srid' => null,
-                    'value' => [
-                        [
-                            'type' => 'POINT',
-                            'value' => [0, 1],
-                        ],
-                        [
-                            'type' => 'LINESTRING',
-                            'value' => [
+                    [
+                        'type' => 'MULTILINESTRING',
+                        'value' => [
+                            [
+                                [0, 1],
                                 [2, 3],
+                            ],
+                            [
                                 [4, 5],
+                                [6, 7],
                             ],
                         ],
-                        [
-                            'type' => 'POLYGON',
-                            'value' => [
+                    ],
+                    [
+                        'type' => 'MULTIPOLYGON',
+                        'value' => [
+                            [
                                 [
                                     [0, 0],
                                     [0, 10],
@@ -4358,184 +3940,143 @@ class ParserTest extends TestCase
                                     [1, 9],
                                     [9, 9],
                                     [9, 1],
-                                    [1, 1],
-                                ],
+                                    [1, 1]],
                             ],
-                        ],
-                        [
-                            'type' => 'MULTIPOINT',
-                            'value' => [
-                                [0, 1],
-                                [2, 3],
-                            ],
-                        ],
-                        [
-                            'type' => 'MULTILINESTRING',
-                            'value' => [
+                            [
                                 [
-                                    [0, 1],
-                                    [2, 3],
-                                ],
-                                [
-                                    [4, 5],
-                                    [6, 7],
-                                ],
-                            ],
-                        ],
-                        [
-                            'type' => 'MULTIPOLYGON',
-                            'value' => [
-                                [
-                                    [
-                                        [0, 0],
-                                        [0, 10],
-                                        [10, 10],
-                                        [10, 0],
-                                        [0, 0],
-                                    ],
-                                    [
-                                        [1, 1],
-                                        [1, 9],
-                                        [9, 9],
-                                        [9, 1],
-                                        [1, 1]],
-                                ],
-                                [
-                                    [
-                                        [-9, 0],
-                                        [-9, 10],
-                                        [-1, 10],
-                                        [-1, 0],
-                                        [-9, 0],
-                                    ],
+                                    [-9, 0],
+                                    [-9, 10],
+                                    [-1, 10],
+                                    [-1, 0],
+                                    [-9, 0],
                                 ],
                             ],
                         ],
                     ],
-                    'dimension' => null,
                 ],
+                'dimension' => null,
             ],
-            'xdrMultiPointValue2' => [
-                'value' => '01040000000200000001010000000000000000000000000000000000f03f010100000000000000000000400000000000000840',
-                'expected' => [
-                    'type' => 'MULTIPOINT',
-                    'value' => [[0, 1], [2, 3]],
-                    'srid' => null,
-                    'dimension' => null,
-                ],
+        ];
+        yield 'xdrMultiPointValue2' => [
+            'value' => '01040000000200000001010000000000000000000000000000000000f03f010100000000000000000000400000000000000840',
+            'expected' => [
+                'type' => 'MULTIPOINT',
+                'value' => [[0, 1], [2, 3]],
+                'srid' => null,
+                'dimension' => null,
             ],
-            'xdrMultiLineStringValue2' => [
-                'value' => '0105000000020000000102000000020000000000000000000000000000000000f03f000000000000004000000000000008400102000000020000000000000000001040000000000000144000000000000018400000000000001c40',
-                'expected' => [
-                    'type' => 'MULTILINESTRING',
-                    'value' => [[[0, 1], [2, 3]], [[4, 5], [6, 7]]],
-                    'srid' => null,
-                    'dimension' => null,
-                ],
+        ];
+        yield 'xdrMultiLineStringValue2' => [
+            'value' => '0105000000020000000102000000020000000000000000000000000000000000f03f000000000000004000000000000008400102000000020000000000000000001040000000000000144000000000000018400000000000001c40',
+            'expected' => [
+                'type' => 'MULTILINESTRING',
+                'value' => [[[0, 1], [2, 3]], [[4, 5], [6, 7]]],
+                'srid' => null,
+                'dimension' => null,
             ],
-            'xdrMultiPolygonValue2' => [
-                'value' => '01060000000200000001030000000200000005000000000000000000000000000000000000000000000000000000000000000000244000000000000024400000000000002440000000000000244000000000000000000000000000000000000000000000000005000000000000000000f03f000000000000f03f000000000000f03f0000000000002240000000000000224000000000000022400000000000002240000000000000f03f000000000000f03f000000000000f03f0103000000010000000500000000000000000022c0000000000000000000000000000022c00000000000002440000000000000f0bf0000000000002440000000000000f0bf000000000000000000000000000022c00000000000000000',
-                'expected' => [
-                    'type' => 'MULTIPOLYGON',
-                    'value' => [[[[0, 0], [0, 10], [10, 10], [10, 0], [0, 0]], [[1, 1], [1, 9], [9, 9], [9, 1], [1, 1]]], [[[-9, 0], [-9, 10], [-1, 10], [-1, 0], [-9, 0]]]],
-                    'srid' => null,
-                    'dimension' => null,
-                ],
+        ];
+        yield 'xdrMultiPolygonValue2' => [
+            'value' => '01060000000200000001030000000200000005000000000000000000000000000000000000000000000000000000000000000000244000000000000024400000000000002440000000000000244000000000000000000000000000000000000000000000000005000000000000000000f03f000000000000f03f000000000000f03f0000000000002240000000000000224000000000000022400000000000002240000000000000f03f000000000000f03f000000000000f03f0103000000010000000500000000000000000022c0000000000000000000000000000022c00000000000002440000000000000f0bf0000000000002440000000000000f0bf000000000000000000000000000022c00000000000000000',
+            'expected' => [
+                'type' => 'MULTIPOLYGON',
+                'value' => [[[[0, 0], [0, 10], [10, 10], [10, 0], [0, 0]], [[1, 1], [1, 9], [9, 9], [9, 1], [1, 1]]], [[[-9, 0], [-9, 10], [-1, 10], [-1, 0], [-9, 0]]]],
+                'srid' => null,
+                'dimension' => null,
             ],
-            'xdrMultiPointZOGCValue' => [
-                'value' => '01ec0300000200000001e90300000000000000000000000000000000f03f000000000000004001e9030000000000000000084000000000000010400000000000001440',
-                'expected' => [
-                    'type' => 'MULTIPOINT',
-                    'value' => [[0, 1, 2], [3, 4, 5]],
-                    'srid' => null,
-                    'dimension' => 'Z',
-                ],
+        ];
+        yield 'xdrMultiPointZOGCValue' => [
+            'value' => '01ec0300000200000001e90300000000000000000000000000000000f03f000000000000004001e9030000000000000000084000000000000010400000000000001440',
+            'expected' => [
+                'type' => 'MULTIPOINT',
+                'value' => [[0, 1, 2], [3, 4, 5]],
+                'srid' => null,
+                'dimension' => 'Z',
             ],
-            'xdrMultiLineStringZOGCValue' => [
-                'value' => '01ed0300000200000001ea030000020000000000000000000000000000000000f03f000000000000004000000000000008400000000000001040000000000000144001ea0300000200000000000000000018400000000000001c400000000000002040000000000000224000000000000024400000000000002640',
-                'expected' => [
-                    'type' => 'MULTILINESTRING',
-                    'value' => [[[0, 1, 2], [3, 4, 5]], [[6, 7, 8], [9, 10, 11]]],
-                    'srid' => null,
-                    'dimension' => 'Z',
-                ],
+        ];
+        yield 'xdrMultiLineStringZOGCValue' => [
+            'value' => '01ed0300000200000001ea030000020000000000000000000000000000000000f03f000000000000004000000000000008400000000000001040000000000000144001ea0300000200000000000000000018400000000000001c400000000000002040000000000000224000000000000024400000000000002640',
+            'expected' => [
+                'type' => 'MULTILINESTRING',
+                'value' => [[[0, 1, 2], [3, 4, 5]], [[6, 7, 8], [9, 10, 11]]],
+                'srid' => null,
+                'dimension' => 'Z',
             ],
-            'xdrMultiPolygonZOGCValue' => [
-                'value' => '01ee0300000200000001eb030000020000000500000000000000000000000000000000000000000000000000594000000000000000000000000000002440000000000000594000000000000024400000000000002440000000000000594000000000000024400000000000000000000000000000594000000000000000000000000000000000000000000000594005000000000000000000f03f000000000000f03f0000000000005940000000000000f03f000000000000224000000000000059400000000000002240000000000000224000000000000059400000000000002240000000000000f03f0000000000005940000000000000f03f000000000000f03f000000000000594001eb030000010000000500000000000000000022c00000000000000000000000000000494000000000000022c000000000000024400000000000004940000000000000f0bf00000000000024400000000000004940000000000000f0bf0000000000000000000000000000494000000000000022c000000000000000000000000000004940',
-                'expected' => [
-                    'type' => 'MULTIPOLYGON',
-                    'value' => [
-                        [
-                            [[0, 0, 100], [0, 10, 100], [10, 10, 100], [10, 0, 100], [0, 0, 100]],
-                            [[1, 1, 100], [1, 9, 100], [9, 9, 100], [9, 1, 100], [1, 1, 100]],
-                        ],
-                        [
-                            [[-9, 0, 50], [-9, 10, 50], [-1, 10, 50], [-1, 0, 50], [-9, 0, 50]],
-                        ],
-                    ],
-                    'srid' => null,
-                    'dimension' => 'Z',
-                ],
-            ],
-            'xdrPointValue2' => [
-                'value' => '0101000000000000000000f03f0000000000000040',
-                'expected' => [
-                    'type' => 'POINT',
-                    'value' => [1, 2],
-                    'srid' => null,
-                    'dimension' => null,
-                ],
-            ],
-            'xdrLineStringValue2' => [
-                'value' => '010200000002000000000000000000f03f000000000000004000000000000008400000000000001040',
-                'expected' => [
-                    'type' => 'LINESTRING',
-                    'value' => [[1, 2], [3, 4]],
-                    'srid' => null,
-                    'dimension' => null,
-                ],
-            ],
-            'xdrPolygonValue2' => [
-                'value' => '01030000000200000005000000000000000000000000000000000000000000000000000000000000000000244000000000000024400000000000002440000000000000244000000000000000000000000000000000000000000000000005000000000000000000f03f000000000000f03f000000000000f03f0000000000002240000000000000224000000000000022400000000000002240000000000000f03f000000000000f03f000000000000f03f',
-                'expected' => [
-                    'type' => 'POLYGON',
-                    'value' => [
-                        [[0, 0], [0, 10], [10, 10], [10, 0], [0, 0]],
-                        [[1, 1], [1, 9], [9, 9], [9, 1], [1, 1]],
-                    ],
-                    'srid' => null,
-                    'dimension' => null,
-                ],
-            ],
-            'xdrPointZOGCValue2' => [
-                'value' => '01e9030000000000000000f03f00000000000000400000000000000840',
-                'expected' => [
-                    'type' => 'POINT',
-                    'value' => [1, 2, 3],
-                    'srid' => null,
-                    'dimension' => 'Z',
-                ],
-            ],
-            'xdrLineStringZOGCValue' => [
-                'value' => '01ea03000002000000000000000000f03f00000000000000400000000000000840000000000000104000000000000014400000000000001840',
-                'expected' => [
-                    'type' => 'LINESTRING',
-                    'value' => [[1, 2, 3], [4, 5, 6]],
-                    'srid' => null,
-                    'dimension' => 'Z',
-                ],
-            ],
-            'xdrPolygonZOGCValue' => [
-                'value' => '01eb030000020000000500000000000000000000000000000000000000000000000000594000000000000000000000000000002440000000000000594000000000000024400000000000002440000000000000594000000000000024400000000000000000000000000000594000000000000000000000000000000000000000000000594005000000000000000000f03f000000000000f03f0000000000005940000000000000f03f000000000000224000000000000059400000000000002240000000000000224000000000000059400000000000002240000000000000f03f0000000000005940000000000000f03f000000000000f03f0000000000005940',
-                'expected' => [
-                    'type' => 'POLYGON',
-                    'value' => [
+        ];
+        yield 'xdrMultiPolygonZOGCValue' => [
+            'value' => '01ee0300000200000001eb030000020000000500000000000000000000000000000000000000000000000000594000000000000000000000000000002440000000000000594000000000000024400000000000002440000000000000594000000000000024400000000000000000000000000000594000000000000000000000000000000000000000000000594005000000000000000000f03f000000000000f03f0000000000005940000000000000f03f000000000000224000000000000059400000000000002240000000000000224000000000000059400000000000002240000000000000f03f0000000000005940000000000000f03f000000000000f03f000000000000594001eb030000010000000500000000000000000022c00000000000000000000000000000494000000000000022c000000000000024400000000000004940000000000000f0bf00000000000024400000000000004940000000000000f0bf0000000000000000000000000000494000000000000022c000000000000000000000000000004940',
+            'expected' => [
+                'type' => 'MULTIPOLYGON',
+                'value' => [
+                    [
                         [[0, 0, 100], [0, 10, 100], [10, 10, 100], [10, 0, 100], [0, 0, 100]],
                         [[1, 1, 100], [1, 9, 100], [9, 9, 100], [9, 1, 100], [1, 1, 100]],
                     ],
-                    'srid' => null,
-                    'dimension' => 'Z',
+                    [
+                        [[-9, 0, 50], [-9, 10, 50], [-1, 10, 50], [-1, 0, 50], [-9, 0, 50]],
+                    ],
                 ],
+                'srid' => null,
+                'dimension' => 'Z',
+            ],
+        ];
+        yield 'xdrPointValue2' => [
+            'value' => '0101000000000000000000f03f0000000000000040',
+            'expected' => [
+                'type' => 'POINT',
+                'value' => [1, 2],
+                'srid' => null,
+                'dimension' => null,
+            ],
+        ];
+        yield 'xdrLineStringValue2' => [
+            'value' => '010200000002000000000000000000f03f000000000000004000000000000008400000000000001040',
+            'expected' => [
+                'type' => 'LINESTRING',
+                'value' => [[1, 2], [3, 4]],
+                'srid' => null,
+                'dimension' => null,
+            ],
+        ];
+        yield 'xdrPolygonValue2' => [
+            'value' => '01030000000200000005000000000000000000000000000000000000000000000000000000000000000000244000000000000024400000000000002440000000000000244000000000000000000000000000000000000000000000000005000000000000000000f03f000000000000f03f000000000000f03f0000000000002240000000000000224000000000000022400000000000002240000000000000f03f000000000000f03f000000000000f03f',
+            'expected' => [
+                'type' => 'POLYGON',
+                'value' => [
+                    [[0, 0], [0, 10], [10, 10], [10, 0], [0, 0]],
+                    [[1, 1], [1, 9], [9, 9], [9, 1], [1, 1]],
+                ],
+                'srid' => null,
+                'dimension' => null,
+            ],
+        ];
+        yield 'xdrPointZOGCValue2' => [
+            'value' => '01e9030000000000000000f03f00000000000000400000000000000840',
+            'expected' => [
+                'type' => 'POINT',
+                'value' => [1, 2, 3],
+                'srid' => null,
+                'dimension' => 'Z',
+            ],
+        ];
+        yield 'xdrLineStringZOGCValue' => [
+            'value' => '01ea03000002000000000000000000f03f00000000000000400000000000000840000000000000104000000000000014400000000000001840',
+            'expected' => [
+                'type' => 'LINESTRING',
+                'value' => [[1, 2, 3], [4, 5, 6]],
+                'srid' => null,
+                'dimension' => 'Z',
+            ],
+        ];
+        yield 'xdrPolygonZOGCValue' => [
+            'value' => '01eb030000020000000500000000000000000000000000000000000000000000000000594000000000000000000000000000002440000000000000594000000000000024400000000000002440000000000000594000000000000024400000000000000000000000000000594000000000000000000000000000000000000000000000594005000000000000000000f03f000000000000f03f0000000000005940000000000000f03f000000000000224000000000000059400000000000002240000000000000224000000000000059400000000000002240000000000000f03f0000000000005940000000000000f03f000000000000f03f0000000000005940',
+            'expected' => [
+                'type' => 'POLYGON',
+                'value' => [
+                    [[0, 0, 100], [0, 10, 100], [10, 10, 100], [10, 0, 100], [0, 0, 100]],
+                    [[1, 1, 100], [1, 9, 100], [9, 9, 100], [9, 1, 100], [1, 1, 100]],
+                ],
+                'srid' => null,
+                'dimension' => 'Z',
             ],
         ];
     }
@@ -4665,7 +4206,7 @@ class ParserTest extends TestCase
      */
     public function testParserPrependLower0XHex(string $value, array $expected): void
     {
-        $parser = new Parser('0x'.$value);
+        $parser = new Parser('0x' . $value);
         $actual = $parser->parse();
 
         $this->assertEquals($expected, $actual);
@@ -4678,7 +4219,7 @@ class ParserTest extends TestCase
      */
     public function testParserPrependLowerXHex(string $value, array $expected): void
     {
-        $parser = new Parser('x'.$value);
+        $parser = new Parser('x' . $value);
         $actual = $parser->parse();
 
         $this->assertEquals($expected, $actual);
@@ -4691,7 +4232,7 @@ class ParserTest extends TestCase
      */
     public function testParserPrependUpper0XHex(string $value, array $expected): void
     {
-        $parser = new Parser('0X'.$value);
+        $parser = new Parser('0X' . $value);
         $actual = $parser->parse();
 
         $this->assertEquals($expected, $actual);
@@ -4704,7 +4245,7 @@ class ParserTest extends TestCase
      */
     public function testParserPrependUpperXHex(string $value, array $expected): void
     {
-        $parser = new Parser('X'.$value);
+        $parser = new Parser('X' . $value);
         $actual = $parser->parse();
 
         $this->assertEquals($expected, $actual);
@@ -4732,19 +4273,19 @@ class ParserTest extends TestCase
 
             $this->assertEquals($testData['expected'], $actual);
 
-            $actual = $parser->parse('x'.$testData['value']);
+            $actual = $parser->parse('x' . $testData['value']);
 
             $this->assertEquals($testData['expected'], $actual);
 
-            $actual = $parser->parse('X'.$testData['value']);
+            $actual = $parser->parse('X' . $testData['value']);
 
             $this->assertEquals($testData['expected'], $actual);
 
-            $actual = $parser->parse('0x'.$testData['value']);
+            $actual = $parser->parse('0x' . $testData['value']);
 
             $this->assertEquals($testData['expected'], $actual);
 
-            $actual = $parser->parse('0X'.$testData['value']);
+            $actual = $parser->parse('0X' . $testData['value']);
 
             $this->assertEquals($testData['expected'], $actual);
 
