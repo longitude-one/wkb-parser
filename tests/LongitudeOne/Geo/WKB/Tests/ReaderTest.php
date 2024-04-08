@@ -26,144 +26,152 @@ use PHPUnit\Framework\TestCase;
 class ReaderTest extends TestCase
 {
     /**
-     * @return array<string, array{value:string|null, methods:string[], exception:class-string<ExceptionInterface>, message:string}>
+     * @return \Generator<string, array{value:string|null, methods:string[], exception:class-string<ExceptionInterface>, message:string}, null, void>
      */
-    public static function badTestData(): array
+    public static function badTestData(): \Generator
     {
-        return [
-            'readNullPackage' => [
-                'value' => null,
-                'methods' => ['readByteOrder'],
-                'exception' => InvalidArgumentException::class,
-                'message' => 'LongitudeOne\Geo\WKB\Reader: Error number 1: No input data to read. Input is null.',
-            ],
-            'readBinaryBadByteOrder' => [
-                'value' => pack('H*', '04'),
-                'methods' => ['readByteOrder'],
-                'exception' => UnexpectedValueException::class,
-                'message' => 'Invalid byte order "4"',
-            ],
-            'readBinaryWithoutByteOrder' => [
-                'value' => pack('H*', '0101000000'),
-                'methods' => ['readLong'],
-                'exception' => UnexpectedValueException::class,
-                'message' => 'Invalid byte order "unset"',
-            ],
-            'readHexWithoutByteOrder' => [
-                'value' => '0101000000',
-                'methods' => ['readLong'],
-                'exception' => UnexpectedValueException::class,
-                'message' => 'Invalid byte order "unset"',
-            ],
-            'readBinaryShortFloat' => [
-                'value' => pack('H*', '013D0AD'),
-                'methods' => ['readByteOrder', 'readFloat'],
-                'exception' => InvalidArgumentException::class,
-                'message' => '/Type d: not enough input values, need 8 values but only 3 were provided$/',
-            ],
+        yield 'readNullPackage' => [
+            'value' => null,
+            'methods' => ['readByteOrder'],
+            'exception' => InvalidArgumentException::class,
+            'message' => 'LongitudeOne\Geo\WKB\Reader: Error number 1: No input data to read. Input is null.',
+        ];
+        yield 'readEmptyPackage' => [
+            'value' => '',
+            'methods' => ['readByteOrder'],
+            'exception' => InvalidArgumentException::class,
+            'message' => 'LongitudeOne\Geo\WKB\Reader: Error number 2: unpack(): Type C: not enough input values, need 1 values but only 0 were provided.',
+        ];
+        yield 'readBinaryBadByteOrder' => [
+            'value' => pack('H*', '04'),
+            'methods' => ['readByteOrder'],
+            'exception' => UnexpectedValueException::class,
+            'message' => 'Invalid byte order "4"',
+        ];
+        yield 'readBinaryWithoutByteOrder' => [
+            'value' => pack('H*', '0101000000'),
+            'methods' => ['readLong'],
+            'exception' => UnexpectedValueException::class,
+            'message' => 'Invalid byte order "unset"',
+        ];
+        yield 'readHexWithoutByteOrder' => [
+            'value' => '0101000000',
+            'methods' => ['readLong'],
+            'exception' => UnexpectedValueException::class,
+            'message' => 'Invalid byte order "unset"',
+        ];
+        yield 'readBinaryShortFloat' => [
+            'value' => pack('H*', '013D0AD'),
+            'methods' => ['readByteOrder', 'readFloat'],
+            'exception' => InvalidArgumentException::class,
+            'message' => '/Type d: not enough input values, need 8 values but only 3 were provided\.$/',
+        ];
+        yield 'readHexShortFloat' => [
+            'value' => '013D0AD',
+            'methods' => ['readByteOrder', 'readFloat'],
+            'exception' => InvalidArgumentException::class,
+            'message' => '/Type d: not enough input values, need 8 values but only 3 were provided\.$/',
         ];
     }
 
     /**
-     * @return array<string, array{value:string, methods:array{0:string, 1:int|null, 2:float|float[]|int|null}[]}>
+     * @return \Generator<string, array{value:string, methods:array{0:string, 1:int|null, 2:float|float[]|int|null}[]}, null, void>
      */
-    public static function goodTestData(): array
+    public static function goodTestData(): \Generator
     {
-        return [
-            'readBinaryByteOrder' => [
-                'value' => pack('H*', '01'),
-                'methods' => [
-                    ['readByteOrder', null, 1],
-                ],
+        yield 'readBinaryByteOrder' => [
+            'value' => pack('H*', '01'),
+            'methods' => [
+                ['readByteOrder', null, 1],
             ],
-            'readHexByteOrder' => [
-                'value' => '01',
-                'methods' => [
-                    ['readByteOrder', null, 1],
-                ],
+        ];
+        yield 'readHexByteOrder' => [
+            'value' => '01',
+            'methods' => [
+                ['readByteOrder', null, 1],
             ],
-            'readPrefixedHexByteOrder' => [
-                'value' => '0x01',
-                'methods' => [
-                    ['readByteOrder', null, 1],
-                ],
+        ];
+        yield 'readPrefixedHexByteOrder' => [
+            'value' => '0x01',
+            'methods' => [
+                ['readByteOrder', null, 1],
             ],
-            'readNDRBinaryLong' => [
-                'value' => pack('H*', '0101000000'),
-                'methods' => [
-                    ['readByteOrder', null, 1],
-                    ['readLong', null, 1],
-                ],
+        ];
+        yield 'readNDRBinaryLong' => [
+            'value' => pack('H*', '0101000000'),
+            'methods' => [
+                ['readByteOrder', null, 1],
+                ['readLong', null, 1],
             ],
-            'readXDRBinaryLong' => [
-                'value' => pack('H*', '0000000001'),
-                'methods' => [
-                    ['readByteOrder', null, 0],
-                    ['readLong', null, 1],
-                ],
+        ];
+        yield 'readXDRBinaryLong' => [
+            'value' => pack('H*', '0000000001'),
+            'methods' => [
+                ['readByteOrder', null, 0],
+                ['readLong', null, 1],
             ],
-            'readNDRHexLong' => [
-                'value' => '0101000000',
-                'methods' => [
-                    ['readByteOrder', null, 1],
-                    ['readLong', null, 1],
-                ],
+        ];
+        yield 'readNDRHexLong' => [
+            'value' => '0101000000',
+            'methods' => [
+                ['readByteOrder', null, 1],
+                ['readLong', null, 1],
             ],
-            'readXDRHexLong' => [
-                'value' => '0000000001',
-                'methods' => [
-                    ['readByteOrder', null, 0],
-                    ['readLong', null, 1],
-                ],
+        ];
+        yield 'readXDRHexLong' => [
+            'value' => '0000000001',
+            'methods' => [
+                ['readByteOrder', null, 0],
+                ['readLong', null, 1],
             ],
-            'readNDRBinaryFloat' => [
-                'value' => pack('H*', '013D0AD7A3701D4140'),
-                'methods' => [
-                    ['readByteOrder', null, 1],
-                    ['readFloat', null, 34.23],
-                ],
+        ];
+        yield 'readNDRBinaryFloat' => [
+            'value' => pack('H*', '013D0AD7A3701D4140'),
+            'methods' => [
+                ['readByteOrder', null, 1],
+                ['readFloat', null, 34.23],
             ],
-            'readXDRBinaryFloat' => [
-                'value' => pack('H*', '0040411D70A3D70A3D'),
-                'methods' => [
-                    ['readByteOrder', null, 0],
-                    ['readFloat', null, 34.23],
-                ],
+        ];
+        yield 'readXDRBinaryFloat' => [
+            'value' => pack('H*', '0040411D70A3D70A3D'),
+            'methods' => [
+                ['readByteOrder', null, 0],
+                ['readFloat', null, 34.23],
             ],
-            'readNDRHexFloat' => [
-                'value' => '013D0AD7A3701D4140',
-                'methods' => [
-                    ['readByteOrder', null, 1],
-                    ['readFloat', null, 34.23],
-                ],
+        ];
+        yield 'readNDRHexFloat' => [
+            'value' => '013D0AD7A3701D4140',
+            'methods' => [
+                ['readByteOrder', null, 1],
+                ['readFloat', null, 34.23],
             ],
-            'readXDRHexFloat' => [
-                'value' => '0040411D70A3D70A3D',
-                'methods' => [
-                    ['readByteOrder', null, 0],
-                    ['readFloat', null, 34.23],
-                ],
+        ];
+        yield 'readXDRHexFloat' => [
+            'value' => '0040411D70A3D70A3D',
+            'methods' => [
+                ['readByteOrder', null, 0],
+                ['readFloat', null, 34.23],
             ],
-            'readXDRBinaryFloats' => [
-                'value' => pack('H*', '0040411D70A3D70A3D40411D70A3D70A3D'),
-                'methods' => [
-                    ['readByteOrder', null, 0],
-                    ['readFloats', 2, [34.23, 34.23]],
-                ],
+        ];
+        yield 'readXDRBinaryFloats' => [
+            'value' => pack('H*', '0040411D70A3D70A3D40411D70A3D70A3D'),
+            'methods' => [
+                ['readByteOrder', null, 0],
+                ['readFloats', 2, [34.23, 34.23]],
             ],
-            'readXDRPosition' => [
-                'value' => pack('H*', '0040411D70A3D70A3D40411D70A3D70A3D'),
-                'methods' => [
-                    ['readByteOrder', null, 0],
-                    ['getCurrentPosition', null, 1],
-                    ['getLastPosition', null, 0],
-                    ['readFloat', null, 34.23],
-                    ['getCurrentPosition', null, 9],
-                    ['getLastPosition', null, 1],
-                    ['readFloat', null, 34.23],
-                    ['getCurrentPosition', null, 17],
-                    ['getLastPosition', null, 9],
-                ],
+        ];
+        yield 'readXDRPosition' => [
+            'value' => pack('H*', '0040411D70A3D70A3D40411D70A3D70A3D'),
+            'methods' => [
+                ['readByteOrder', null, 0],
+                ['getCurrentPosition', null, 1],
+                ['getLastPosition', null, 0],
+                ['readFloat', null, 34.23],
+                ['getCurrentPosition', null, 9],
+                ['getLastPosition', null, 1],
+                ['readFloat', null, 34.23],
+                ['getCurrentPosition', null, 17],
+                ['getLastPosition', null, 9],
             ],
         ];
     }

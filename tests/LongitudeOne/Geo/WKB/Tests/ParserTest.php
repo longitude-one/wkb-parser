@@ -109,7 +109,7 @@ class ParserTest extends TestCase
     }
 
     /**
-     * @return \Generator<string, array{value:string, expected:array{srid: ?int, type:string, value:array<int|float|(int|float)[]>, dimension: ?string}}, null, void>
+     * @return \Generator<string, array{value:string, expected: array{srid: ?int, type: string, value: (float|int|(float|int)[]|(float|int)[][]|(float|int)[][][]|array{type:string, value:(float|int|array{type:string, value:(float|int|(float|int)[]|array{type:string, value: int[][]|int[][][]})[]})[]})[], dimension: ?string}}, null, void>
      */
     public static function goodBinaryData(): \Generator
     {
@@ -4206,7 +4206,7 @@ class ParserTest extends TestCase
      */
     public function testParserPrependLower0XHex(string $value, array $expected): void
     {
-        $parser = new Parser('0x' . $value);
+        $parser = new Parser('0x'.$value);
         $actual = $parser->parse();
 
         $this->assertEquals($expected, $actual);
@@ -4219,7 +4219,7 @@ class ParserTest extends TestCase
      */
     public function testParserPrependLowerXHex(string $value, array $expected): void
     {
-        $parser = new Parser('x' . $value);
+        $parser = new Parser('x'.$value);
         $actual = $parser->parse();
 
         $this->assertEquals($expected, $actual);
@@ -4232,7 +4232,7 @@ class ParserTest extends TestCase
      */
     public function testParserPrependUpper0XHex(string $value, array $expected): void
     {
-        $parser = new Parser('0X' . $value);
+        $parser = new Parser('0X'.$value);
         $actual = $parser->parse();
 
         $this->assertEquals($expected, $actual);
@@ -4245,7 +4245,7 @@ class ParserTest extends TestCase
      */
     public function testParserPrependUpperXHex(string $value, array $expected): void
     {
-        $parser = new Parser('X' . $value);
+        $parser = new Parser('X'.$value);
         $actual = $parser->parse();
 
         $this->assertEquals($expected, $actual);
@@ -4273,19 +4273,19 @@ class ParserTest extends TestCase
 
             $this->assertEquals($testData['expected'], $actual);
 
-            $actual = $parser->parse('x' . $testData['value']);
+            $actual = $parser->parse('x'.$testData['value']);
 
             $this->assertEquals($testData['expected'], $actual);
 
-            $actual = $parser->parse('X' . $testData['value']);
+            $actual = $parser->parse('X'.$testData['value']);
 
             $this->assertEquals($testData['expected'], $actual);
 
-            $actual = $parser->parse('0x' . $testData['value']);
+            $actual = $parser->parse('0x'.$testData['value']);
 
             $this->assertEquals($testData['expected'], $actual);
 
-            $actual = $parser->parse('0X' . $testData['value']);
+            $actual = $parser->parse('0X'.$testData['value']);
 
             $this->assertEquals($testData['expected'], $actual);
 
