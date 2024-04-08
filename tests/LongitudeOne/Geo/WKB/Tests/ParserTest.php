@@ -41,11 +41,18 @@ class ParserTest extends TestCase
             'exception' => UnexpectedValueException::class,
             'message' => 'Unsupported WKB type "21" (0x15) at byte 1',
         ];
+
+        // Short NDR POINT
+        $message = 'Type d: not enough input values, need 8 values but only 4 were provided';
+        if (version_compare(PHP_VERSION, '8.3.0', '<')) {
+            $message = 'LongitudeOne\Geo\WKB\Reader: Error number 2: unpack(): Type d: not enough input, need 8, have 4. at byte 5';
+        }
         yield 'shortNDRPoint' => [
             'value' => pack('H*', '01010000003D0AD7A3701D414000000000'),
             'exception' => InvalidArgumentException::class,
-            'message' => 'Type d: not enough input values, need 8 values but only 4 were provided',
+            'message' => $message,
         ];
+
         yield 'badPointSize' => [
             'value' => pack('H*', '0000000FA1'),
             'exception' => UnexpectedValueException::class,

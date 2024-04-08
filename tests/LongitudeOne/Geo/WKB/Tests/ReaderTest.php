@@ -36,11 +36,16 @@ class ReaderTest extends TestCase
             'exception' => InvalidArgumentException::class,
             'message' => 'LongitudeOne\Geo\WKB\Reader: Error number 1: No input data to read. Input is null.',
         ];
+        // read empty package
+        $message = 'LongitudeOne\Geo\WKB\Reader: Error number 2: unpack(): Type C: not enough input values, need 1 values but only 0 were provided.';
+        if (version_compare(PHP_VERSION, '8.3.0', '<')) {
+            $message = 'LongitudeOne\Geo\WKB\Reader: Error number 2: unpack(): Type C: not enough input, need 1, have 0.';
+        }
         yield 'readEmptyPackage' => [
             'value' => '',
             'methods' => ['readByteOrder'],
             'exception' => InvalidArgumentException::class,
-            'message' => 'LongitudeOne\Geo\WKB\Reader: Error number 2: unpack(): Type C: not enough input values, need 1 values but only 0 were provided.',
+            'message' => $message,
         ];
         yield 'readBinaryBadByteOrder' => [
             'value' => pack('H*', '04'),
@@ -60,17 +65,27 @@ class ReaderTest extends TestCase
             'exception' => UnexpectedValueException::class,
             'message' => 'Invalid byte order "unset"',
         ];
+
+        // Read Binary Short Float
+        $message = '/Type d: not enough input values, need 8 values but only 3 were provided\.$/';
+        if (version_compare(PHP_VERSION, '8.3.0', '<')) {
+            $message = 'LongitudeOne\Geo\WKB\Reader: Error number 2: unpack(): Type d: not enough input, need 8, have 3.';
+        }
         yield 'readBinaryShortFloat' => [
             'value' => pack('H*', '013D0AD'),
             'methods' => ['readByteOrder', 'readFloat'],
             'exception' => InvalidArgumentException::class,
-            'message' => '/Type d: not enough input values, need 8 values but only 3 were provided\.$/',
+            'message' => $message,
         ];
+        $message = '/Type d: not enough input values, need 8 values but only 3 were provided\.$/';
+        if (version_compare(PHP_VERSION, '8.3.0', '<')) {
+            $message = 'LongitudeOne\Geo\WKB\Reader: Error number 2: unpack(): Type d: not enough input, need 8, have 3.';
+        }
         yield 'readHexShortFloat' => [
             'value' => '013D0AD',
             'methods' => ['readByteOrder', 'readFloat'],
             'exception' => InvalidArgumentException::class,
-            'message' => '/Type d: not enough input values, need 8 values but only 3 were provided\.$/',
+            'message' => $message,
         ];
     }
 
