@@ -203,7 +203,7 @@ class Reader
 
     private function getInvalidArgumentException(int $errorNumber, string $errorMessage): InvalidArgumentException
     {
-        $message = sprintf('%s: Error number %d: %s', static::class, $errorNumber, $errorMessage);
+        $message = sprintf('%s: Error number %d: %s.', static::class, $errorNumber, $errorMessage);
 
         return new InvalidArgumentException($message);
     }
