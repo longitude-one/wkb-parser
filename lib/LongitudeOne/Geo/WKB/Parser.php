@@ -83,7 +83,7 @@ class Parser
                 trigger_error('Since longitudeone/geo-wkb-parser 1.0: using non-string parameter for Reader constructor deprecated.', E_USER_DEPRECATED);
             }
 
-            $this->reader->load($input);
+            $this->reader->load((string) $input);
         }
     }
 
@@ -99,7 +99,7 @@ class Parser
     public function parse($input = null): array
     {
         if (null !== $input) {
-            $this->reader->load($input);
+            $this->reader->load((string) $input);
         }
 
         return $this->readGeometry();
