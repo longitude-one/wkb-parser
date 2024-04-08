@@ -1,24 +1,13 @@
 <?php
+
 /**
- * Copyright (C) 2016 Derek J. Lambert
+ * This file is part of the LongitudeOne WKB-Parser project.
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * PHP 8.1 | 8.2 | 8.3
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * Copyright LongitudeOne - Alexandre Tranchant - Derek J. Lambert.
+ * Copyright 2024.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
  */
 
 namespace LongitudeOne\Geo\WKB;
@@ -28,45 +17,28 @@ use LongitudeOne\Geo\WKB\Exception\RangeException;
 use LongitudeOne\Geo\WKB\Exception\UnexpectedValueException;
 
 /**
- * Reader for spatial WKB values
- *
- * @author  Derek J. Lambert <dlambert@dereklambert.com>
- * @license http://dlambert.mit-license.org MIT
+ * Reader for spatial WKB values.
  */
 class Reader
 {
-    const WKB_XDR = 0;
-    const WKB_NDR = 1;
+    public const WKB_NDR = 1;
+    public const WKB_XDR = 0;
 
     /**
-     * @var int
+     * Byte order for current machine.
      */
-    private $byteOrder;
+    private static ?int $machineByteOrder = null;
 
     /**
-     * @var string
+     * Byte order for current input.
      */
-    private $input;
+    private ?int $byteOrder = null;
 
-    /**
-     * @var int
-     */
-    private $position;
+    private ?string $input = null;
 
-    /**
-     * @var int
-     */
-    private $previous;
+    private int $position = 0;
 
-    /**
-     * @var int
-     */
-    private $length;
-
-    /**
-     * @var int
-     */
-    private static $machineByteOrder;
+    private int $previous = 0;
 
     /**
      * @param string $input
@@ -80,19 +52,26 @@ class Reader
         }
     }
 
+    public function getCurrentPosition(): int
+    {
+        return $this->position;
+    }
+
+    public function getLastPosition(): int
+    {
+        return $this->position - $this->previous;
+    }
+
     /**
-     * @param string $input
-     *
      * @throws UnexpectedValueException
      */
-    public function load($input)
+    public function load(string $input): void
     {
         $this->position = 0;
         $this->previous = 0;
 
         if (ord($input) < 32) {
-            $this->input  = $input;
-            $this->length = strlen($input);
+            $this->input = $input;
 
             return;
         }
@@ -103,48 +82,69 @@ class Reader
             $input = substr($input, $position + 1);
         }
 
-        $this->input  = pack('H*', $input);
-        $this->length = strlen($this->input);
+        $this->input = pack('H*', $input);
     }
 
     /**
-     * @return int
+     * @throws RangeException
      * @throws UnexpectedValueException
      */
-    public function readLong()
+    public function readByteOrder(): int
     {
-        $format = self::WKB_NDR === $this->getByteOrder() ? 'V' : 'N';
-        $value = $this->unpackInput($format);
-        $this->previous  = 4;
+        /** @var int $byteOrder */
+        $byteOrder = $this->unpackInput('C');
+
+        $this->previous = 1;
         $this->position += $this->previous;
 
-        return $value;
+        if ($byteOrder >> 1) {
+            throw new UnexpectedValueException('Invalid byte order "'.$byteOrder.'"');
+        }
+
+        return $this->byteOrder = $byteOrder;
     }
 
     /**
-     * @return float
      * @throws UnexpectedValueException
      * @throws RangeException
      *
      * @deprecated use readFloat()
      */
-    public function readDouble()
+    public function readDouble(): float
     {
+        trigger_error(static::class.': Method readDouble is deprecated, use readFloat instead.', E_USER_DEPRECATED);
+
         return $this->readFloat();
     }
 
     /**
-     * @return float
+     * @return float[]
+     *
+     * @throws RangeException
+     * @throws UnexpectedValueException
+     *
+     * @deprecated use readFloats()
+     */
+    public function readDoubles(int $count): array
+    {
+        trigger_error(static::class.': Method readDoubles is deprecated, use readFloats instead.', E_USER_DEPRECATED);
+
+        return $this->readFloats($count);
+    }
+
+    /**
      * @throws RangeException
      * @throws UnexpectedValueException
      */
-    public function readFloat()
+    public function readFloat(): float
     {
+        /** @var float $double */
         $double = $this->unpackInput('d');
 
         if ($this->getMachineByteOrder() !== $this->getByteOrder()) {
-            $double = unpack('dvalue', strrev(pack('d', $double)));
-            $double = $double['value'];
+            /** @var array{value: float} $unpacked */
+            $unpacked = unpack('dvalue', strrev(pack('d', $double)));
+            $double = $unpacked['value'];
         }
 
         $this->previous = 8;
@@ -154,34 +154,19 @@ class Reader
     }
 
     /**
-     * @param int $count
-     *
      * @return float[]
-     * @throws RangeException
-     * @throws UnexpectedValueException
      *
-     * @deprecated use readFloats()
-     */
-    public function readDoubles($count)
-    {
-        return $this->readFloats($count);
-    }
-
-    /**
-     * @param int $count
-     *
-     * @return float[]
      * @throws RangeException
      * @throws UnexpectedValueException
      */
-    public function readFloats($count)
+    public function readFloats(int $count): array
     {
-        $floats = array();
+        $floats = [];
 
-        for ($i = 0; $i < $count; $i++) {
+        for ($i = 0; $i < $count; ++$i) {
             $float = $this->readFloat();
 
-            if (!is_null($float) && !is_nan($float)) {
+            if (!is_nan($float)) {
                 $floats[] = $float;
             }
         }
@@ -190,42 +175,21 @@ class Reader
     }
 
     /**
-     * @return int
-     * @throws RangeException
      * @throws UnexpectedValueException
      */
-    public function readByteOrder()
+    public function readLong(): float|int
     {
-        $byteOrder = $this->unpackInput('C');
-
-        $this->previous  = 1;
+        $format = self::WKB_NDR === $this->getByteOrder() ? 'V' : 'N';
+        $value = $this->unpackInput($format);
+        $this->previous = 4;
         $this->position += $this->previous;
 
-        if ($byteOrder >> 1) {
-            throw new UnexpectedValueException('Invalid byte order "' . $byteOrder . '"');
-        }
-
-        return $this->byteOrder = $byteOrder;
+        return $value;
     }
 
     /**
      * @return int
-     */
-    public function getCurrentPosition()
-    {
-        return $this->position;
-    }
-
-    /**
-     * @return int
-     */
-    public function getLastPosition()
-    {
-        return $this->position - $this->previous;
-    }
-
-    /**
-     * @return int
+     *
      * @throws UnexpectedValueException
      */
     private function getByteOrder()
@@ -237,15 +201,51 @@ class Reader
         return $this->byteOrder;
     }
 
+    private function getInvalidArgumentException(int $errorNumber, string $errorMessage): InvalidArgumentException
+    {
+        $message = sprintf('%s: Error number %d: %s.', static::class, $errorNumber, $errorMessage);
+
+        return new InvalidArgumentException($message);
+    }
+
     /**
-     * @param string $format
-     *
+     * @return int return the Byte order for current machine
+     */
+    private function getMachineByteOrder(): int
+    {
+        if (null === self::$machineByteOrder) {
+            $result = unpack('S', "\x01\x00");
+
+            if (false === $result) {
+                $message = sprintf(
+                    '%s: Unable to determine the current machine Byte order. Unpack failed.',
+                    static::class
+                );
+                throw new InvalidArgumentException($message);
+            }
+
+            self::$machineByteOrder = 1 === $result[1] ? self::WKB_NDR : self::WKB_XDR;
+        }
+
+        return self::$machineByteOrder;
+    }
+
+    private function onWarning(int $errorNumber, string $errorMessage): void
+    {
+        throw $this->getInvalidArgumentException($errorNumber, $errorMessage);
+    }
+
+    /**
      * @throws InvalidArgumentException
      */
-    private function unpackInput($format)
+    private function unpackInput(string $format): float|int
     {
+        if (null === $this->input) {
+            throw $this->getInvalidArgumentException(1, 'No input data to read. Input is null.');
+        }
+
         set_error_handler([$this, 'onWarning'], E_WARNING);
-        $result = unpack($format . 'result/a*input', $this->input);
+        $result = unpack($format.'result/a*input', $this->input);
         restore_error_handler();
 
         if (false === $result) {
@@ -260,26 +260,5 @@ class Reader
         $this->input = $result['input'];
 
         return $result['result'];
-    }
-
-    /**
-     * @return bool
-     */
-    private function getMachineByteOrder()
-    {
-        if (null === self::$machineByteOrder) {
-            $result = unpack('S', "\x01\x00");
-
-            self::$machineByteOrder = $result[1] === 1 ? self::WKB_NDR : self::WKB_XDR;
-        }
-
-        return self::$machineByteOrder;
-    }
-
-    private function onWarning(int $errorNumber, string $errorMessage): void
-    {
-        $message = sprintf('%s: Error number %d: %s', static::class, $errorNumber, $errorMessage);
-
-        throw new InvalidArgumentException($message);
     }
 }

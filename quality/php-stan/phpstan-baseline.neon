@@ -1,0 +1,12 @@
+parameters:
+	ignoreErrors:
+		# readGeometry is recursive because of GeometryCollection.
+		-
+			message: "#^Method LongitudeOne\\\\Geo\\\\WKB\\\\Parser\\:\\:geometryCollection\\(\\) should return array\\<array\\{type\\: string, value\\: array\\<array\\<array\\<array\\<array\\<array\\<array\\<array\\<float\\|int\\>\\>\\|float\\|int\\|string\\>\\|float\\|int\\>\\|float\\|int\\|string\\>\\|float\\|int\\>\\|float\\|int\\|string\\>\\|float\\|int\\>\\}\\> but returns array\\<int\\<0, max\\>, array\\{type\\: string, value\\: array\\<array\\<array\\<array\\<array\\<array\\<array\\<array\\<array\\<array\\<float\\|int\\>\\>\\|float\\|int\\|string\\>\\|float\\|int\\>\\|float\\|int\\|string\\>\\|float\\|int\\>\\|float\\|int\\|string\\>\\|float\\|int\\>\\|float\\|int\\|string\\>\\|float\\|int\\>\\}\\>\\.$#"
+			count: 1
+			path: ../../lib/LongitudeOne/Geo/WKB/Parser.php
+		# Type cannot be null at this step
+		-
+			message: "#^Parameter \\#1 \\$type of method LongitudeOne\\\\Geo\\\\WKB\\\\Parser\\:\\:getTypeName\\(\\) expects int, int\\|null given\\.$#"
+			count: 1
+			path: ../../lib/LongitudeOne/Geo/WKB/Parser.php

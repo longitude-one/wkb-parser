@@ -1,24 +1,13 @@
 <?php
+
 /**
- * Copyright (C) 2016 Derek J. Lambert
+ * This file is part of the LongitudeOne WKB-Parser project.
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * PHP 8.1 | 8.2 | 8.3
  *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * Copyright LongitudeOne - Alexandre Tranchant - Derek J. Lambert.
+ * Copyright 2024.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
  */
 
 namespace LongitudeOne\Geo\WKB;
@@ -27,79 +16,58 @@ use LongitudeOne\Geo\WKB\Exception\ExceptionInterface;
 use LongitudeOne\Geo\WKB\Exception\UnexpectedValueException;
 
 /**
- * Parser for WKB/EWKB spatial object data
+ * Parser for WKB/EWKB spatial object data.
  */
 class Parser
 {
-    const WKB_TYPE_GEOMETRY           = 0x00000000;
-    const WKB_TYPE_POINT              = 0x00000001;
-    const WKB_TYPE_LINESTRING         = 0x00000002;
-    const WKB_TYPE_POLYGON            = 0x00000003;
-    const WKB_TYPE_MULTIPOINT         = 0x00000004;
-    const WKB_TYPE_MULTILINESTRING    = 0x00000005;
-    const WKB_TYPE_MULTIPOLYGON       = 0x00000006;
-    const WKB_TYPE_GEOMETRYCOLLECTION = 0x00000007;
-    const WKB_TYPE_CIRCULARSTRING     = 0x00000008;
-    const WKB_TYPE_COMPOUNDCURVE      = 0x00000009;
-    const WKB_TYPE_CURVEPOLYGON       = 0x0000000A;
-    const WKB_TYPE_MULTICURVE         = 0x0000000B;
-    const WKB_TYPE_MULTISURFACE       = 0x0000000C;
-    const WKB_TYPE_CURVE              = 0x0000000D;
-    const WKB_TYPE_SURFACE            = 0x0000000E;
-    const WKB_TYPE_POLYHEDRALSURFACE  = 0x0000000F;
-    const WKB_TYPE_TIN                = 0x00000010;
-    const WKB_TYPE_TRIANGLE           = 0x00000011;
+    public const TYPE_CIRCULARSTRING = 'CircularString';
+    public const TYPE_COMPOUNDCURVE = 'CompoundCurve';
+    public const TYPE_CURVEPOLYGON = 'CurvePolygon';
 
-    const WKB_FLAG_SRID               = 0x20000000;
-    const WKB_FLAG_M                  = 0x40000000;
-    const WKB_FLAG_Z                  = 0x80000000;
+    public const TYPE_GEOMETRY = 'Geometry';
+    public const TYPE_GEOMETRYCOLLECTION = 'GeometryCollection';
+    public const TYPE_LINESTRING = 'LineString';
+    public const TYPE_MULTICURVE = 'MultiCurve';
+    public const TYPE_MULTILINESTRING = 'MultiLineString';
+    public const TYPE_MULTIPOINT = 'MultiPoint';
+    public const TYPE_MULTIPOLYGON = 'MultiPolygon';
+    public const TYPE_MULTISURFACE = 'MultiSurface';
+    public const TYPE_POINT = 'Point';
+    public const TYPE_POLYGON = 'Polygon';
+    public const TYPE_POLYHEDRALSURFACE = 'PolyhedralSurface';
+    public const TYPE_TIN = 'Tin';
+    public const TYPE_TRIANGLE = 'Triangle';
 
-    const TYPE_GEOMETRY           = 'Geometry';
-    const TYPE_POINT              = 'Point';
-    const TYPE_LINESTRING         = 'LineString';
-    const TYPE_POLYGON            = 'Polygon';
-    const TYPE_MULTIPOINT         = 'MultiPoint';
-    const TYPE_MULTILINESTRING    = 'MultiLineString';
-    const TYPE_MULTIPOLYGON       = 'MultiPolygon';
-    const TYPE_GEOMETRYCOLLECTION = 'GeometryCollection';
-    const TYPE_CIRCULARSTRING     = 'CircularString';
-    const TYPE_COMPOUNDCURVE      = 'CompoundCurve';
-    const TYPE_CURVEPOLYGON       = 'CurvePolygon';
-    const TYPE_MULTICURVE         = 'MultiCurve';
-    const TYPE_MULTISURFACE       = 'MultiSurface';
-    const TYPE_POLYHEDRALSURFACE  = 'PolyhedralSurface';
-    const TYPE_TIN                = 'Tin';
-    const TYPE_TRIANGLE           = 'Triangle';
+    public const WKB_FLAG_M = 0x40000000;
+    public const WKB_FLAG_SRID = 0x20000000;
+    public const WKB_FLAG_Z = 0x80000000;
 
-    /**
-     * @var int
-     */
-    private $type;
+    public const WKB_TYPE_CIRCULARSTRING = 0x00000008;
+    public const WKB_TYPE_COMPOUNDCURVE = 0x00000009;
+    public const WKB_TYPE_CURVE = 0x0000000D;
+    public const WKB_TYPE_CURVEPOLYGON = 0x0000000A;
+    public const WKB_TYPE_GEOMETRY = 0x00000000;
+    public const WKB_TYPE_GEOMETRYCOLLECTION = 0x00000007;
+    public const WKB_TYPE_LINESTRING = 0x00000002;
+    public const WKB_TYPE_MULTICURVE = 0x0000000B;
+    public const WKB_TYPE_MULTILINESTRING = 0x00000005;
+    public const WKB_TYPE_MULTIPOINT = 0x00000004;
+    public const WKB_TYPE_MULTIPOLYGON = 0x00000006;
+    public const WKB_TYPE_MULTISURFACE = 0x0000000C;
+    public const WKB_TYPE_POINT = 0x00000001;
+    public const WKB_TYPE_POLYGON = 0x00000003;
+    public const WKB_TYPE_POLYHEDRALSURFACE = 0x0000000F;
+    public const WKB_TYPE_SURFACE = 0x0000000E;
+    public const WKB_TYPE_TIN = 0x00000010;
+    public const WKB_TYPE_TRIANGLE = 0x00000011;
 
-    /**
-     * @var int
-     */
-    private $srid;
+    private ?int $dimensions;
 
-    /**
-     * @var int
-     */
-    private $pointSize;
+    private int $pointSize = 2;
 
-    /**
-     * @var int
-     */
-    private $byteOrder;
+    private Reader $reader;
 
-    /**
-     * @var int
-     */
-    private $dimensions;
-
-    /**
-     * @var Reader
-     */
-    private $reader;
+    private int $type;
 
     /**
      * @param string $input
@@ -111,19 +79,24 @@ class Parser
         $this->reader = new Reader();
 
         if (null !== $input) {
+            if (!is_string($input)) {
+                trigger_error('Since longitudeone/geo-wkb-parser 1.0: using non-string parameter for Reader constructor deprecated.', E_USER_DEPRECATED);
+            }
+
             $this->reader->load($input);
         }
     }
 
     /**
-     * Parse input data
+     * Parse input data.
      *
      * @param string $input
      *
-     * @return array
-     * @throws UnexpectedValueException
+     * @return array{type:string, srid: ?int, value: (float|int)[]|(float|int)[][]|(float|int)[][][]|(float|int)[][][][]|(float|int)[][][][][]|array{type: string, value:(float|int)[][]}[]|array{type: string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]|array{type: string, value:(float|int)[][][]|array{type: string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]}[]|array{type: string, value:(float|int)[][][]}[]|array{type:string, value:(float|int)[]|(float|int)[][]|(float|int)[][][]|(float|int)[][][][]|(float|int)[][][][][]|array{type: string, value:(float|int)[][]}[]|array{type: string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]|array{type: string, value:(float|int)[][][]|array{type: string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]}[]|array{type: string, value:(float|int)[][][]}[]}[], dimension: ?string}
+     *
+     * @throws ExceptionInterface
      */
-    public function parse($input = null)
+    public function parse($input = null): array
     {
         if (null !== $input) {
             $this->reader->load($input);
@@ -133,28 +106,111 @@ class Parser
     }
 
     /**
-     * Parse geometry data
+     * Parse CIRCULARSTRING value.
      *
-     * @return array
+     * @return (float|int)[][]
+     *
      * @throws UnexpectedValueException
      */
-    private function readGeometry()
+    private function circularString(): array
     {
-        $this->srid      = null;
+        return $this->readPoints($this->readCount());
+    }
 
-        try {
-            $this->byteOrder = $this->readByteOrder();
-            $this->type      = $this->readType();
+    /**
+     * Parse COMPOUNDCURVE value.
+     *
+     * @return array{type: string, value:(float|int)[][]}[]
+     *
+     * @throws UnexpectedValueException
+     */
+    private function compoundCurve(): array
+    {
+        $values = [];
+        $count = $this->readCount();
 
-            if ($this->hasFlag($this->type, self::WKB_FLAG_SRID)) {
-                $this->srid = $this->readSrid();
+        for ($i = 0; $i < $count; ++$i) {
+            $this->readByteOrder();
+
+            $type = $this->readType();
+
+            $value = match ($type) {
+                $this->getDimensionedPrimitive(self::WKB_TYPE_LINESTRING),
+                $this->getDimensionedPrimitive(self::WKB_TYPE_CIRCULARSTRING) => $this->readPoints($this->readCount()),
+                default => throw new UnexpectedValueException($this->getBadTypeInTypeMessage($type, self::WKB_TYPE_COMPOUNDCURVE, [self::WKB_TYPE_LINESTRING, self::WKB_TYPE_CIRCULARSTRING])),
+            };
+
+            $values[] = [
+                'type' => $this->getTypeName($type),
+                'value' => $value,
+            ];
+        }
+
+        return $values;
+    }
+
+    /**
+     * Parse CURVEPOLYGON value.
+     *
+     * @return array{type: string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]
+     *
+     * @throws UnexpectedValueException
+     */
+    private function curvePolygon(): array
+    {
+        $values = [];
+        $count = $this->readCount();
+
+        for ($i = 0; $i < $count; ++$i) {
+            $this->readByteOrder();
+
+            $type = $this->readType();
+
+            switch ($type) {
+                case $this->getDimensionedPrimitive(self::WKB_TYPE_LINESTRING):
+                case $this->getDimensionedPrimitive(self::WKB_TYPE_CIRCULARSTRING):
+                    $value = $this->readPoints($this->readCount());
+                    break;
+                case $this->getDimensionedPrimitive(self::WKB_TYPE_COMPOUNDCURVE):
+                    $value = $this->compoundCurve();
+                    break;
+                default:
+                    throw new UnexpectedValueException($this->getBadTypeInTypeMessage($type, self::WKB_TYPE_CURVEPOLYGON, [self::WKB_TYPE_LINESTRING, self::WKB_TYPE_CIRCULARSTRING, self::WKB_TYPE_COMPOUNDCURVE]));
             }
 
-            $this->dimensions = $this->getDimensions($this->type);
-            $this->pointSize  = 2 + strlen($this->getDimensionType($this->dimensions));
-            $typeName = $this->getTypeName($this->type);
+            $values[] = [
+                'type' => $this->getTypeName($type),
+                'value' => $value,
+            ];
+        }
 
-            $value = match (strtoupper($typeName)) {
+        return $values;
+    }
+
+    /**
+     * Parse GEOMETRYCOLLECTION value.
+     * The type of each geometry is stored in the 'type' key of the returned array.
+     * The value of each geometry is stored in the 'value' key of the returned array.
+     * This value can be point|line-string|multiPoint|polygon|multiLineString|multiPolygon|compoundCurve||multiCurve|multiSurface| polyhedralSurface,
+     * OR a geometryCollection of all these previous types because Geometry collections are recursive.
+     * So, geometry collections can contain geometry collections.
+     *
+     * @return array{type:string, value:(float|int)[]|(float|int)[][]|(float|int)[][][]|(float|int)[][][][]|(float|int)[][][][][]|array{type: string, value:(float|int)[][]}[]|array{type: string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]|array{type: string, value:(float|int)[][][]|array{type: string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]}[]|array{type: string, value:(float|int)[][][]}[]}[]
+     *
+     * @throws UnexpectedValueException
+     */
+    private function geometryCollection(): array
+    {
+        $values = [];
+        $count = $this->readCount();
+
+        for ($i = 0; $i < $count; ++$i) {
+            $this->readByteOrder();
+
+            $type = $this->readType();
+            $typeName = $this->getTypeName($type);
+
+            $value = match ($typeName) {
                 strtoupper(self::TYPE_POINT) => $this->point(),
                 strtoupper(self::TYPE_LINESTRING) => $this->lineString(),
                 strtoupper(self::TYPE_POLYGON) => $this->polygon(),
@@ -168,79 +224,50 @@ class Parser
                 strtoupper(self::TYPE_MULTICURVE) => $this->multiCurve(),
                 strtoupper(self::TYPE_MULTISURFACE) => $this->multiSurface(),
                 strtoupper(self::TYPE_POLYHEDRALSURFACE) => $this->polyhedralSurface(),
-                default => throw new UnexpectedValueException(sprintf('Unsupported WKB type %s %d (%X)"', $typeName, $this->type, $this->type)),
+                default => throw new UnexpectedValueException(sprintf('Unsupported typeName "%s" with type (0x%2$x)', $typeName, $type)),
             };
 
-            return array(
-                'type'      => $typeName,
-                'srid'      => $this->srid,
-                'value'     => $value,
-                'dimension' => $this->getDimensionType($this->dimensions)
-            );
-        } catch (ExceptionInterface $e) {
-            throw new $e($e->getMessage() . ' at byte ' . $this->reader->getLastPosition(), $e->getCode(), $e);
-        }
-    }
-
-    /**
-     * Check type for flag
-     *
-     * @param int $type
-     * @param int $flag
-     *
-     * @return bool
-     */
-    private function hasFlag($type, $flag)
-    {
-        return ($type & $flag) === $flag;
-    }
-
-    /**
-     * @param int $type
-     *
-     * @return bool
-     */
-    private function is2D($type)
-    {
-        return $type < 0x20; //FIXME : 32 is a magic number
-    }
-
-    /**
-     * @param int $type
-     *
-     * @return int|null
-     */
-    private function getDimensions($type)
-    {
-        if ($this->is2D($type)) {
-            return null;
+            $values[] = [
+                'type' => $typeName,
+                'value' => $value,
+            ];
         }
 
-        if ($type & (self::WKB_FLAG_SRID | self::WKB_FLAG_M | self::WKB_FLAG_Z)) {
-            return $type & (self::WKB_FLAG_M | self::WKB_FLAG_Z);
-        }
-
-        return $type - ($type % 1000);
+        return $values;
     }
 
     /**
-     * @param int $dimensions
+     * @param int[] $expectedTypes
      *
      * @return string
-     * @throws UnexpectedValueException
      */
-    private function getDimensionType($dimensions)
+    private function getBadTypeInTypeMessage(int $childType, int $parentType, array $expectedTypes)
     {
-        if ($this->is2D($dimensions)) {
-            return '';
+        if ($this->type !== $parentType) {
+            $parentType = $this->type;
         }
 
-        return match ($dimensions) {
-            1000, self::WKB_FLAG_Z => 'Z',
-            2000, self::WKB_FLAG_M => 'M',
-            3000, self::WKB_FLAG_M | self::WKB_FLAG_Z => 'ZM',
-            default => throw new UnexpectedValueException(sprintf('%s with unsupported dimensions 0x%2$X (%2$d)', $this->getTypeName($this->type), $dimensions)),
-        };
+        $message = sprintf(
+            ' %s with dimensions 0x%X (%2$d) in %3$s, expected ',
+            $this->getTypeName($childType),
+            $this->getDimensions($childType),
+            $this->getTypeName($parentType)
+        );
+
+        if (!in_array($this->getTypePrimitive($childType), $expectedTypes, true)) {
+            if (1 === count($expectedTypes)) {
+                $message .= $this->getTypeName($expectedTypes[0]);
+            } else {
+                $last = $this->getTypeName(array_pop($expectedTypes));
+                $message .= implode(', ', array_map([$this, 'getTypeName'], $expectedTypes)).' or '.$last;
+            }
+
+            $message = 'Unexpected'.$message.' with ';
+        } else {
+            $message = 'Bad'.$message;
+        }
+
+        return $message.sprintf('dimensions 0x%X (%1$d)', $this->dimensions);
     }
 
     /**
@@ -261,30 +288,43 @@ class Parser
         return $type + $this->dimensions;
     }
 
-    /**
-     * @param int $type
-     *
-     * @return int
-     */
-    private function getTypePrimitive($type)
+    private function getDimensions(int $type): ?int
     {
         if ($this->is2D($type)) {
-            return $type;
+            return null;
         }
 
-        if ($type > 0xFFFF) {
-            return ($type & 0xFF);
+        if ($type & (self::WKB_FLAG_SRID | self::WKB_FLAG_M | self::WKB_FLAG_Z)) {
+            return $type & (self::WKB_FLAG_M | self::WKB_FLAG_Z);
         }
 
-        return $type % 1000;
+        return $type - ($type % 1000);
     }
 
     /**
-     * Get name of data type
+     * @throws UnexpectedValueException
+     */
+    private function getDimensionType(?int $dimensions): string
+    {
+        if ($this->is2D($dimensions)) {
+            return '';
+        }
+
+        return match ($dimensions) {
+            1000, self::WKB_FLAG_Z => 'Z',
+            2000, self::WKB_FLAG_M => 'M',
+            3000, self::WKB_FLAG_M | self::WKB_FLAG_Z => 'ZM',
+            default => throw new UnexpectedValueException(sprintf('%s with unsupported dimensions 0x%2$X (%2$d)', $this->getTypeName($this->type), $dimensions)),
+        };
+    }
+
+    /**
+     * Get name of data type.
      *
      * @param int $type
      *
      * @return string
+     *
      * @throws UnexpectedValueException
      */
     private function getTypeName($type)
@@ -310,166 +350,109 @@ class Parser
     }
 
     /**
-     * Parse data byte order
+     * @param int $type
      *
-     * @throws UnexpectedValueException
-     */
-    private function readByteOrder()
-    {
-        return $this->reader->readByteOrder();
-    }
-
-    /**
-     * Parse data type
-     *
-     * @throws UnexpectedValueException
-     */
-    private function readType()
-    {
-        return $this->reader->readLong();
-    }
-
-    /**
-     * Parse SRID value
-     *
-     * @throws UnexpectedValueException
-     */
-    private function readSrid()
-    {
-        return $this->reader->readLong();
-    }
-
-    /**
      * @return int
-     * @throws UnexpectedValueException
      */
-    private function readCount()
+    private function getTypePrimitive($type)
     {
-        return $this->reader->readLong();
-    }
-
-    /**
-     * @param int $count
-     *
-     * @return array
-     * @throws UnexpectedValueException
-     */
-    private function readPoints($count)
-    {
-        $points = array();
-
-        for ($i = 0; $i < $count; $i++) {
-            $points[] = $this->point();
+        if ($this->is2D($type)) {
+            return $type;
         }
 
-        return $points;
-    }
-
-    /**
-     * @param int $count
-     *
-     * @return array
-     * @throws UnexpectedValueException
-     */
-    private function readLinearRings($count)
-    {
-        $rings = array();
-
-        for ($i = 0; $i < $count; $i++) {
-            $rings[] = $this->readPoints($this->readCount());
+        if ($type > 0xFFFF) {
+            return $type & 0xFF;
         }
 
-        return $rings;
+        return $type % 1000;
     }
 
     /**
-     * Parse POINT values
+     * Check type for flag.
      *
-     * @return float[]
-     * @throws UnexpectedValueException
+     * @param int $type
+     * @param int $flag
+     *
+     * @return bool
      */
-    private function point()
+    private function hasFlag($type, $flag)
     {
-        return $this->reader->readFloats($this->pointSize);
+        return ($type & $flag) === $flag;
+    }
+
+    private function is2D(?int $type): bool
+    {
+        if (null === $type) {
+            return true;
+        }
+
+        return $type < 0x20; // FIXME : 32 is a magic number
     }
 
     /**
-     * Parse LINESTRING value
+     * Parse LINESTRING value.
      *
-     * @return array
+     * @return (float|int)[][]
+     *
      * @throws UnexpectedValueException
      */
-    private function lineString()
+    private function lineString(): array
     {
         return $this->readPoints($this->readCount());
     }
 
     /**
-     * Parse CIRCULARSTRING value
+     * Parse MULTICURVE value.
      *
-     * @return array
+     * @return array{type:string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]
+     *
      * @throws UnexpectedValueException
      */
-    private function circularString()
+    private function multiCurve(): array
     {
-        return $this->readPoints($this->readCount());
-    }
+        $values = [];
+        $count = $this->readCount();
 
-    /**
-     * Parse POLYGON value
-     *
-     * @return array[]
-     * @throws UnexpectedValueException
-     */
-    private function polygon()
-    {
-        return $this->readLinearRings($this->readCount());
-    }
-
-    /**
-     * Parse MULTIPOINT value
-     *
-     * @return array[]
-     * @throws UnexpectedValueException
-     */
-    private function multiPoint()
-    {
-        $values = array();
-        $count  = $this->readCount();
-
-        for ($i = 0; $i < $count; $i++) {
+        for ($i = 0; $i < $count; ++$i) {
             $this->readByteOrder();
 
             $type = $this->readType();
 
-            if ($this->getDimensionedPrimitive(self::WKB_TYPE_POINT) !== $type) {
-                throw new UnexpectedValueException($this->getBadTypeInTypeMessage($type, self::WKB_TYPE_MULTIPOINT, array(self::WKB_TYPE_POINT)));
-            }
+            $value = match ($type) {
+                $this->getDimensionedPrimitive(self::WKB_TYPE_LINESTRING),
+                $this->getDimensionedPrimitive(self::WKB_TYPE_CIRCULARSTRING) => $this->readPoints($this->readCount()),
+                $this->getDimensionedPrimitive(self::WKB_TYPE_COMPOUNDCURVE) => $this->compoundCurve(),
+                default => throw new UnexpectedValueException($this->getBadTypeInTypeMessage($type, self::WKB_TYPE_MULTICURVE, [self::WKB_TYPE_LINESTRING, self::WKB_TYPE_CIRCULARSTRING, self::WKB_TYPE_COMPOUNDCURVE])),
+            };
 
-            $values[] = $this->point();
+            $values[] = [
+                'type' => $this->getTypeName($type),
+                'value' => $value,
+            ];
         }
 
         return $values;
     }
 
     /**
-     * Parse MULTILINESTRING value
+     * Parse MULTILINESTRING value.
      *
-     * @return array[]
+     * @return (float|int)[][][]
+     *
      * @throws UnexpectedValueException
      */
-    private function multiLineString()
+    private function multiLineString(): array
     {
-        $values = array();
-        $count  = $this->readCount();
+        $values = [];
+        $count = $this->readCount();
 
-        for ($i = 0; $i < $count; $i++) {
+        for ($i = 0; $i < $count; ++$i) {
             $this->readByteOrder();
 
             $type = $this->readType();
 
             if ($this->getDimensionedPrimitive(self::WKB_TYPE_LINESTRING) !== $type) {
-                throw new UnexpectedValueException($this->getBadTypeInTypeMessage($type, self::WKB_TYPE_MULTILINESTRING, array(self::WKB_TYPE_LINESTRING)));
+                throw new UnexpectedValueException($this->getBadTypeInTypeMessage($type, self::WKB_TYPE_MULTILINESTRING, [self::WKB_TYPE_LINESTRING]));
             }
 
             $values[] = $this->readPoints($this->readCount());
@@ -479,23 +462,51 @@ class Parser
     }
 
     /**
-     * Parse MULTIPOLYGON value
+     * Parse MULTIPOINT value.
      *
-     * @return array[]
+     * @return (float|int)[][]
+     *
      * @throws UnexpectedValueException
      */
-    private function multiPolygon()
+    private function multiPoint(): array
     {
-        $count  = $this->readCount();
-        $values = array();
+        $values = [];
+        $count = $this->readCount();
 
-        for ($i = 0; $i < $count; $i++) {
+        for ($i = 0; $i < $count; ++$i) {
+            $this->readByteOrder();
+
+            $type = $this->readType();
+
+            if ($this->getDimensionedPrimitive(self::WKB_TYPE_POINT) !== $type) {
+                throw new UnexpectedValueException($this->getBadTypeInTypeMessage($type, self::WKB_TYPE_MULTIPOINT, [self::WKB_TYPE_POINT]));
+            }
+
+            $values[] = $this->point();
+        }
+
+        return $values;
+    }
+
+    /**
+     * Parse MULTIPOLYGON value.
+     *
+     * @return float[][][][]|int[][][][]
+     *
+     * @throws UnexpectedValueException
+     */
+    private function multiPolygon(): array
+    {
+        $count = $this->readCount();
+        $values = [];
+
+        for ($i = 0; $i < $count; ++$i) {
             $this->readByteOrder();
 
             $type = $this->readType();
 
             if ($this->getDimensionedPrimitive(self::WKB_TYPE_POLYGON) !== $type) {
-                throw new UnexpectedValueException($this->getBadTypeInTypeMessage($type, self::WKB_TYPE_MULTIPOLYGON, array(self::WKB_TYPE_POLYGON)));
+                throw new UnexpectedValueException($this->getBadTypeInTypeMessage($type, self::WKB_TYPE_MULTIPOLYGON, [self::WKB_TYPE_POLYGON]));
             }
 
             $values[] = $this->readLinearRings($this->readCount());
@@ -505,245 +516,238 @@ class Parser
     }
 
     /**
-     * Parse COMPOUNDCURVE value
+     * Parse MULTISURFACE value.
      *
-     * @return array
+     * @return array{type: string, value:float[][][]|int[][][]|array{type: string, value:float[][]|int[][]|array{type: string, value:float[][]|int[][]}[]}[]}[]
+     *
      * @throws UnexpectedValueException
      */
-    private function compoundCurve()
+    private function multiSurface(): array
     {
-        $values = array();
-        $count  = $this->readCount();
+        $values = [];
+        $count = $this->readCount();
 
-        for ($i = 0; $i < $count; $i++) {
+        for ($i = 0; $i < $count; ++$i) {
             $this->readByteOrder();
 
             $type = $this->readType();
 
             switch ($type) {
-                case ($this->getDimensionedPrimitive(self::WKB_TYPE_LINESTRING)):
-                    // no break
-                case ($this->getDimensionedPrimitive(self::WKB_TYPE_CIRCULARSTRING)):
-                    $value = $this->readPoints($this->readCount());
-                    break;
-                default:
-                    throw new UnexpectedValueException($this->getBadTypeInTypeMessage($type, self::WKB_TYPE_COMPOUNDCURVE, array(self::WKB_TYPE_LINESTRING, self::WKB_TYPE_CIRCULARSTRING)));
-            }
-
-            $values[] = array(
-                'type'  => $this->getTypeName($type),
-                'value' => $value,
-            );
-        }
-
-        return $values;
-    }
-
-    /**
-     * Parse CURVEPOLYGON value
-     *
-     * @return array
-     * @throws UnexpectedValueException
-     */
-    private function curvePolygon()
-    {
-        $values = array();
-        $count  = $this->readCount();
-
-        for ($i = 0; $i < $count; $i++) {
-            $this->readByteOrder();
-
-            $type = $this->readType();
-
-            switch ($type) {
-                case ($this->getDimensionedPrimitive(self::WKB_TYPE_LINESTRING)):
-                    // no break
-                case ($this->getDimensionedPrimitive(self::WKB_TYPE_CIRCULARSTRING)):
-                    $value = $this->readPoints($this->readCount());
-                    break;
-                case ($this->getDimensionedPrimitive(self::WKB_TYPE_COMPOUNDCURVE)):
-                    $value = $this->compoundCurve();
-                    break;
-                default:
-                    throw new UnexpectedValueException($this->getBadTypeInTypeMessage($type, self::WKB_TYPE_CURVEPOLYGON, array(self::WKB_TYPE_LINESTRING, self::WKB_TYPE_CIRCULARSTRING, self::WKB_TYPE_COMPOUNDCURVE)));
-            }
-
-            $values[] = array(
-                'type'  => $this->getTypeName($type),
-                'value' => $value,
-            );
-        }
-
-        return $values;
-    }
-
-    /**
-     * Parse MULTICURVE value
-     *
-     * @return array
-     * @throws UnexpectedValueException
-     */
-    private function multiCurve()
-    {
-        $values = array();
-        $count  = $this->readCount();
-
-        for ($i = 0; $i < $count; $i++) {
-            $this->readByteOrder();
-
-            $type = $this->readType();
-
-            switch ($type) {
-                case ($this->getDimensionedPrimitive(self::WKB_TYPE_LINESTRING)):
-                    // no break
-                case ($this->getDimensionedPrimitive(self::WKB_TYPE_CIRCULARSTRING)):
-                    $value = $this->readPoints($this->readCount());
-                    break;
-                case ($this->getDimensionedPrimitive(self::WKB_TYPE_COMPOUNDCURVE)):
-                    $value = $this->compoundCurve();
-                    break;
-                default:
-                    throw new UnexpectedValueException($this->getBadTypeInTypeMessage($type, self::WKB_TYPE_MULTICURVE, array(self::WKB_TYPE_LINESTRING, self::WKB_TYPE_CIRCULARSTRING, self::WKB_TYPE_COMPOUNDCURVE)));
-            }
-
-            $values[] = array(
-                'type'  => $this->getTypeName($type),
-                'value' => $value,
-            );
-        }
-
-        return $values;
-    }
-
-    /**
-     * Parse MULTISURFACE value
-     *
-     * @return array
-     * @throws UnexpectedValueException
-     */
-    private function multiSurface()
-    {
-        $values = array();
-        $count  = $this->readCount();
-
-        for ($i = 0; $i < $count; $i++) {
-            $this->readByteOrder();
-
-            $type = $this->readType();
-
-            switch ($type) {
-                case ($this->getDimensionedPrimitive(self::WKB_TYPE_POLYGON)):
+                case $this->getDimensionedPrimitive(self::WKB_TYPE_POLYGON):
                     $value = $this->polygon();
                     break;
-                case ($this->getDimensionedPrimitive(self::WKB_TYPE_CURVEPOLYGON)):
+                case $this->getDimensionedPrimitive(self::WKB_TYPE_CURVEPOLYGON):
                     $value = $this->curvePolygon();
                     break;
                 default:
-                    throw new UnexpectedValueException($this->getBadTypeInTypeMessage($type, self::WKB_TYPE_MULTISURFACE, array(self::WKB_TYPE_POLYGON, self::WKB_TYPE_CURVEPOLYGON)));
+                    throw new UnexpectedValueException($this->getBadTypeInTypeMessage($type, self::WKB_TYPE_MULTISURFACE, [self::WKB_TYPE_POLYGON, self::WKB_TYPE_CURVEPOLYGON]));
             }
 
-            $values[] = array(
-                'type'  => $this->getTypeName($type),
+            $values[] = [
+                'type' => $this->getTypeName($type),
                 'value' => $value,
-            );
+            ];
         }
 
         return $values;
     }
 
     /**
-     * Parse POLYHEDRALSURFACE value
+     * Parse POINT values.
      *
-     * @return array
+     * @return (float|int)[]
+     *
      * @throws UnexpectedValueException
      */
-    private function polyhedralSurface()
+    private function point()
     {
-        $values = array();
-        $count  = $this->readCount();
+        return $this->reader->readFloats($this->pointSize);
+    }
 
-        for ($i = 0; $i < $count; $i++) {
+    /**
+     * Parse POLYGON value.
+     *
+     * @return (float|int)[][][]
+     *
+     * @throws UnexpectedValueException
+     */
+    private function polygon(): array
+    {
+        return $this->readLinearRings($this->readCount());
+    }
+
+    /**
+     * Parse POLYHEDRALSURFACE value.
+     *
+     * @return array{type: string, value:(float|int)[][][]}[]
+     *
+     * @throws UnexpectedValueException
+     */
+    private function polyhedralSurface(): array
+    {
+        $values = [];
+        $count = $this->readCount();
+
+        for ($i = 0; $i < $count; ++$i) {
             $this->readByteOrder();
 
             $type = $this->readType();
 
             switch ($type) {
-                case ($this->getDimensionedPrimitive(self::WKB_TYPE_POLYGON)):
+                case $this->getDimensionedPrimitive(self::WKB_TYPE_POLYGON):
                     $value = $this->polygon();
                     break;
-                // is polygon the only one?
+                    // is polygon the only one?
                 default:
-                    throw new UnexpectedValueException($this->getBadTypeInTypeMessage($type, self::WKB_TYPE_POLYHEDRALSURFACE, array(self::WKB_TYPE_POLYGON)));
+                    throw new UnexpectedValueException($this->getBadTypeInTypeMessage($type, self::WKB_TYPE_POLYHEDRALSURFACE, [self::WKB_TYPE_POLYGON]));
             }
 
-            $values[] = array(
-                'type'  => $this->getTypeName($type),
+            $values[] = [
+                'type' => $this->getTypeName($type),
                 'value' => $value,
-            );
+            ];
         }
 
         return $values;
     }
 
     /**
-     * Parse GEOMETRYCOLLECTION value
+     * Parse data byte order.
      *
-     * @return array[]
      * @throws UnexpectedValueException
      */
-    private function geometryCollection()
+    private function readByteOrder(): int
     {
-        $values = array();
-        $count  = $this->readCount();
-
-        for ($i = 0; $i < $count; $i++) {
-            $this->readByteOrder();
-
-            $type     = $this->readType();
-            $typeName = $this->getTypeName($type);
-
-            $values[] = array(
-                'type'  => $typeName,
-                'value' => $this->$typeName()
-            );
-        }
-
-        return $values;
+        return $this->reader->readByteOrder();
     }
 
     /**
-     * @param int   $childType
-     * @param int   $parentType
-     * @param int[] $expectedTypes
-     *
-     * @return string
+     * @throws UnexpectedValueException
      */
-    private function getBadTypeInTypeMessage($childType, $parentType, array $expectedTypes)
+    private function readCount(): int
     {
-        if ($this->type !== $parentType) {
-            $parentType = $this->type;
+        $count = $this->reader->readLong();
+
+        if (!is_int($count)) {
+            throw new UnexpectedValueException('Invalid count value');
         }
 
-        $message = sprintf(
-            ' %s with dimensions 0x%X (%2$d) in %3$s, expected ',
-            $this->getTypeName($childType),
-            $this->getDimensions($childType),
-            $this->getTypeName($parentType)
-        );
+        return $count;
+    }
 
-        if (! in_array($this->getTypePrimitive($childType), $expectedTypes, true)) {
-            if (1 === count($expectedTypes)) {
-                $message .= $this->getTypeName($expectedTypes[0]);
-            } else {
-                $last = $this->getTypeName(array_pop($expectedTypes));
-                $message .= implode(', ', array_map(array($this, 'getTypeName'), $expectedTypes)) . ' or ' . $last;
+    /**
+     * Parse geometry data.
+     *
+     * @return array{type:string, srid: ?int, value: (float|int)[]|(float|int)[][]|(float|int)[][][]|(float|int)[][][][]|(float|int)[][][][][]|array{type: string, value:(float|int)[][]}[]|array{type: string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]|array{type: string, value:(float|int)[][][]|array{type: string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]}[]|array{type: string, value:(float|int)[][][]}[]|array{type:string, value:(float|int)[]|(float|int)[][]|(float|int)[][][]|(float|int)[][][][]|(float|int)[][][][][]|array{type: string, value:(float|int)[][]}[]|array{type: string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]|array{type: string, value:(float|int)[][][]|array{type: string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]}[]|array{type: string, value:(float|int)[][][]}[]}[], dimension: ?string}
+     *
+     * @throws ExceptionInterface
+     */
+    private function readGeometry(): array
+    {
+        $srid = null;
+
+        try {
+            $this->readByteOrder();
+            $this->type = $this->readType();
+
+            if ($this->hasFlag($this->type, self::WKB_FLAG_SRID)) {
+                $srid = $this->readSrid();
             }
 
-            $message = 'Unexpected' . $message . ' with ';
-        } else {
-            $message = 'Bad' . $message;
+            $this->dimensions = $this->getDimensions($this->type);
+            $this->pointSize = 2 + strlen($this->getDimensionType($this->dimensions));
+            $typeName = $this->getTypeName($this->type);
+
+            $value = match (strtoupper($typeName)) {
+                strtoupper(self::TYPE_POINT) => $this->point(),
+                strtoupper(self::TYPE_LINESTRING) => $this->lineString(),
+                strtoupper(self::TYPE_POLYGON) => $this->polygon(),
+                strtoupper(self::TYPE_MULTIPOINT) => $this->multiPoint(),
+                strtoupper(self::TYPE_MULTILINESTRING) => $this->multiLineString(),
+                strtoupper(self::TYPE_MULTIPOLYGON) => $this->multiPolygon(),
+                strtoupper(self::TYPE_GEOMETRYCOLLECTION) => $this->geometryCollection(),
+                strtoupper(self::TYPE_CIRCULARSTRING) => $this->circularString(),
+                strtoupper(self::TYPE_COMPOUNDCURVE) => $this->compoundCurve(),
+                strtoupper(self::TYPE_CURVEPOLYGON) => $this->curvePolygon(),
+                strtoupper(self::TYPE_MULTICURVE) => $this->multiCurve(),
+                strtoupper(self::TYPE_MULTISURFACE) => $this->multiSurface(),
+                strtoupper(self::TYPE_POLYHEDRALSURFACE) => $this->polyhedralSurface(),
+                default => throw new UnexpectedValueException(sprintf('Unsupported WKB type %s %d (%X)"', $typeName, $this->type, $this->type)),
+            };
+
+            return [
+                'type' => $typeName,
+                'srid' => $srid,
+                'value' => $value,
+                'dimension' => $this->getDimensionType($this->dimensions),
+            ];
+        } catch (ExceptionInterface $e) {
+            throw new $e($e->getMessage().' at byte '.$this->reader->getLastPosition(), $e->getCode(), $e);
+        }
+    }
+
+    /**
+     * @param int $count
+     *
+     * @return (float|int)[][][]
+     *
+     * @throws UnexpectedValueException
+     */
+    private function readLinearRings($count): array
+    {
+        $rings = [];
+
+        for ($i = 0; $i < $count; ++$i) {
+            $rings[] = $this->readPoints($this->readCount());
         }
 
-        return $message . sprintf('dimensions 0x%X (%1$d)', $this->dimensions);
+        return $rings;
+    }
+
+    /**
+     * @return (float|int)[][]
+     *
+     * @throws UnexpectedValueException
+     */
+    private function readPoints(int $count): array
+    {
+        $points = [];
+
+        for ($i = 0; $i < $count; ++$i) {
+            $points[] = $this->point();
+        }
+
+        return $points;
+    }
+
+    /**
+     * Parse SRID value.
+     *
+     * @throws UnexpectedValueException
+     */
+    private function readSrid(): int
+    {
+        $srid = $this->reader->readLong();
+        if (!is_int($srid)) {
+            throw new UnexpectedValueException('Invalid SRID value');
+        }
+
+        return $srid;
+    }
+
+    /**
+     * Parse data type.
+     *
+     * @throws UnexpectedValueException
+     */
+    private function readType(): int
+    {
+        $type = $this->reader->readLong();
+
+        if (!is_int($type)) {
+            throw new UnexpectedValueException('Invalid type value');
+        }
+
+        return $type;
     }
 }
