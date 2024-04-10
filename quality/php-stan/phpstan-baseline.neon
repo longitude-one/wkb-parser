@@ -14,3 +14,8 @@ parameters:
 			message: "#^Parameter \\#1 \\$input of class LongitudeOne\\\\Geo\\\\WKB\\\\Parser constructor expects string\\|null, float\\|string given\\.$#"
 			count: 1
 			path: ../../tests/LongitudeOne/Geo/WKB/Tests/ParserTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$input of method LongitudeOne\\\\Geo\\\\WKB\\\\Parser\\:\\:parse\\(\\) expects string\\|null, float\\|string given\\.$#"
+			count: 1
+			path: ../../tests/LongitudeOne/Geo/WKB/Tests/ParserTest.php
