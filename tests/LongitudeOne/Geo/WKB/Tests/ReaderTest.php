@@ -214,33 +214,6 @@ class ReaderTest extends TestCase
         }
     }
 
-    public function testDeprecation(): void
-    {
-        $reader = new Reader();
-
-        $value = '0040411D70A3D70A3D';
-        $value = pack('H*', $value);
-
-        $reader->load($value);
-
-        $reader->readByteOrder();
-
-        $result = $reader->readDouble();
-
-        self::assertEquals(34.23, $result);
-
-        $value = '0040411D70A3D70A3D40411D70A3D70A3D';
-        $value = pack('H*', $value);
-
-        $reader->load($value);
-
-        $reader->readByteOrder();
-
-        $result = $reader->readDoubles(2);
-
-        $this->assertEquals([34.23, 34.23], $result);
-    }
-
     /**
      * @param array{0:string, 1:float|int|null, 2:array<int|float>|int|float|null}[] $methods
      *

@@ -18,8 +18,8 @@
     </rule>
     <rule ref="rulesets/codesize.xml/ExcessiveClassComplexity">
         <properties>
-            <!-- Set the maximum class complexity to 71 because of Parser, but Parser need to be simplified -->
-            <property name="maximum" value="71"/>
+            <!-- Set the maximum class complexity to 69 because of Parser, but Parser need to be simplified -->
+            <property name="maximum" value="69"/>
         </properties>
     </rule>
     <!-- Import the entire naming rule set -->

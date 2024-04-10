@@ -70,55 +70,27 @@ class Parser
     private int $type;
 
     /**
-     * @param string $input
-     *
      * @throws UnexpectedValueException
      */
-    public function __construct($input = null)
+    public function __construct(?string $input = null)
     {
         $this->reader = new Reader();
 
         if (null !== $input) {
-            if (!is_string($input)) {
-                trigger_deprecation(
-                    'longitudeone/geo-wkb-parser',
-                    '2.1',
-                    sprintf('Argument 1 passed to __construct() must be of the type string, %s given, called in %s on line %d',
-                        gettype($input),
-                        __FILE__,
-                        __LINE__
-                    )
-                );
-            }
-
-            $this->reader->load((string) $input);
+            $this->reader->load($input);
         }
     }
 
     /**
      * Parse input data.
      *
-     * @param string $input
-     *
      * @return array{type:string, srid: ?int, value: (float|int)[]|(float|int)[][]|(float|int)[][][]|(float|int)[][][][]|(float|int)[][][][][]|array{type: string, value:(float|int)[][]}[]|array{type: string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]|array{type: string, value:(float|int)[][][]|array{type: string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]}[]|array{type: string, value:(float|int)[][][]}[]|array{type:string, value:(float|int)[]|(float|int)[][]|(float|int)[][][]|(float|int)[][][][]|(float|int)[][][][][]|array{type: string, value:(float|int)[][]}[]|array{type: string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]|array{type: string, value:(float|int)[][][]|array{type: string, value:(float|int)[][]|array{type: string, value:(float|int)[][]}[]}[]}[]|array{type: string, value:(float|int)[][][]}[]}[], dimension: ?string}
      *
      * @throws ExceptionInterface
      */
-    public function parse($input = null): array
+    public function parse(?string $input = null): array
     {
         if (null !== $input) {
-            if (!is_string($input)) {
-                trigger_deprecation(
-                    'longitudeone/geo-wkb-parser',
-                    '2.1',
-                    sprintf('Argument 1 passed to parse() must be of the type string, %s given, called in %s on line %d',
-                        gettype($input),
-                        __FILE__,
-                        __LINE__
-                    )
-                );
-            }
-
             $this->reader->load((string) $input);
         }
 

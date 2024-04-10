@@ -41,7 +41,7 @@ class ParserTest extends TestCase
     }
 
     /**
-     * @return \Generator<string, array{value:string|float, exception:class-string<ExceptionInterface>, message:string}, null, void>
+     * @return \Generator<string, array{value:string, exception:class-string<ExceptionInterface>, message:string}, null, void>
      */
     public static function badBinaryData(): \Generator
     {
@@ -54,11 +54,6 @@ class ParserTest extends TestCase
             'value' => pack('H*', '01150000003D0AD7A3701D41400000000000C055C0'),
             'exception' => UnexpectedValueException::class,
             'message' => 'Unsupported WKB type "21" (0x15) at byte 1',
-        ];
-        yield 'badPacketType' => [
-            'value' => 0x0101000000000000000000F03F0000000000000040, // POINT(1 2)
-            'exception' => UnexpectedValueException::class,
-            'message' => 'Invalid byte order "16" at byte 0',
         ];
 
         // Short NDR POINT
@@ -4190,8 +4185,10 @@ class ParserTest extends TestCase
      * @param class-string<ExceptionInterface> $exception
      *
      * @dataProvider badBinaryData
+     *
+     * @throws ExceptionInterface
      */
-    public function testBadBinaryData(string|float $value, string $exception, string $message): void
+    public function testBadBinaryData(string $value, string $exception, string $message): void
     {
         self::expectException($exception);
         self::expectMessage($message);
@@ -4206,7 +4203,7 @@ class ParserTest extends TestCase
      *
      * @dataProvider badBinaryData
      */
-    public function testBadBinaryDataWithPreparedParser(string|float $value, string $exception, string $message): void
+    public function testBadBinaryDataWithPreparedParser(string $value, string $exception, string $message): void
     {
         self::expectException($exception);
         self::expectMessage($message);

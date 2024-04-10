@@ -41,24 +41,12 @@ class Reader
     private int $previous = 0;
 
     /**
-     * @param string $input
-     *
      * @throws UnexpectedValueException
      */
-    public function __construct($input = null)
+    public function __construct(?string $input = null)
     {
         if (null !== $input) {
-            if (!is_string($input)) {
-                trigger_deprecation(
-                    'longitudeone/geo-wkb-parser',
-                    '2.1',
-                    'Argument 1 passed to __construct() must be of the type string, %s given, called in %s on line %d',
-                    gettype($input),
-                    __FILE__,
-                    __LINE__
-                );
-            }
-            $this->load((string) $input);
+            $this->load($input);
         }
     }
 
@@ -112,42 +100,6 @@ class Reader
         }
 
         return $this->byteOrder = $byteOrder;
-    }
-
-    /**
-     * @throws UnexpectedValueException
-     * @throws RangeException
-     *
-     * @deprecated use readFloat()
-     */
-    public function readDouble(): float
-    {
-        trigger_deprecation(
-            'longitudeone/geo-wkb-parser',
-            '1.0',
-            'Method readDouble is deprecated, use readFloat instead.'
-        );
-
-        return $this->readFloat();
-    }
-
-    /**
-     * @return float[]
-     *
-     * @throws RangeException
-     * @throws UnexpectedValueException
-     *
-     * @deprecated use readFloats()
-     */
-    public function readDoubles(int $count): array
-    {
-        trigger_deprecation(
-            'longitudeone/geo-wkb-parser',
-            '1.0',
-            'Method readDoubles is deprecated, use readFloats instead.'
-        );
-
-        return $this->readFloats($count);
     }
 
     /**
