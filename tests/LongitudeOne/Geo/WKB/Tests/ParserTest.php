@@ -26,6 +26,20 @@ use PHPUnit\Framework\TestCase;
  */
 class ParserTest extends TestCase
 {
+    private Parser $parser;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->parser = new Parser();
+    }
+
+    public function tearDown(): void
+    {
+        unset($this->parser);
+        parent::tearDown();
+    }
+
     /**
      * @return \Generator<string, array{value:string|float, exception:class-string<ExceptionInterface>, message:string}, null, void>
      */
@@ -4180,16 +4194,24 @@ class ParserTest extends TestCase
     public function testBadBinaryData(string|float $value, string $exception, string $message): void
     {
         self::expectException($exception);
-
-        if ('/' === $message[0]) {
-            self::expectExceptionMessageMatches($message);
-        } else {
-            self::expectExceptionMessage($message);
-        }
+        self::expectMessage($message);
 
         $parser = new Parser($value);
 
         $parser->parse();
+    }
+
+    /**
+     * @param class-string<ExceptionInterface> $exception
+     *
+     * @dataProvider badBinaryData
+     */
+    public function testBadBinaryDataWithPreparedParser(string|float $value, string $exception, string $message): void
+    {
+        self::expectException($exception);
+        self::expectMessage($message);
+
+        $this->parser->parse($value);
     }
 
     #[DataProvider('wkbGeometryType')]
@@ -4304,6 +4326,15 @@ class ParserTest extends TestCase
             $actual = $parser->parse(pack('H*', $testData['value']));
 
             $this->assertEquals($testData['expected'], $actual);
+        }
+    }
+
+    private function expectMessage(string $message): void
+    {
+        if ('/' === $message[0]) {
+            self::expectExceptionMessageMatches($message);
+        } else {
+            self::expectExceptionMessage($message);
         }
     }
 }

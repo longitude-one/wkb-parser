@@ -80,7 +80,15 @@ class Parser
 
         if (null !== $input) {
             if (!is_string($input)) {
-                trigger_error('Since longitudeone/geo-wkb-parser 1.0: using non-string parameter for Reader constructor deprecated.', E_USER_DEPRECATED);
+                trigger_error(
+                    sprintf('%s: Since longitudeone/geo-wkb-parser 2.1, Argument 1 passed to __construct() must be of the type string, %s given, called in %s on line %d',
+                        static::class,
+                        gettype($input),
+                        __FILE__,
+                        __LINE__
+                    ),
+                    E_USER_DEPRECATED
+                );
             }
 
             $this->reader->load((string) $input);
@@ -99,6 +107,18 @@ class Parser
     public function parse($input = null): array
     {
         if (null !== $input) {
+            if (!is_string($input)) {
+                trigger_error(
+                    sprintf('%s: Since longitudeone/geo-wkb-parser 2.1, Argument 1 passed to parse() must be of the type string, %s given, called in %s on line %d',
+                        static::class,
+                        gettype($input),
+                        __FILE__,
+                        __LINE__
+                    ),
+                    E_USER_DEPRECATED
+                );
+            }
+
             $this->reader->load((string) $input);
         }
 
