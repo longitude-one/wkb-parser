@@ -9,13 +9,3 @@ parameters:
 			message: "#^Parameter \\#1 \\$type of method LongitudeOne\\\\Geo\\\\WKB\\\\Parser\\:\\:getTypeName\\(\\) expects int, int\\|null given\\.$#"
 			count: 1
 			path: ../../lib/LongitudeOne/Geo/WKB/Parser.php
-
-		-
-			message: "#^Parameter \\#1 \\$input of class LongitudeOne\\\\Geo\\\\WKB\\\\Parser constructor expects string\\|null, float\\|string given\\.$#"
-			count: 1
-			path: ../../tests/LongitudeOne/Geo/WKB/Tests/ParserTest.php
-
-		-
-			message: "#^Parameter \\#1 \\$input of method LongitudeOne\\\\Geo\\\\WKB\\\\Parser\\:\\:parse\\(\\) expects string\\|null, float\\|string given\\.$#"
-			count: 1
-			path: ../../tests/LongitudeOne/Geo/WKB/Tests/ParserTest.php
