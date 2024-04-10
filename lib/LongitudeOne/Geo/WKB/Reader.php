@@ -49,15 +49,13 @@ class Reader
     {
         if (null !== $input) {
             if (!is_string($input)) {
-                trigger_error(
-                    sprintf(
-                        '%s: Argument 1 passed to __construct() must be of the type string, %s given, called in %s on line %d',
-                        static::class,
-                        gettype($input),
-                        __FILE__,
-                        __LINE__
-                    ),
-                    E_USER_DEPRECATED
+                trigger_deprecation(
+                    'longitudeone/geo-wkb-parser',
+                    '2.1',
+                    'Argument 1 passed to __construct() must be of the type string, %s given, called in %s on line %d',
+                    gettype($input),
+                    __FILE__,
+                    __LINE__
                 );
             }
             $this->load((string) $input);
@@ -124,11 +122,10 @@ class Reader
      */
     public function readDouble(): float
     {
-        trigger_error(
-            sprintf('%s: Since longitudeone/geo-wkb-parser 1.0, method readDoubles is deprecated, use readFloats instead.',
-                static::class,
-            ),
-            E_USER_DEPRECATED
+        trigger_deprecation(
+            'longitudeone/geo-wkb-parser',
+            '1.0',
+            'Method readDouble is deprecated, use readFloat instead.'
         );
 
         return $this->readFloat();
@@ -144,11 +141,10 @@ class Reader
      */
     public function readDoubles(int $count): array
     {
-        trigger_error(
-            sprintf('%s: Since longitudeone/geo-wkb-parser 1.0, method readDoubles is deprecated, use readFloats instead.',
-                static::class,
-            ),
-            E_USER_DEPRECATED
+        trigger_deprecation(
+            'longitudeone/geo-wkb-parser',
+            '1.0',
+            'Method readDoubles is deprecated, use readFloats instead.'
         );
 
         return $this->readFloats($count);

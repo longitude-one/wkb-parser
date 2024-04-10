@@ -80,14 +80,14 @@ class Parser
 
         if (null !== $input) {
             if (!is_string($input)) {
-                trigger_error(
-                    sprintf('%s: Since longitudeone/geo-wkb-parser 2.1, Argument 1 passed to __construct() must be of the type string, %s given, called in %s on line %d',
-                        static::class,
+                trigger_deprecation(
+                    'longitudeone/geo-wkb-parser',
+                    '2.1',
+                    sprintf('Argument 1 passed to __construct() must be of the type string, %s given, called in %s on line %d',
                         gettype($input),
                         __FILE__,
                         __LINE__
-                    ),
-                    E_USER_DEPRECATED
+                    )
                 );
             }
 
@@ -108,14 +108,14 @@ class Parser
     {
         if (null !== $input) {
             if (!is_string($input)) {
-                trigger_error(
-                    sprintf('%s: Since longitudeone/geo-wkb-parser 2.1, Argument 1 passed to parse() must be of the type string, %s given, called in %s on line %d',
-                        static::class,
+                trigger_deprecation(
+                    'longitudeone/geo-wkb-parser',
+                    '2.1',
+                    sprintf('Argument 1 passed to parse() must be of the type string, %s given, called in %s on line %d',
                         gettype($input),
                         __FILE__,
                         __LINE__
-                    ),
-                    E_USER_DEPRECATED
+                    )
                 );
             }
 
