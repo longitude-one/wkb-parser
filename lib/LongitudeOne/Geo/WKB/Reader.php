@@ -68,9 +68,8 @@ class Reader
         $this->position = 0;
         $this->previous = 0;
 
-        if (ord($input) < 32) {
+        if (ord($input[0]) < 32) {
             $this->input = $input;
-
             return;
         }
 
