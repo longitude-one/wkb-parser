@@ -14,16 +14,16 @@ docker exec wkb-parser composer install --working-dir=quality/php-cs-fixer
 
 To install PHP-CS-Fixer, run this command:
 ```bash
-docker exec wkb-parser composer update --working-dir=quality/php-cs-fixer
+docker compose run --rm app composer update --working-dir=quality/php-cs-fixer
 ```
 
 To test all files:
 ```bash
-docker exec wkb-parser quality/php-cs-fixer/vendor/bin/php-cs-fixer fix --config=quality/php-cs-fixer/.php-cs-fixer.php --dry-run --allow-risky=yes
+docker compose run --rm app  quality/php-cs-fixer/vendor/bin/php-cs-fixer fix --config=quality/php-cs-fixer/.php-cs-fixer.php --dry-run --allow-risky=yes
 ```
 To fix all files:
 ```bash
-docker exec wkb-parser quality/php-cs-fixer/vendor/bin/php-cs-fixer fix --config=quality/php-cs-fixer/.php-cs-fixer.php --allow-risky=yes
+docker compose run --rm app  quality/php-cs-fixer/vendor/bin/php-cs-fixer fix --config=quality/php-cs-fixer/.php-cs-fixer.php --allow-risky=yes
 ```
 
 ## PhpStan
@@ -31,17 +31,17 @@ docker exec wkb-parser quality/php-cs-fixer/vendor/bin/php-cs-fixer fix --config
 To install PHP-Stan, run this command:
 
 ```bash
-docker exec wkb-parser composer update --working-dir=quality/php-stan
+docker compose run --rm app  composer update --working-dir=quality/php-stan
 ```
 
 To test files:
 ```bash
-docker exec wkb-parser quality/php-stan/vendor/bin/phpstan analyse --configuration=quality/php-stan/php-stan.neon lib tests --error-format=table --no-progress --no-interaction --no-ansi --level=9 --memory-limit=256M
+docker compose run --rm app  quality/php-stan/vendor/bin/phpstan analyse --configuration=quality/php-stan/php-stan.neon lib tests --error-format=table --no-progress --no-interaction --no-ansi --level=9 --memory-limit=256M
 ```
 
 To add a file at exception baseline:
 ```bash
-docker exec wkb-parser quality/php-stan/vendor/bin/phpstan analyse --configuration=quality/php-stan/php-stan.neon lib tests --error-format=table --no-progress --no-interaction --no-ansi --level=9 --generate-baseline quality/php-stan/phpstan-baseline.neon
+docker compose run --rm app quality/php-stan/vendor/bin/phpstan analyse --configuration=quality/php-stan/php-stan.neon lib tests --error-format=table --no-progress --no-interaction --no-ansi --level=9 --generate-baseline quality/php-stan/phpstan-baseline.neon
 ```
 
 ## PHP Mess Detector
@@ -49,11 +49,11 @@ docker exec wkb-parser quality/php-stan/vendor/bin/phpstan analyse --configurati
 To install PHP-Mess-Detector, run this command:
 
 ```bash
-docker exec wkb-parser composer update --working-dir=quality/php-mess-detector
+docker compose run --rm app composer update --working-dir=quality/php-mess-detector
 ```
 
 To test files:
 ```bash
-docker exec wkb-parser quality/php-mess-detector/vendor/bin/phpmd lib text quality/php-mess-detector/ruleset.xml
-docker exec wkb-parser quality/php-mess-detector/vendor/bin/phpmd tests text quality/php-mess-detector/test-ruleset.xml
+docker compose run --rm app quality/php-mess-detector/vendor/bin/phpmd lib text quality/php-mess-detector/ruleset.xml
+docker compose run --rm app quality/php-mess-detector/vendor/bin/phpmd tests text quality/php-mess-detector/test-ruleset.xml
 ```

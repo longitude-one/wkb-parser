@@ -6,7 +6,7 @@
  * PHP 8.1 | 8.2 | 8.3
  *
  * Copyright LongitudeOne - Alexandre Tranchant - Derek J. Lambert.
- * Copyright 2024.
+ * Copyright 2024-2026.
  *
  */
 
@@ -68,7 +68,7 @@ class Reader
         $this->position = 0;
         $this->previous = 0;
 
-        if (ord($input) < 32) {
+        if ('' === $input || ord($input[0]) < 32) {
             $this->input = $input;
 
             return;
